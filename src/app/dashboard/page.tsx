@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { Suspense, useEffect, useState } from 'react';
 
 // Define the type for ad accounts
 interface AdAccount {
@@ -8,36 +9,40 @@ interface AdAccount {
   name: string;
 }
 
-const DashboardPage = () => {
-  // Type the state as an array of AdAccount objects
+const Dashboard = () => {
   const [adAccounts, setAdAccounts] = useState<AdAccount[]>([]);
   const [error, setError] = useState('');
+  const searchParams = useSearchParams();  // Client-side hook to get URL parameters
 
   useEffect(() => {
-    const fetchAdAccounts = async () => {
-      try {
-        const accessToken = localStorage.getItem('fb_access_token'); // Fetch from local storage
+    const code = searchParams.get('code');
 
-        if (!accessToken) {
-          setError('No access token found');
-          return;
+    if (code) {
+      // Handle exchanging the code for access token
+      const exchangeCodeForAccessToken = async () => {
+        try {
+          const response = await fetch('/api/facebook/access-token', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ code }),
+          });
+
+          const data = await response.json();
+
+          if (response.ok) {
+            localStorage.setItem('fb_access_token', data.accessToken);
+            // Optionally, you can remove the 'code' from the URL
+          } else {
+            setError(data.error);
+          }
+        } catch (err) {
+          setError('Error exchanging code for access token.');
         }
+      };
 
-        const response = await fetch(`/api/facebook/ad-accounts`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-
-        const data = await response.json();
-        setAdAccounts(data.accounts); // TypeScript will now know this is an array of AdAccount
-      } catch (err) {
-        setError('Failed to fetch ad accounts');
-      }
-    };
-
-    fetchAdAccounts();
-  }, []);
+      exchangeCodeForAccessToken();
+    }
+  }, [searchParams]);
 
   return (
     <div>
@@ -52,6 +57,14 @@ const DashboardPage = () => {
         ))}
       </ul>
     </div>
+  );
+};
+
+const DashboardPage = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <Dashboard />
+    </Suspense>
   );
 };
 
