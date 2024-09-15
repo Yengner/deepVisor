@@ -1,17 +1,13 @@
-'use client';
+// app/facebook-login/page.tsx
 
-import FacebookLoginButton from '@/components/fbLogin'; // Adjust the path
+import FacebookLogin from '@/components/fblogin';  // Adjust the path according to your project structure
 
 const FacebookLoginPage = () => {
-  const { handleLogin, accessToken, error } = FacebookLoginButton();
 
   return (
     <div>
-      <h1>Facebook Login</h1>
-      <button onClick={handleLogin}>Login with Facebook</button>
-
-      {accessToken && <p>Access Token: {accessToken}</p>}
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      <h1>WELCOME CHUMP</h1>
+      <FacebookLogin />
     </div>
   );
 };
