@@ -1,6 +1,5 @@
 'use client';  // This ensures the file is treated as a client-side component
 
-import { useRouter } from 'next/navigation'; // Use next/navigation for Next.js 14 router
 import { useEffect, useState } from 'react';
 
 interface AdAccount {
