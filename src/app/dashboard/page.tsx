@@ -1,7 +1,7 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import { Suspense, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // Define the type for ad accounts
 interface AdAccount {
@@ -9,8 +9,8 @@ interface AdAccount {
   name: string;
 }
 
-const Dashboard = () => {
-  const [adAccounts, setAdAccounts] = useState<AdAccount[]>([]);  // This will hold the fetched ad accounts
+const DashboardPage = () => {
+  const [adAccounts, setAdAccounts] = useState<AdAccount[]>([]);
   const [error, setError] = useState('');
   const searchParams = useSearchParams();  // Client-side hook to get URL parameters
 
@@ -64,14 +64,6 @@ const Dashboard = () => {
         ))}
       </ul>
     </div>
-  );
-};
-
-const DashboardPage = () => {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <Dashboard />
-    </Suspense>
   );
 };
 

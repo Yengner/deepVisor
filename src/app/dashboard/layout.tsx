@@ -1,13 +1,16 @@
+import { Suspense } from 'react';
+
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
-    return (
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
       <div>
         <header>
           <h1>My Dashboard</h1>
         </header>
         <main>{children}</main>
       </div>
-    );
-  };
-  
-  export default DashboardLayout;
-  
+    </Suspense>
+  );
+};
+
+export default DashboardLayout;
