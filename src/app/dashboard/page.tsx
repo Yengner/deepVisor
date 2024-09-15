@@ -1,9 +1,11 @@
-'use client';
+'use client';  // Forces client-side rendering
 
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
-// Define the type for ad accounts
+// Force dynamic rendering to avoid server-side rendering
+export const dynamic = 'force-dynamic';
+
 interface AdAccount {
   id: string;
   name: string;
@@ -12,13 +14,12 @@ interface AdAccount {
 const DashboardPage = () => {
   const [adAccounts, setAdAccounts] = useState<AdAccount[]>([]);
   const [error, setError] = useState('');
-  const router = useRouter();  // Use useRouter instead of useSearchParams
+  const router = useRouter();
 
   useEffect(() => {
-    const { code } = router.query;  // Access the query parameters from the router
+    const { code } = router.query;  // Get query params from the router
 
     if (code) {
-      // Handle exchanging the code for access token
       const exchangeCodeForAccessToken = async () => {
         try {
           const response = await fetch('/api/facebook/access-token', {
@@ -31,14 +32,14 @@ const DashboardPage = () => {
 
           if (response.ok) {
             localStorage.setItem('fb_access_token', data.accessToken);
-            // Now fetch the ad accounts after storing the access token
+
             const adAccountsResponse = await fetch('/api/facebook/ad-accounts', {
               headers: {
                 Authorization: `Bearer ${data.accessToken}`,
               },
             });
             const adAccountsData = await adAccountsResponse.json();
-            setAdAccounts(adAccountsData.accounts);  // Update the adAccounts state with fetched data
+            setAdAccounts(adAccountsData.accounts);  // Update state
           } else {
             setError(data.error);
           }

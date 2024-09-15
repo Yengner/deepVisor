@@ -1,3 +1,5 @@
+'use client';  
+
 import { Suspense } from 'react';
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
