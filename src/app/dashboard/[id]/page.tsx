@@ -1,10 +1,7 @@
-'use client';  // Forces client-side rendering
+'use client';  // This ensures the file is treated as a client-side component
 
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-
-// Force dynamic rendering to avoid server-side rendering
-export const dynamic = 'force-dynamic';
 
 interface AdAccount {
   id: string;
@@ -15,10 +12,9 @@ const DashboardPage = () => {
   const [adAccounts, setAdAccounts] = useState<AdAccount[]>([]);
   const [error, setError] = useState('');
   const router = useRouter();
+  const { code } = router.query;  // Capture the 'code' dynamic route parameter
 
   useEffect(() => {
-    const { code } = router.query;  // Get query params from the router
-
     if (code) {
       const exchangeCodeForAccessToken = async () => {
         try {
@@ -39,7 +35,7 @@ const DashboardPage = () => {
               },
             });
             const adAccountsData = await adAccountsResponse.json();
-            setAdAccounts(adAccountsData.accounts);  // Update state
+            setAdAccounts(adAccountsData.accounts);
           } else {
             setError(data.error);
           }
@@ -50,7 +46,7 @@ const DashboardPage = () => {
 
       exchangeCodeForAccessToken();
     }
-  }, [router.query]);
+  }, [code]);
 
   return (
     <div>
