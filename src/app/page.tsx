@@ -1,6 +1,6 @@
 // app/facebook-login/page.tsx
 
-import FacebookLogin from '@/components/fblogin';  // Adjust the path according to your project structure
+import FacebookLogin from '@/components/FbComponenets/fbLogin';  // Adjust the path according to your project structure
 
 const FacebookLoginPage = () => {
 

@@ -1,5 +1,7 @@
 'use client';  // This ensures the file is treated as a client-side component
 
+import InstagramPosts from '@/components/FbComponenets/InstagramPosts';
+import FacebookLogin from '@/components/FbComponenets/fbLogin';
 import { useEffect, useState } from 'react';
 
 interface AdAccount {
@@ -70,6 +72,7 @@ const DashboardPage = () => {
   }, [code]);
 
   return (
+  <div>
     <div>
       <h2>Facebook Ad Accounts</h2>
       {loading && <p>Loading...</p>}
@@ -85,6 +88,15 @@ const DashboardPage = () => {
         </ul>
       )}
     </div>
+    <div>
+      <h2>Instagram Posts</h2>
+      <InstagramPosts />
+    </div>
+    <div>
+      <h2>Facebook Posts</h2>
+      <FacebookLogin />
+    </div>
+  </div>
   );
 };
 
