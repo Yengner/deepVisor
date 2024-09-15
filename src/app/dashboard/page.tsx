@@ -3,7 +3,8 @@
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-// Define the type for ad accounts
+export const dynamic = 'force-dynamic';
+
 interface AdAccount {
   id: string;
   name: string;
@@ -12,7 +13,7 @@ interface AdAccount {
 const DashboardPage = () => {
   const [adAccounts, setAdAccounts] = useState<AdAccount[]>([]);
   const [error, setError] = useState('');
-  const searchParams = useSearchParams();  // Client-side hook to get URL parameters
+  const searchParams = useSearchParams();  
 
   useEffect(() => {
     const code = searchParams.get('code');
