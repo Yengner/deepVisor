@@ -1,21 +1,19 @@
-import { supabase } from "@/lib/supabaseClient";
+'use client';
 
-export default async function Page() {
-  const { data: users, error } = await supabase.from("users").select("*");
+import FacebookLoginButton from '@/components/fbLogin'; // Adjust the path
 
-  if (error) {
-    return <div>Error: {error.message}</div>
-  }
+const FacebookLoginPage = () => {
+  const { handleLogin, accessToken, error } = FacebookLoginButton();
 
-  // You can now use the user object directly in your component
   return (
     <div>
-      <h1>User Info</h1>
-          <ul>
-            {users.map((user) => (
-              <li key={user.id}>{user.name}</li>
-            ))}
-          </ul>
+      <h1>Facebook Login</h1>
+      <button onClick={handleLogin}>Login with Facebook</button>
+
+      {accessToken && <p>Access Token: {accessToken}</p>}
+      {error && <p style={{ color: 'red' }}>{error}</p>}
     </div>
   );
-}
+};
+
+export default FacebookLoginPage;
