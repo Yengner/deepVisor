@@ -1,11 +1,15 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextApiRequest, NextApiResponse } from 'next';
 import axios from 'axios';
 
-export async function POST(req: NextRequest) {
-  const { code } = await req.json();
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ message: 'Method Not Allowed' });
+  }
+
+  const { code } = req.body;
 
   if (!code) {
-    return NextResponse.json({ error: 'Authorization code is required' }, { status: 400 });
+    return res.status(400).json({ error: 'Code is required.' });
   }
 
   try {
@@ -13,14 +17,16 @@ export async function POST(req: NextRequest) {
     const appSecret = process.env.FACEBOOK_APP_SECRET;
     const redirectUri = process.env.NEXT_PUBLIC_FACEBOOK_REDIRECT_URI;
 
-    const tokenUrl = `https://graph.facebook.com/v20.0/oauth/access_token?client_id=${appId}&client_secret=${appSecret}&redirect_uri=${redirectUri}&code=${code}`;
+    const tokenUrl = `https://graph.facebook.com/v20.0/oauth/access_token?client_id=${appId}&redirect_uri=${redirectUri}&client_secret=${appSecret}&code=${code}`;
 
+    // Exchange code for access token
     const response = await axios.get(tokenUrl);
-    const accessToken = response.data.access_token;
+    const { access_token } = response.data;
 
-    return NextResponse.json({ accessToken });
+    // Return the access token to the client
+    return res.status(200).json({ accessToken: access_token });
   } catch (error) {
     console.error('Error exchanging code for access token:', error);
-    return NextResponse.json({ error: 'Failed to exchange code for access token' }, { status: 500 });
+    return res.status(500).json({ error: 'Failed to exchange code for access token.' });
   }
 }
