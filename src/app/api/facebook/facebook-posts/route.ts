@@ -10,20 +10,20 @@ export async function GET(req: NextRequest) {
 
   try {
     const response = await axios.get(
-      'https://graph.instagram.com/me/media',
+      `https://graph.facebook.com/v20.0/PAGE_ID/posts`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
         params: {
-          fields: 'id,caption,media_type,media_url,permalink,timestamp',
+          fields: 'id,message,created_time', 
         },
       }
     );
 
     return NextResponse.json({ posts: response.data.data });
   } catch (error) {
-    console.error('Error fetching Instagram posts:', error);
-    return NextResponse.json({ error: 'Failed to fetch Instagram posts' }, { status: 500 });
+    console.error('Error fetching Facebook posts:', error);
+    return NextResponse.json({ error: 'Failed to fetch Facebook posts' }, { status: 500 });
   }
 }
