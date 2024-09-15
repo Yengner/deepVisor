@@ -13,7 +13,6 @@ const DashboardPage = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true); // Loading state
   const [code, setCode] = useState<string | null>(null);
-  const router = useRouter();
 
   useEffect(() => {
     // Ensure the code only runs on the client
