@@ -1,10 +1,9 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
-export const dynamic = 'force-dynamic';
-
+// Define the type for ad accounts
 interface AdAccount {
   id: string;
   name: string;
@@ -13,10 +12,10 @@ interface AdAccount {
 const DashboardPage = () => {
   const [adAccounts, setAdAccounts] = useState<AdAccount[]>([]);
   const [error, setError] = useState('');
-  const searchParams = useSearchParams();  
+  const router = useRouter();  // Use useRouter instead of useSearchParams
 
   useEffect(() => {
-    const code = searchParams.get('code');
+    const { code } = router.query;  // Access the query parameters from the router
 
     if (code) {
       // Handle exchanging the code for access token
@@ -50,7 +49,7 @@ const DashboardPage = () => {
 
       exchangeCodeForAccessToken();
     }
-  }, [searchParams]);
+  }, [router.query]);
 
   return (
     <div>
