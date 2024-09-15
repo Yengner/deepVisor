@@ -10,7 +10,7 @@ interface AdAccount {
 }
 
 const Dashboard = () => {
-  const [adAccounts, setAdAccounts] = useState<AdAccount[]>([]);
+  const [adAccounts, setAdAccounts] = useState<AdAccount[]>([]);  // This will hold the fetched ad accounts
   const [error, setError] = useState('');
   const searchParams = useSearchParams();  // Client-side hook to get URL parameters
 
@@ -31,7 +31,14 @@ const Dashboard = () => {
 
           if (response.ok) {
             localStorage.setItem('fb_access_token', data.accessToken);
-            // Optionally, you can remove the 'code' from the URL
+            // Now fetch the ad accounts after storing the access token
+            const adAccountsResponse = await fetch('/api/facebook/ad-accounts', {
+              headers: {
+                Authorization: `Bearer ${data.accessToken}`,
+              },
+            });
+            const adAccountsData = await adAccountsResponse.json();
+            setAdAccounts(adAccountsData.accounts);  // Update the adAccounts state with fetched data
           } else {
             setError(data.error);
           }
