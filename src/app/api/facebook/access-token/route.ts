@@ -1,18 +1,15 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextRequest, NextResponse } from 'next/server';
 import axios from 'axios';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ message: 'Method Not Allowed' });
-  }
-
-  const { code } = req.body;
-
-  if (!code) {
-    return res.status(400).json({ error: 'Code is required.' });
-  }
-
+// This is how you define the handler for POST requests
+export async function POST(req: NextRequest) {
   try {
+    const { code } = await req.json();
+
+    if (!code) {
+      return NextResponse.json({ error: 'Code is required.' }, { status: 400 });
+    }
+
     const appId = process.env.NEXT_PUBLIC_FACEBOOK_APP_ID;
     const appSecret = process.env.FACEBOOK_APP_SECRET;
     const redirectUri = process.env.NEXT_PUBLIC_FACEBOOK_REDIRECT_URI;
@@ -23,10 +20,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const response = await axios.get(tokenUrl);
     const { access_token } = response.data;
 
-    // Return the access token to the client
-    return res.status(200).json({ accessToken: access_token });
+    return NextResponse.json({ accessToken: access_token });
   } catch (error) {
     console.error('Error exchanging code for access token:', error);
-    return res.status(500).json({ error: 'Failed to exchange code for access token.' });
+    return NextResponse.json({ error: 'Failed to exchange code for access token.' }, { status: 500 });
   }
 }
