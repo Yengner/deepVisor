@@ -1,7 +1,5 @@
 'use client';  // This ensures the file is treated as a client-side component
 
-import InstagramPosts from '@/components/FbComponenets/InstagramPosts';
-import FacebookLogin from '@/components/FbComponenets/fbLogin';
 import { useEffect, useState } from 'react';
 
 interface AdAccount {
@@ -12,11 +10,10 @@ interface AdAccount {
 const DashboardPage = () => {
   const [adAccounts, setAdAccounts] = useState<AdAccount[]>([]);
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(true); // Loading state
+  const [loading, setLoading] = useState(true);
   const [code, setCode] = useState<string | null>(null);
 
   useEffect(() => {
-    // Ensure the code only runs on the client
     if (typeof window !== 'undefined') {
       const searchParams = new URLSearchParams(window.location.search);
       setCode(searchParams.get('code'));
@@ -24,40 +21,56 @@ const DashboardPage = () => {
   }, []);
 
   useEffect(() => {
-    const exchangeCodeForAccessToken = async () => {
-      if (!code) return;
-
+    const fetchAccessTokenAndAdAccounts = async () => {
       try {
         setLoading(true);
-        const response = await fetch('/api/facebook/access-token', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ code }),
-        });
 
-        if (!response.ok) {
-          const errorData = await response.json();
-          setError(errorData.error || 'Error exchanging code for access token.');
-          setLoading(false);
-          return;
+        // Check if access token is already in sessionStorage
+        let accessToken = sessionStorage.getItem('fb_access_token');
+
+        if (!accessToken && code) {
+          // Exchange code for access token
+          const response = await fetch('/api/facebook/access-token', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ code }),
+          });
+
+          if (!response.ok) {
+            const errorData = await response.json();
+            setError(errorData.error || 'Error exchanging code for access token.');
+            setLoading(false);
+            return;
+          }
+
+          const data = await response.json();
+          accessToken = data.accessToken;
+
+          if (!accessToken) {
+            setError('Failed to retrieve access token.');
+            setLoading(false);
+            return;
+          }
+
+          // Save access token to sessionStorage
+          sessionStorage.setItem('fb_access_token', accessToken);
         }
 
-        const data = await response.json();
-        localStorage.setItem('fb_access_token', data.accessToken);
+        if (accessToken) {
+          // Fetch ad accounts using the access token
+          const adAccountsResponse = await fetch('/api/facebook/ad-accounts', {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          });
 
-        // Fetch ad accounts using the access token
-        const adAccountsResponse = await fetch('/api/facebook/ad-accounts', {
-          headers: {
-            Authorization: `Bearer ${data.accessToken}`,
-          },
-        });
-
-        if (!adAccountsResponse.ok) {
-          const adAccountsError = await adAccountsResponse.json();
-          setError(adAccountsError.error || 'Error fetching ad accounts.');
-        } else {
-          const adAccountsData = await adAccountsResponse.json();
-          setAdAccounts(adAccountsData.accounts || []);
+          if (!adAccountsResponse.ok) {
+            const adAccountsError = await adAccountsResponse.json();
+            setError(adAccountsError.error || 'Error fetching ad accounts.');
+          } else {
+            const adAccountsData = await adAccountsResponse.json();
+            setAdAccounts(adAccountsData.accounts || []);
+          }
         }
       } catch (err) {
         setError('Error communicating with the server.');
@@ -66,13 +79,12 @@ const DashboardPage = () => {
       }
     };
 
-    if (code) {
-      exchangeCodeForAccessToken();
+    if (code || sessionStorage.getItem('fb_access_token')) {
+      fetchAccessTokenAndAdAccounts();
     }
   }, [code]);
 
   return (
-  <div>
     <div>
       <h2>Facebook Ad Accounts</h2>
       {loading && <p>Loading...</p>}
@@ -88,15 +100,6 @@ const DashboardPage = () => {
         </ul>
       )}
     </div>
-    <div>
-      <h2>Instagram Posts</h2>
-      <InstagramPosts />
-    </div>
-    <div>
-      <h2>Facebook Posts</h2>
-      <FacebookLogin />
-    </div>
-  </div>
   );
 };
 
