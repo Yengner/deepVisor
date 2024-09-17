@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import Fbcampaigns  from '../../components/FbComponenets/fb_campaigns'
-import { fetchFacebookCampaignInsights } from '@/lib/meta.insights';
 
 interface AdAccount {
   id: string;

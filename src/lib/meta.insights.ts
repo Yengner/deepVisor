@@ -1,6 +1,6 @@
 'use server';
 
-import { FacebookAdsApi, AdAccount, Campaign, AdConversions } from 'facebook-nodejs-business-sdk';
+import { FacebookAdsApi, AdAccount, Campaign } from 'facebook-nodejs-business-sdk';
 
 interface Action {
     action_type: string;
