@@ -8,23 +8,19 @@ interface Action {
   }
 
 // Initialize Facebook API with access token from environment variables
-let accessToken = sessionStorage.getItem('fb_access_token');
 
 // Helper function to initialize the Facebook API
-function initFacebookApi() {
-  if (!accessToken) {
-    throw new Error('Facebook access token is missing from environment variables');
-  }
-  FacebookAdsApi.init(accessToken);
-}
+
 
 // Fetch Facebook campaign insights using the user's fbId
-export const fetchFacebookCampaignInsights = async (fbId: string) => {
-  initFacebookApi();
+export const fetchFacebookCampaignInsights = async (accessToken: string) => {
+    FacebookAdsApi.init(accessToken);
+    
 
+  try {
+    const account = new AdAccount(accessToken); // Initialize AdAccount with the access token
 
-try {
-    const account = new AdAccount(fbId);
+    // Fetch campaigns from the Facebook Ads account
     const campaigns = await account.getCampaigns([Campaign.Fields.name], { limit: 10 });
 
     // Fetch insights for each campaign

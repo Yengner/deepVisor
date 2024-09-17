@@ -2,7 +2,7 @@ import React from 'react'
 import { fetchFacebookCampaignInsights }from '../../lib/meta.insights'
 
 
-const fb_campaigns = async ({accountId}: any) => {
+const Fbcampaigns = async ({accountId}: any) => {
     // Fetch Facebook campaigns using the user's fbId
     const campaigns = await fetchFacebookCampaignInsights(accountId);
     return (
@@ -29,4 +29,4 @@ const fb_campaigns = async ({accountId}: any) => {
     );    
 }
 
-export default fb_campaigns
+export default Fbcampaigns;  // Export the component
