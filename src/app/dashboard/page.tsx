@@ -104,7 +104,7 @@ const DashboardPage = () => {
       )}
       <div>
         <h2>Campaigns</h2>
-        <Fbcampaigns adAccounts={adAccounts[0].id}/>
+        <Fbcampaigns accountId={adAccounts[0].id}/>
       </div>
     </div>
   );
