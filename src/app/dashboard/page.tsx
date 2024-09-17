@@ -1,6 +1,7 @@
 'use client';  // This ensures the file is treated as a client-side component
 
 import { useEffect, useState } from 'react';
+import fb_campaigns from '../../components/FbComponenets/fb_campaigns'
 
 interface AdAccount {
   id: string;
@@ -12,6 +13,7 @@ const DashboardPage = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
   const [code, setCode] = useState<string | null>(null);
+
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -83,7 +85,8 @@ const DashboardPage = () => {
       fetchAccessTokenAndAdAccounts();
     }
   }, [code]);
-
+  const adAccountId = adAccounts.length > 0 ? adAccounts[0].id : null;
+  const campaigns = fb_campaigns(adAccountId);
   return (
     <div>
       <h2>Facebook Ad Accounts</h2>
@@ -97,8 +100,13 @@ const DashboardPage = () => {
               <p>ID: {account.id}</p>
             </li>
           ))}
-        </ul>
+        </ul>      
       )}
+      <div>
+        <h2>Campaigns</h2>
+        {campaigns}
+        
+      </div>
     </div>
   );
 };
