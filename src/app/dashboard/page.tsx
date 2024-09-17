@@ -1,7 +1,7 @@
 'use client';  // This ensures the file is treated as a client-side component
 
 import { useEffect, useState } from 'react';
-import Fbcampaigns  from '../../components/FbComponenets/fb_campaigns'
+import Fbcampaigns from '../../components/FbComponenets/fb_campaigns';
 
 interface AdAccount {
   id: string;
@@ -13,7 +13,6 @@ const DashboardPage = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
   const [code, setCode] = useState<string | null>(null);
-
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -59,7 +58,6 @@ const DashboardPage = () => {
         }
 
         if (accessToken) {
-          // Fetch ad accounts using the access token
           const adAccountsResponse = await fetch('/api/facebook/ad-accounts', {
             headers: {
               Authorization: `Bearer ${accessToken}`,
@@ -91,20 +89,24 @@ const DashboardPage = () => {
       <h2>Facebook Ad Accounts</h2>
       {loading && <p>Loading...</p>}
       {error && <p style={{ color: 'red' }}>{error}</p>}
-      {!loading && !error && (
-        <ul>
-          {adAccounts.map((account) => (
-            <li key={account.id}>
-              <p>{account.name}</p>
-              <p>ID: {account.id}</p>
-            </li>
-          ))}
-        </ul>      
+      {!loading && !error && adAccounts.length > 0 ? (
+        <>
+          <ul>
+            {adAccounts.map((account) => (
+              <li key={account.id}>
+                <p>{account.name}</p>
+                <p>ID: {account.id}</p>
+              </li>
+            ))}
+          </ul>
+          <div>
+            <h2>Campaigns</h2>
+            {adAccounts[0] && <Fbcampaigns accountId={adAccounts[0].id} />}
+          </div>
+        </>
+      ) : (
+        !loading && !error && <p>No ad accounts found.</p>
       )}
-      <div>
-        <h2>Campaigns</h2>
-        <Fbcampaigns accountId={adAccounts[0].id}/>
-      </div>
     </div>
   );
 };
