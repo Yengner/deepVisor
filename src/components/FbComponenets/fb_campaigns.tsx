@@ -28,6 +28,7 @@ const Fbcampaigns: React.FC<FbcampaignsProps> = ({ accountId }) => {
   useEffect(() => {
     const getCampaigns = async () => {
       try {
+        console.log('accountId within fb_campaign component:', accountId);
         const campaignData = await fetchFacebookCampaignInsights(accountId);
         console.log('campaignData:', campaignData);
         setCampaigns(campaignData);

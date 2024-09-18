@@ -20,6 +20,7 @@ function initFacebookApi() {
 
 // Fetch Facebook campaign insights using the user's adAccountId
 export const fetchFacebookCampaignInsights = async (adAccountId: string) => {
+  console.log('Fetching insights for Ad Account:', adAccountId);
   initFacebookApi();  // Initialize the Facebook API with the access token
 
   try {
