@@ -9,7 +9,6 @@ interface Action {
 
 // Initialize Facebook API with access token from environment variables
 const accessToken = process.env.FB_ACCESS_TOKEN;
-
 // Helper function to initialize the Facebook API
 function initFacebookApi() {
   if (!accessToken) {
