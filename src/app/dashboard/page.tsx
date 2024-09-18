@@ -98,13 +98,10 @@ const DashboardPage = () => {
                 <p>ID: {account.id}</p>
               </li>
             ))}
-          </ul>
-          <div>
-            <h2>Campaigns</h2>
             {adAccounts.map((account) => (
               <Fbcampaigns key={account.id} accountId={account.id} />
             ))}
-          </div>
+          </ul>
         </>
       ) : (
         !loading && !error && <p>No ad accounts found.</p>
