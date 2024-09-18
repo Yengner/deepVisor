@@ -3,27 +3,27 @@
 import { FacebookAdsApi, AdAccount, Campaign } from 'facebook-nodejs-business-sdk';
 
 interface Action {
-    action_type: string;
-    value: string | number;
-    accessToken: string
-  }
-interface AccountId {
-    accountId: string;
+  action_type: string;
+  value: string | number;
 }
 
 // Initialize Facebook API with access token from environment variables
+const accessToken = process.env.FB_ACCESS_TOKEN;
 
 // Helper function to initialize the Facebook API
+function initFacebookApi() {
+  if (!accessToken) {
+    throw new Error('Facebook access token is missing from environment variables');
+  }
+  FacebookAdsApi.init(accessToken);
+}
 
-
-// Fetch Facebook campaign insights using the user's fbId
-export const fetchFacebookCampaignInsights = async ({accountId}: AccountId) => {
-  console.log('Fetching insights for account:', accountId);
-  FacebookAdsApi.init(accountId);
-    
+// Fetch Facebook campaign insights using the user's adAccountId
+export const fetchFacebookCampaignInsights = async (adAccountId: string) => {
+  initFacebookApi();  // Initialize the Facebook API with the access token
 
   try {
-    const account = new AdAccount(accountId); // Initialize AdAccount with the access token
+    const account = new AdAccount(adAccountId);  // Initialize AdAccount with adAccountId
 
     // Fetch campaigns from the Facebook Ads account
     const campaigns = await account.getCampaigns([Campaign.Fields.name], { limit: 10 });
@@ -42,7 +42,7 @@ export const fetchFacebookCampaignInsights = async ({accountId}: AccountId) => {
           'cpm',
           'conversions',
           'unique_clicks',
-          'cost_per_action_type'
+          'cost_per_action_type',
         ], {
           date_preset: 'maximum', // Fetch data for the maximum time period
           action_breakdowns: ['action_type'], // Break down by action type (e.g., leads)
@@ -51,8 +51,8 @@ export const fetchFacebookCampaignInsights = async ({accountId}: AccountId) => {
 
         // Extract lead count from the insights
         const leads = insights[0]?.actions?.find((action: Action) => action.action_type === 'lead')?.value || 0;
-        console.log('actions:', insights[0]?.actions);
         const link_click = insights[0]?.actions?.find((action: Action) => action.action_type === "link_click")?.value || 0;
+
         return {
           id: campaign.id,
           name: campaign.name,
