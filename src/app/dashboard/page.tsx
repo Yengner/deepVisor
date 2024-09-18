@@ -101,7 +101,9 @@ const DashboardPage = () => {
           </ul>
           <div>
             <h2>Campaigns</h2>
-            {adAccounts[0] && <Fbcampaigns accountId={adAccounts[0].id} />}
+            {adAccounts.map((account) => (
+              <Fbcampaigns key={account.id} accountId={account.id} />
+            ))}
           </div>
         </>
       ) : (
