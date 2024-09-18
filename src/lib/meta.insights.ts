@@ -5,7 +5,11 @@ import { FacebookAdsApi, AdAccount, Campaign } from 'facebook-nodejs-business-sd
 interface Action {
     action_type: string;
     value: string | number;
+    accessToken: string
   }
+interface AccountId {
+    accountId: string;
+}
 
 // Initialize Facebook API with access token from environment variables
 
@@ -13,12 +17,13 @@ interface Action {
 
 
 // Fetch Facebook campaign insights using the user's fbId
-export const fetchFacebookCampaignInsights = async (accessToken: string) => {
-    FacebookAdsApi.init(accessToken);
+export const fetchFacebookCampaignInsights = async ({accountId}: AccountId) => {
+  console.log('Fetching insights for account:', accountId);
+  FacebookAdsApi.init(accountId);
     
 
   try {
-    const account = new AdAccount(accessToken); // Initialize AdAccount with the access token
+    const account = new AdAccount(accountId); // Initialize AdAccount with the access token
 
     // Fetch campaigns from the Facebook Ads account
     const campaigns = await account.getCampaigns([Campaign.Fields.name], { limit: 10 });
