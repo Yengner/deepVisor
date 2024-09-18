@@ -70,7 +70,6 @@ const DashboardPage = () => {
           } else {
             const adAccountsData = await adAccountsResponse.json();
             setAdAccounts(adAccountsData.accounts || []);
-            console.log('Ad Accounts:', adAccounts);
           }
         }
       } catch (err) {
@@ -99,7 +98,7 @@ const DashboardPage = () => {
                 <p>ID: {account.id}</p>
               </li>
             ))}
-            console.log('adAccounts:', adAccounts);
+            
             {adAccounts.map((account) => (
               <Fbcampaigns key={account.id} accountId={account.id} />
             ))}

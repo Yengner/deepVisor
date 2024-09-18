@@ -24,6 +24,7 @@ const Fbcampaigns: React.FC<FbcampaignsProps> = ({ accountId }) => {
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  console.log('accountId:', accountId);
 
   useEffect(() => {
     const getCampaigns = async () => {
