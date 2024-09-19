@@ -99,10 +99,9 @@ const DashboardPage = () => {
               </li>
             ))}
             
-            <Fbcampaigns accountId='act_782974607026594'/>
-            {/* {adAccounts.map((account) => (
+            {adAccounts.map((account) => (
               <Fbcampaigns key={account.id} accountId={account.id} />
-            ))} */}
+            ))}
           </ul>
         </>
       ) : (
