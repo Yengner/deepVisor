@@ -1,111 +1,102 @@
-'use client';  // This ensures the file is treated as a client-side component
+'use client';
 
 import { useEffect, useState } from 'react';
+import { fetchAdAccounts, fetchAccountInfo, fetchAccessToken } from '@/lib/actions/facebook.actions';
 import Fbcampaigns from '../../components/FbComponenets/fb_campaigns';
 
 interface AdAccount {
   id: string;
+}
+
+interface AccountInfo {
+  id: string;
   name: string;
+  category: string;
+  category_list: { id: string; name: string }[];
+  tasks: string[];
 }
 
 const DashboardPage = () => {
   const [adAccounts, setAdAccounts] = useState<AdAccount[]>([]);
-  const [error, setError] = useState('');
+  const [accountsInfo, setAccountsInfo] = useState<AccountInfo[]>([]);
+  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [code, setCode] = useState<string | null>(null);
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const searchParams = new URLSearchParams(window.location.search);
-      setCode(searchParams.get('code'));
-    }
-  }, []);
+    const fetchData = async () => {
+      const code = new URLSearchParams(window.location.search).get('code');
+      if (!code) {
+        setError('Code is required.');
+        setLoading(false);
+        return;
+      }
 
-  useEffect(() => {
-    const fetchAccessTokenAndAdAccounts = async () => {
       try {
-        setLoading(true);
+        const accessToken = await fetchAccessToken(code);
 
-        // Check if access token is already in sessionStorage
-        let accessToken = sessionStorage.getItem('fb_access_token');
+        // Fetch ad accounts and account info concurrently
+        const [fetchedAdAccounts, fetchedAccountsInfo] = await Promise.all([
+          fetchAdAccounts(accessToken),
+          fetchAccountInfo(accessToken),
+        ]);
 
-        if (!accessToken && code) {
-          // Exchange code for access token
-          const response = await fetch('/api/facebook/access-token', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ code }),
-          });
-
-          if (!response.ok) {
-            const errorData = await response.json();
-            setError(errorData.error || 'Error exchanging code for access token.');
-            setLoading(false);
-            return;
-          }
-
-          const data = await response.json();
-          accessToken = data.accessToken;
-
-          if (!accessToken) {
-            setError('Failed to retrieve access token.');
-            setLoading(false);
-            return;
-          }
-
-          // Save access token to sessionStorage
-          sessionStorage.setItem('fb_access_token', accessToken);
-        }
-
-        if (accessToken) {
-          const adAccountsResponse = await fetch('/api/facebook/ad-accounts', {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          });
-
-          if (!adAccountsResponse.ok) {
-            const adAccountsError = await adAccountsResponse.json();
-            setError(adAccountsError.error || 'Error fetching ad accounts.');
-          } else {
-            const adAccountsData = await adAccountsResponse.json();
-            setAdAccounts(adAccountsData.accounts || []);
-          }
-        }
-      } catch (err) {
-        setError('Error communicating with the server.');
+        setAdAccounts(fetchedAdAccounts);
+        setAccountsInfo(fetchedAccountsInfo);
+      } catch (err: any) {
+        setError(err.message || 'Error fetching data');
       } finally {
         setLoading(false);
       }
     };
 
-    if (code || sessionStorage.getItem('fb_access_token')) {
-      fetchAccessTokenAndAdAccounts();
-    }
-  }, [code]);
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return (
+      <div>
+        <h2>Facebook Dashboard</h2>
+        <p style={{ color: 'red' }}>{error}</p>
+      </div>
+    );
+  }
 
   return (
     <div>
       <h2>Facebook Ad Accounts</h2>
-      {loading && <p>Loading...</p>}
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      {!loading && !error && adAccounts.length > 0 ? (
-        <>
-          <ul>
-            {adAccounts.map((account) => (
-              <li key={account.id}>
-                <p>{account.name}</p>
-                <p>ID: {account.id}</p>
-              </li>
-            ))}
-            
-            {adAccounts.map((account) => (
+      {adAccounts.length > 0 ? (
+        <ul>
+          {adAccounts.map((account: AdAccount) => (
+            <li key={account.id}>
+              <p>ID: {account.id}</p>
               <Fbcampaigns key={account.id} accountId={account.id} />
-            ))}
-          </ul>
-        </>
+            </li>
+          ))}
+        </ul>
       ) : (
-        !loading && !error && <p>No ad accounts found.</p>
+        <p>No ad accounts found.</p>
+      )}
+
+      <h2>Facebook Business Accounts</h2>
+      {accountsInfo.length > 0 ? (
+        <ul>
+          {accountsInfo.map((account: AccountInfo) => (
+            <li
+              key={account.id}
+              style={{ border: '1px solid black', padding: '10px', margin: '10px' }}
+            >
+              <h2>{account.id}</h2>
+              <h3>{account.name}</h3>
+              <p>Category: {account.category}</p>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>No business accounts found.</p>
       )}
     </div>
   );
