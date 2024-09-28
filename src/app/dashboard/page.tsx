@@ -42,8 +42,12 @@ const DashboardPage = () => {
 
         setAdAccounts(fetchedAdAccounts);
         setAccountsInfo(fetchedAccountsInfo);
-      } catch (err: any) {
-        setError(err.message || 'Error fetching data');
+      } catch (err) {
+        if (err instanceof Error) {
+          setError(err.message || 'Error fetching data');
+        } else {
+          setError('An unknown error occurred.');
+        }
       } finally {
         setLoading(false);
       }
