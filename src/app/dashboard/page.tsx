@@ -24,17 +24,27 @@ const DashboardPage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const code = new URLSearchParams(window.location.search).get('code');
-      if (!code) {
-        setError('Code is required.');
-        setLoading(false);
-        return;
+      let accessToken = localStorage.getItem('fb_access_token');
+
+      if (!accessToken) {
+        const code = new URLSearchParams(window.location.search).get('code');
+        if (!code) {
+          setError('Authorization code is required.');
+          setLoading(false);
+          return;
+        }
+
+        try {
+          accessToken = await fetchAccessToken(code);
+          localStorage.setItem('fb_access_token', accessToken); 
+        } catch (err) {
+          setError('Failed to fetch access token');
+          setLoading(false);
+          return;
+        }
       }
 
       try {
-        const accessToken = await fetchAccessToken(code);
-
-        // Fetch ad accounts and account info concurrently
         const [fetchedAdAccounts, fetchedAccountsInfo] = await Promise.all([
           fetchAdAccounts(accessToken),
           fetchAccountInfo(accessToken),
@@ -54,7 +64,7 @@ const DashboardPage = () => {
     };
 
     fetchData();
-  }, []);
+  }, []); 
 
   if (loading) {
     return <div>Loading...</div>;
