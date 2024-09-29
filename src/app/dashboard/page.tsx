@@ -24,6 +24,8 @@ const DashboardPage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      // const temp_accessToken = "EAAQohtuZCRFoBOx3GZAqqeivf517rruze8UZC6NEezUhhmAEuLNYWesy1wRZBgfDZBi5GfWOIevZCC5QQ3fNVBDJDLIrT7k5ivzj8ZCQ3G4eMt53KOo7NbiZCH9fW4MlUfQ6e4HiBCqjQXejT0msDFLcXHY6q6ec28EoWYNYcojs0B64QkSZBkVVyTZBa8T4iAlg1oeilAR9WzCO9MERZA73usonEpSld8esHQ2N5cc7xFNnLebx7cbEzpNR7Yd9dNB"
+      // localStorage.setItem('fb_access_token', temp_accessToken); // Temporary use local storage in place of subabase
       let accessToken = localStorage.getItem('fb_access_token');
 
       if (!accessToken) {
@@ -36,7 +38,7 @@ const DashboardPage = () => {
 
         try {
           accessToken = await fetchAccessToken(code);
-          localStorage.setItem('fb_access_token', accessToken); 
+          localStorage.setItem('fb_access_token', accessToken); // Take out this line when using subabase
         } catch (err) {
           setError('Failed to fetch access token');
           setLoading(false);
@@ -49,9 +51,11 @@ const DashboardPage = () => {
           fetchAdAccounts(accessToken),
           fetchAccountInfo(accessToken),
         ]);
-
+        
+        localStorage.setItem('fb_ad_account_id', fetchedAdAccounts[0].id); // Temporary use local storage in place of subabase
         setAdAccounts(fetchedAdAccounts);
         setAccountsInfo(fetchedAccountsInfo);
+
       } catch (err) {
         if (err instanceof Error) {
           setError(err.message || 'Error fetching data');
