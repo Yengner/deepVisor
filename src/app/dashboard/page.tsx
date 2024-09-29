@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { fetchAdAccounts, fetchAccountInfo, fetchAccessToken } from '@/lib/actions/facebook.actions';
 import Fbcampaigns from '../../components/FbComponenets/fb_campaigns';
-
+import { useRouter } from 'next/navigation';
 interface AdAccount {
   id: string;
 }
@@ -21,7 +21,11 @@ const DashboardPage = () => {
   const [accountsInfo, setAccountsInfo] = useState<AccountInfo[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
+  const handleNavigateToCampaigns = () => {
+    router.push('/campaigns');  // Push to the /campaigns page
+  };
   useEffect(() => {
     const fetchData = async () => {
       // const temp_accessToken = "EAAQohtuZCRFoBOx3GZAqqeivf517rruze8UZC6NEezUhhmAEuLNYWesy1wRZBgfDZBi5GfWOIevZCC5QQ3fNVBDJDLIrT7k5ivzj8ZCQ3G4eMt53KOo7NbiZCH9fW4MlUfQ6e4HiBCqjQXejT0msDFLcXHY6q6ec28EoWYNYcojs0B64QkSZBkVVyTZBa8T4iAlg1oeilAR9WzCO9MERZA73usonEpSld8esHQ2N5cc7xFNnLebx7cbEzpNR7Yd9dNB"
@@ -85,6 +89,9 @@ const DashboardPage = () => {
 
   return (
     <div>
+      <button onClick={handleNavigateToCampaigns}>
+        Go to Campaigns
+      </button>
       <h2>Facebook Ad Accounts</h2>
       {adAccounts.length > 0 ? (
         <ul>
