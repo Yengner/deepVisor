@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import { fetchAdAccounts, fetchAccountInfo, fetchAccessToken } from '@/lib/actions/facebook.actions';
-import Fbcampaigns from '../../components/FbComponenets/fb_campaigns';
 import { useRouter } from 'next/navigation';
+import Fbcampaigns from '../../components/FbComponenets/FbCampaignData';
+
 interface AdAccount {
   id: string;
 }
