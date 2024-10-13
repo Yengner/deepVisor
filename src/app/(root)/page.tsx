@@ -29,8 +29,8 @@ const DashboardPage = () => {
   };
   useEffect(() => {
     const fetchData = async () => {
-      // const temp_accessToken = "EAAQohtuZCRFoBOx3GZAqqeivf517rruze8UZC6NEezUhhmAEuLNYWesy1wRZBgfDZBi5GfWOIevZCC5QQ3fNVBDJDLIrT7k5ivzj8ZCQ3G4eMt53KOo7NbiZCH9fW4MlUfQ6e4HiBCqjQXejT0msDFLcXHY6q6ec28EoWYNYcojs0B64QkSZBkVVyTZBa8T4iAlg1oeilAR9WzCO9MERZA73usonEpSld8esHQ2N5cc7xFNnLebx7cbEzpNR7Yd9dNB"
-      // localStorage.setItem('fb_access_token', temp_accessToken); // Temporary use local storage in place of subabase
+      const temp_accessToken = "EAAQohtuZCRFoBOx3GZAqqeivf517rruze8UZC6NEezUhhmAEuLNYWesy1wRZBgfDZBi5GfWOIevZCC5QQ3fNVBDJDLIrT7k5ivzj8ZCQ3G4eMt53KOo7NbiZCH9fW4MlUfQ6e4HiBCqjQXejT0msDFLcXHY6q6ec28EoWYNYcojs0B64QkSZBkVVyTZBa8T4iAlg1oeilAR9WzCO9MERZA73usonEpSld8esHQ2N5cc7xFNnLebx7cbEzpNR7Yd9dNB"
+      localStorage.setItem('fb_access_token', temp_accessToken); // Temporary use local storage in place of subabase
       let accessToken = localStorage.getItem('fb_access_token');
 
       if (!accessToken) {
