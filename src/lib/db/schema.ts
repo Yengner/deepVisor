@@ -1,4 +1,4 @@
-import { pgTable, serial, text, uuid, timestamp, integer, decimal } from 'drizzle-orm/pg-core';
+import { pgTable, serial, text, uuid, timestamp } from 'drizzle-orm/pg-core';
 
 // Users table (Linked to Supabase Auth, manual reference in migrations)
 export const users = pgTable('users', {
