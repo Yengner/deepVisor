@@ -17,7 +17,7 @@ const SidebarDropdown = ({ item }: SidebarDropdownProps) => {
   return (
     <>
       <ul className="mb-5.5 mt-4 flex flex-col gap-2.5 pl-6">
-        {item.map((item: any, index: number) => (
+        {item.map((item: MenuItem, index: number) => (
           <li key={index}>
             <Link
               href={item.route}

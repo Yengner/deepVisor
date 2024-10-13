@@ -29,7 +29,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ item, pageName, setPageName }
   const isActive = (item: MenuItem): boolean => {
     if (item.route === pathname) return true;
     if (item.children) {
-      return item.children.some((child: any) => isActive(child));
+      return item.children.some((child) => isActive(child));
     }
     return false;
   };
