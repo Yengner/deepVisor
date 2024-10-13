@@ -3,16 +3,30 @@ import Link from "next/link";
 import SidebarDropdown from "@/components/Sidebar/SidebarDropdown";
 import { usePathname } from "next/navigation";
 
-const SidebarItem = ({ item, pageName, setPageName }: any) => {
+interface MenuItem {
+  route: string;
+  label: string;
+  icon?: React.ReactNode; // Optional icon, assuming it's a React element
+  children?: MenuItem[]; // Optional array of children, following the same structure
+}
+
+interface SidebarItemProps {
+  item: MenuItem;
+  pageName: string;
+  setPageName: (name: string) => void;
+}
+
+const SidebarItem: React.FC<SidebarItemProps> = ({ item, pageName, setPageName }) => {
+  const pathname = usePathname();
+
   const handleClick = () => {
     const updatedPageName =
       pageName !== item.label.toLowerCase() ? item.label.toLowerCase() : "";
     return setPageName(updatedPageName);
   };
 
-  const pathname = usePathname();
 
-  const isActive = (item: any) => {
+  const isActive = (item: MenuItem): boolean => {
     if (item.route === pathname) return true;
     if (item.children) {
       return item.children.some((child: any) => isActive(child));
