@@ -33,15 +33,15 @@ export const facebookAdCampaigns = pgTable('facebook_ad_campaigns', {
   created_at: timestamp('created_at').defaultNow(),
 });
 
-export const campaignPerformance = pgTable('campaign_performance', {
-    id: serial('id').primaryKey(), // Auto-incremented primary key
-    campaign_id: integer('campaign_id').notNull(), // Foreign key to facebook_ad_campaigns
-    impressions: integer('impressions').notNull(), // Number of impressions
-    clicks: integer('clicks').notNull(), // Number of clicks
-    conversions: integer('conversions').notNull(), // Number of conversions
-    spend: decimal('spend', 10, 2).notNull(), // Spend amount
-    created_at: timestamp('created_at').defaultNow(), // Timestamp for performance data
-  });
+// export const campaignPerformance = pgTable('campaign_performance', {
+//     id: serial('id').primaryKey(), // Auto-incremented primary key
+//     campaign_id: integer('campaign_id').notNull(), // Foreign key to facebook_ad_campaigns
+//     impressions: integer('impressions').notNull(), // Number of impressions
+//     clicks: integer('clicks').notNull(), // Number of clicks
+//     conversions: integer('conversions').notNull(), // Number of conversions
+//     spend: decimal('spend', 10, 2).notNull(), // Spend amount
+//     created_at: timestamp('created_at').defaultNow(), // Timestamp for performance data
+//   });
 
 // User Activity Logs table
 export const userActivityLogs = pgTable('user_activity_logs', {
