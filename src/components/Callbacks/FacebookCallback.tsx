@@ -1,68 +1,33 @@
-'use client';
-
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createBrowserClient } from '@/lib/utils/supabase/clients/browser';
 import { handleFacebookIntegration } from '@/lib/integrations/facebook/facebook.actions'; // Server-side function
 import { fetchAccessToken } from '@/lib/integrations/facebook/facebook.api';
+import { Session } from '@supabase/supabase-js';  // Import Session type from Supabase
 
 const supabase = createBrowserClient();  // Initialize browser client
 
-const FacebookIntegrationCallback = () => {
+interface FacebookIntegrationCallbackProps {
+  session: Session | null;  // Define the session type or allow null
+}
+
+const FacebookIntegrationCallback: React.FC<FacebookIntegrationCallbackProps> = ({ session }) => {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  // New function to check if the user has already integrated Facebook
-  const checkFacebookIntegration = async (userId: string) => {
-    const { data, error } = await supabase
-      .from('access_token') // Change this to your table where Facebook integration data is stored
-      .select('facebook_access_token')
-      .eq('user_id', userId)
-      .single();
-
-    if (error || !data) {
-      return false; // No integration found, return false
-    }
-
-    return true; // Facebook is already integrated, return true
-  };
-
-  const refreshUserSession = async () => {
-    const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
-    if (sessionError || !sessionData?.session) {
-      throw new Error('Failed to refresh session');
-    }
-    return sessionData.session;
-  };
-
 
   useEffect(() => {
     const handleIntegration = async () => {
       const code = new URLSearchParams(window.location.search).get('code');
     
       try {
-        // refreshing the session
-        await refreshUserSession();
-
-        // Get authenticated user
-        const { data: user, error: userError } = await supabase.auth.getUser();
-        if (userError || !user?.user) {
+        // Get authenticated user from session passed down from the page
+        const userId = session?.user?.id;
+        if (!userId) {
           throw new Error('Failed to retrieve authenticated user');
         }
 
-        const userId = user.user.id;
-
-        // Check if the user already has Facebook integrated
-        const isIntegrated = await checkFacebookIntegration(userId);
-        if (isIntegrated) {
-          // Redirect to dashboard if already integrated
-          setLoading(false);
-          router.push('/');
-          return;
-        }
-
-        // Proceed with Facebook integration if not integrated
+        // Proceed with Facebook integration
         if (!code) {
           setError('Failed to retrieve the authorization code.');
           setLoading(false);
