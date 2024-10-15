@@ -5,6 +5,7 @@ import { fetchAdAccounts, fetchAccountInfo } from '@/lib/integrations/facebook/f
 import { useRouter } from 'next/navigation';
 import Fbcampaigns from '../../components/FbComponenets/FbCampaignData';
 import { createBrowserClient } from '@/lib/utils/supabase/clients/browser';
+import FacebookLogin from '@/components/FbComponenets/FbBusinessLogin';  // Adjust the path according to your project structure
 
 interface AdAccount {
   id: string;
@@ -27,8 +28,8 @@ const DashboardPage = () => {
   
 
   const supabase = createBrowserClient();  // Initialize browser client
-  const handleNavigateToCampaigns = () => {
-    router.push('/campaigns');  // Push to the /campaigns page
+  const handleNavigateToCallback = () => {
+    router.push('/callback');  // Push to the /campaigns page
   };
 
 
@@ -130,6 +131,13 @@ const DashboardPage = () => {
   if (error) {
     return (
       <div>
+        <button onClick={handleNavigateToCallback}>
+          Go to Callback
+        </button>
+        <div>
+        <FacebookLogin />
+        </div>
+
         <h2>Facebook Dashboard</h2>
         <p style={{ color: 'red' }}>{error}</p>
       </div>
@@ -138,7 +146,7 @@ const DashboardPage = () => {
 
   return (
     <div>
-      <button onClick={handleNavigateToCampaigns}>
+      <button onClick={handleNavigateToCallback}>
         Go to Campaigns
       </button>
       <h2>Facebook Ad Accounts</h2>

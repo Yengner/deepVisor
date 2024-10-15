@@ -23,6 +23,7 @@ const FacebookIntegrationCallback: React.FC<FacebookIntegrationCallbackProps> = 
         if (!session) {
           throw new Error('User session is not available.');
         }
+        console.log('Session:', session);
 
         const userId = session.user?.id;
         if (!userId) {
