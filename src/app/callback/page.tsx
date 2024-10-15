@@ -44,7 +44,7 @@ const Page = () => {
         setLoading(false);
       } catch (error) {
         console.error('Error checking session:', error);
-        router.push('/login');  // Redirect to login in case of any issues
+        router.push('/');  // Redirect to login in case of any issues
       }
     };
 
