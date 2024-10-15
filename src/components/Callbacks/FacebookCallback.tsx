@@ -19,10 +19,14 @@ const FacebookIntegrationCallback: React.FC<FacebookIntegrationCallbackProps> = 
   useEffect(() => {
     const handleIntegration = async () => {
       const code = new URLSearchParams(window.location.search).get('code');
-    
+
       try {
-        // Get authenticated user from session passed down from the page
-        const userId = session?.user?.id;
+        // Check if session is available before proceeding
+        if (!session) {
+          throw new Error('User session is not available.');
+        }
+
+        const userId = session.user?.id;
         if (!userId) {
           throw new Error('Failed to retrieve authenticated user');
         }
@@ -39,7 +43,7 @@ const FacebookIntegrationCallback: React.FC<FacebookIntegrationCallbackProps> = 
         console.log('Access Token:', accessToken);
         
         // Integrate Facebook account
-        await handleFacebookIntegration(userId, accessToken!);
+        await handleFacebookIntegration(userId, accessToken);
 
         // Redirect to dashboard after successful integration
         setLoading(false);
@@ -51,13 +55,18 @@ const FacebookIntegrationCallback: React.FC<FacebookIntegrationCallbackProps> = 
       }
     };
 
-    handleIntegration();
-  }, [router]);
+    if (session) {
+      handleIntegration(); // Only run if session is available
+    }
+  }, [router, session]); // Add session to dependency array
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div>
-      {loading && <p>Loading...</p>}
-      {error && <p>{error}</p>}
+      {error ? <p>{error}</p> : <p>Integration successful, redirecting...</p>}
     </div>
   );
 };

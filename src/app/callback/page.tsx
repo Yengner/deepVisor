@@ -4,10 +4,11 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createBrowserClient } from '@/lib/utils/supabase/clients/browser';
 import FacebookIntegrationCallback from '@/components/Callbacks/FacebookCallback'; // Your existing component
+import { Session } from '@supabase/supabase-js'; // Import the correct session type
 
 const Page = () => {
   const [loading, setLoading] = useState(true);
-  const [session, setSession] = useState<any>(null);
+  const [session, setSession] = useState<Session | null>(null);
   const router = useRouter();
   const supabase = createBrowserClient();  // Initialize browser client
 
