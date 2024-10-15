@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { createBrowserClient } from '@/lib/utils/supabase/clients/browser';
 import { handleFacebookIntegration } from '@/lib/integrations/facebook/facebook.actions'; // Server-side function
 import { fetchAccessToken } from '@/lib/integrations/facebook/facebook.api';
 import { Session } from '@supabase/supabase-js';  // Import Session type from Supabase
 
-const supabase = createBrowserClient();  // Initialize browser client
 
 interface FacebookIntegrationCallbackProps {
   session: Session | null;  // Define the session type or allow null
