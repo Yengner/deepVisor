@@ -28,11 +28,23 @@ const FacebookIntegrationCallback = () => {
     return true; // Facebook is already integrated, return true
   };
 
+  const refreshUserSession = async () => {
+    const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+    if (sessionError || !sessionData?.session) {
+      throw new Error('Failed to refresh session');
+    }
+    return sessionData.session;
+  };
+
+
   useEffect(() => {
     const handleIntegration = async () => {
       const code = new URLSearchParams(window.location.search).get('code');
     
       try {
+        // refreshing the session
+        await refreshUserSession();
+
         // Get authenticated user
         const { data: user, error: userError } = await supabase.auth.getUser();
         if (userError || !user?.user) {
