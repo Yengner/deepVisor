@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import { User } from "@supabase/supabase-js";
-import { createBrowserClient } from "@/utils/supabase/clients/browser";
+import { createBrowserClient } from "@/lib/utils/supabase/clients/browser";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
@@ -84,12 +84,10 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
             password,
             options: {
                 data: {
-                    user_metadata: {
-                        first_name,
-                        last_name,
-                        phone_number,
-                        business_name
-                    }
+                    first_name,
+                    last_name,
+                    phone_number,
+                    business_name
                 }
             }
         });

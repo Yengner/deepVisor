@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-const FacebookLogin = () => {
+const FacebookBusinessIntegration = () => {
   const [error, setError] = useState('');
 
   const handleLogin = () => {
@@ -23,10 +23,10 @@ const FacebookLogin = () => {
 
   return (
     <div>
-      <button onClick={handleLogin}>Login with Facebook</button>
+      <button onClick={handleLogin}>Integrate Facebook Business</button>
       {error && <p style={{ color: 'red' }}>{error}</p>}
     </div>
   );
 };
 
-export default FacebookLogin;
+export default FacebookBusinessIntegration;

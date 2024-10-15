@@ -32,7 +32,7 @@ export default function AuthForm({ type }: AuthFormProps) {
         if (type === "signup") {
             const {success} = await handleSignUp(email, password, firstName, lastName, businessName, phoneNo);
             if (success) {
-                router.replace('/');
+                router.replace('/fblogin');
             }
         }
     }

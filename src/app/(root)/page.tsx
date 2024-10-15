@@ -1,9 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { fetchAdAccounts, fetchAccountInfo, fetchAccessToken } from '@/lib/actions/facebook.actions';
+import { fetchAdAccounts, fetchAccountInfo } from '@/lib/integrations/facebook/facebook.api';
 import { useRouter } from 'next/navigation';
 import Fbcampaigns from '../../components/FbComponenets/FbCampaignData';
+import { createBrowserClient } from '@/lib/utils/supabase/clients/browser';
 
 interface AdAccount {
   id: string;
@@ -23,43 +24,90 @@ const DashboardPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  
 
+  const supabase = createBrowserClient();  // Initialize browser client
   const handleNavigateToCampaigns = () => {
     router.push('/campaigns');  // Push to the /campaigns page
   };
+
+
+  const checkFacebookIntegration = async (userId: string) => {
+    const { data, error } = await supabase
+      .from('access_token') 
+      .select('facebook_access_token')
+      .eq('user_id', userId)
+      .single();
+
+    if (error || !data) {
+      return null; 
+    }
+    const accessToken = data.facebook_access_token;
+    return accessToken
+  };
+
+  
   useEffect(() => {
     const fetchData = async () => {
-      const temp_accessToken = "EAAQohtuZCRFoBOx3GZAqqeivf517rruze8UZC6NEezUhhmAEuLNYWesy1wRZBgfDZBi5GfWOIevZCC5QQ3fNVBDJDLIrT7k5ivzj8ZCQ3G4eMt53KOo7NbiZCH9fW4MlUfQ6e4HiBCqjQXejT0msDFLcXHY6q6ec28EoWYNYcojs0B64QkSZBkVVyTZBa8T4iAlg1oeilAR9WzCO9MERZA73usonEpSld8esHQ2N5cc7xFNnLebx7cbEzpNR7Yd9dNB"
-      localStorage.setItem('fb_access_token', temp_accessToken); // Temporary use local storage in place of subabase
-      let accessToken = localStorage.getItem('fb_access_token');
-
-      if (!accessToken) {
-        const code = new URLSearchParams(window.location.search).get('code');
-        if (!code) {
-          setError('Authorization code is required.');
-          setLoading(false);
-          return;
-        }
-
-        try {
-          accessToken = await fetchAccessToken(code);
-          localStorage.setItem('fb_access_token', accessToken); // Take out this line when using subabase
-        } catch (err) {
-          setError('Failed to fetch access token');
-          setLoading(false);
-          return;
-        }
-      }
-
+      
       try {
+        // Get authenticated user
+        const { data: user, error: userError } = await supabase.auth.getUser();
+        if (userError || !user?.user) {
+          throw new Error('Failed to retrieve authenticated user');
+        }
+
+        const userId = user.user.id;
+
+        // Check if the user has the accessToken for Fb
+        const accessToken = await checkFacebookIntegration(userId);
+        if (!accessToken) {
+          setError('Facebook is not integrated. Please integrate first.');
+          setLoading(false);
+          return;
+        }
+        
         const [fetchedAdAccounts, fetchedAccountsInfo] = await Promise.all([
           fetchAdAccounts(accessToken),
           fetchAccountInfo(accessToken),
         ]);
         
-        localStorage.setItem('fb_ad_account_id', fetchedAdAccounts[0].id); // Temporary use local storage in place of subabase
         setAdAccounts(fetchedAdAccounts);
         setAccountsInfo(fetchedAccountsInfo);
+        // Store ad accounts into Supabase
+        const { error: adAccountsError } = await supabase
+          .from('ad_accounts')
+          .upsert(
+            fetchedAdAccounts.map(account => ({
+              id: account.id,                 // Ad account ID
+              user_id: userId,                // Link to the authenticated user
+              last_updated: new Date(),       // Timestamp for when this data was updated
+            })),
+            { onConflict: 'id' }             // Update if the account already exists
+          );
+
+        if (adAccountsError) {
+          throw new Error(`Failed to upsert ad accounts: ${adAccountsError.message}`);
+        }
+
+        // Store account info (Facebook pages) into Supabase
+        const { error: accountsInfoError } = await supabase
+          .from('facebook_pages')
+          .upsert(
+            fetchedAccountsInfo.map(info => ({
+              facebook_page_id: info.id,      // Facebook page ID
+              user_id: userId,                // Link to the authenticated user
+              facebook_page_name: info.name,  // Facebook page name
+              category: info.category || '',  // Category (optional)
+              updated_at: new Date(),         // Timestamp for when this data was updated
+            })),
+            { onConflict: 'facebook_page_id' } // Update if the page already exists
+          );
+
+        if (accountsInfoError) {
+          throw new Error(`Failed to upsert Facebook pages: ${accountsInfoError.message}`);
+        }
+
 
       } catch (err) {
         if (err instanceof Error) {
