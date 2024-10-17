@@ -5,11 +5,22 @@ import { getLoggedInUser } from "@/lib/actions/user.actions";
 import { fetchAdAccountsAndAccountInfo } from "@/lib/integrations/facebook/facebook.api";
 import { createClient } from "@/lib/utils/supabase/clients/browser";
 
+interface AdAccount {
+  id: string;
+  name?: string;
+}
+
+interface AccountInfo {
+  id: string;
+  name: string;
+  category?: string;
+}
+
 const DashboardPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [adAccounts, setAdAccounts] = useState<any[]>([]); 
-  const [accountsInfo, setAccountsInfo] = useState<any[]>([]); 
+  const [adAccounts, setAdAccounts] = useState<AdAccount[]>([]); 
+  const [accountsInfo, setAccountsInfo] = useState<AccountInfo[]>([]); 
   
   useEffect(() => {
     const fetchData = async () => {
@@ -45,9 +56,14 @@ const DashboardPage = () => {
 
         setAdAccounts(adAccounts); // Store fetched ad accounts in state
         setAccountsInfo(accountsInfo); // Store fetched account info in state
-      } catch (err: any) {
-        console.error("Error fetching ad accounts:", err);
-        setError(err.message);
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          console.error("Error fetching ad accounts:", err.message);
+          setError(err.message);
+        } else {
+          console.error("An unexpected error occurred.");
+          setError("An unexpected error occurred.");
+        }
       } finally {
         setLoading(false); // Stop loading once the data is fetched or an error occurs
       }
