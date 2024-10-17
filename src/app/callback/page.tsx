@@ -24,7 +24,10 @@ const Page = () => {
         }
 
         const accessToken = await fetchAccessToken(code)
+        console.log('Access token:', accessToken);
+        console.log('User ID:', userId);
         await handleFacebookIntegration(userId, accessToken);
+        console.log('Facebook integration successful');
 
         setLoading(false);
       } catch (error) {
