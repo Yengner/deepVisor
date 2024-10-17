@@ -6,8 +6,7 @@ import Image from "next/image";
 import SidebarItem from "@/components/Sidebar/SidebarItem";
 import ClickOutside from "@/components/ClickOutside";
 import useLocalStorage from "@/hooks/useLocalStorage";
-import { useAuth } from "@/lib/providers/AuthProvider";
-
+import LogoutButton from "../Logout/logout";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -207,7 +206,6 @@ const menuGroups = [
 ];
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
-  const { handleSignOut } = useAuth();
   const [pageName, setPageName] = useLocalStorage("selectedMenu", "dashboard");
 
 
@@ -293,10 +291,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
     </div>
 
     {/* Logout Button */}
-    <button className="flex flex-row gap-3 opacity-90 focus:opacity-100 hover:opacity-100 bg-white text-center rounded py-3 px-4 justify-c font-semibold transition-opacity" onClick={handleSignOut}>
+  
+  <LogoutButton />
 
-      Logout
-    </button>
   </div>
 </aside>
 
