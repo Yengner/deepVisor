@@ -1,63 +1,50 @@
 'use client';
 
+import { getLoggedInUser } from '@/lib/actions/user.actions';
+import { handleFacebookIntegration } from '@/lib/integrations/facebook/facebook.actions';
+import { fetchAccessToken } from '@/lib/integrations/facebook/facebook.api';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { createBrowserClient } from '@/lib/utils/supabase/clients/browser';
-import FacebookIntegrationCallback from '@/components/Callbacks/FacebookCallback'; // Your existing component
-import { Session } from '@supabase/supabase-js'; // Import the correct session type
 
 const Page = () => {
   const [loading, setLoading] = useState(true);
-  const [session, setSession] = useState<Session | null>(null);
-  const router = useRouter();
-  const supabase = createBrowserClient();  // Initialize browser client
-
-  // New function to refresh session and check authentication
-  const refreshUserSession = async () => {
-    try {
-      const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
-      if (sessionError || !sessionData?.session) {
-        throw new Error('Failed to refresh session');
-      }
-      return sessionData.session;
-    } catch (error) {
-      console.error('Error refreshing session:', error);
-      return null;
-    }
-  };
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const checkSessionAndProceed = async () => {
+    const fetchUserInfo = async () => {
+      const code = new URLSearchParams(window.location.search).get('code');
+
       try {
-        // 1. Refresh session before rendering the component
-        const session = await refreshUserSession();
-        if (!session) {
-          // If no session, redirect to login
-          router.push('/login');
+        const user = await getLoggedInUser();
+        const userId = user.id
+
+        if (!code) {
+          setError('Failed to retrieve the authorization code.');
+          setLoading(false);
           return;
         }
 
-        // 2. Set session state for use in the page/component
-        setSession(session);
+        const accessToken = await fetchAccessToken(code)
+        await handleFacebookIntegration(userId, accessToken);
 
-        // 3. If session exists, allow the Facebook integration process to begin
         setLoading(false);
       } catch (error) {
-        console.error('Error checking session:', error);
-        router.push('/');  // Redirect to login in case of any issues
+        console.error("Error fetching Facebook integration data:", error);
+        setError('An error occurred while fetching Facebook integration data.');
       }
     };
 
-    checkSessionAndProceed();
-  }, [router]);
+    fetchUserInfo();
+  }, []); // Empty array ensures this runs once when the component mounts
 
-  // If loading or session not available yet, show a loader
   if (loading) {
     return <div>Loading...</div>;
   }
 
-  // Once session is validated, render the Facebook integration component
-  return <FacebookIntegrationCallback session={session} />;
+  return (
+    <div>
+      {error ? <p>{error}</p> : <p>Integration successful, redirecting...</p>}
+    </div>
+  );
 };
 
 export default Page;

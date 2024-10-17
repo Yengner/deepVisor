@@ -1,11 +1,12 @@
 'use client';
 
-import { useAuth } from "@/lib/providers/AuthProvider";
+import { handleLogin, handleSignUp } from "@/lib/actions/user.actions";
 import { useState } from "react";
 import SubmitButton from "../ui/SubmitButton";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 interface AuthFormProps {
     type: "login" | "signup";
@@ -13,30 +14,45 @@ interface AuthFormProps {
 
 export default function AuthForm({ type }: AuthFormProps) {
     const router = useRouter();
-    const { handleSignUp, handleLogin, loading } = useAuth();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [businessName, setBusinessName] = useState("");
     const [phoneNo, setPhoneNo] = useState("");
+    const [loading, setLoading] = useState(false); // Manage loading state
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
-        if (type === "login") {
-            const {success} = await handleLogin(email, password);
-            if (success) {
-                router.replace('/');
+        setLoading(true); // Start loading
+        try {
+          if (type === "login") {
+            const { errorMessage } = await handleLogin(email, password);
+            if (errorMessage) {
+              toast.error(errorMessage);
+            } else {
+              router.push('/');
+              toast.success("YIPEEE YAYYYYY HURRAYYYYY");
+              
             }
-        }
-        if (type === "signup") {
-            const {success} = await handleSignUp(email, password, firstName, lastName, businessName, phoneNo);
-            if (success) {
-                router.replace('/');
+          }
+          if (type === "signup") {
+            const { errorMessage } = await handleSignUp(email, password, firstName, lastName, businessName, phoneNo);
+            if (errorMessage) {
+              toast.error(errorMessage);
+            } else {
+              router.push('/');
+              toast.success("YOU SIGNED UP HIPP HIPP HURAYYY");
             }
+          }
+        } catch (error) {
+          toast.error("An error occurred. Please try again.");
+        } finally {
+          setLoading(false); // End loading
         }
-    }
+      }
 
+      
     return (
         <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
             <div className="flex flex-wrap items-center">

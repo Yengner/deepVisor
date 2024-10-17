@@ -2,7 +2,7 @@
 
 // import { FacebookAdsApi, AdAccount, Campaign } from 'facebook-nodejs-business-sdk';
 import { fetchAdAccountsAndAccountInfo } from '@/lib/integrations/facebook/facebook.api'; // Import your integration logic
-import { createServerClient } from '@/lib/utils/supabase/clients/server'; 
+import { createSupabaseClient } from '@/lib/utils/supabase/clients/server'; 
 
 // interface Action {
 //     action_type: string;
@@ -12,7 +12,7 @@ import { createServerClient } from '@/lib/utils/supabase/clients/server';
 
 // FETCH FACEBOOK USER DATA FROM SUPABASE
 export async function fetchFbUserDataFromSupabase(userId: string) {
-  const supabase = createServerClient();  // Create a server-side Supabase client
+  const supabase = createSupabaseClient();  // Create a server-side Supabase client
 
   try {
     // Fetch ad accounts
@@ -43,7 +43,7 @@ export async function fetchFbUserDataFromSupabase(userId: string) {
 
 // INSERT FACEBOOK INTEGRATION DATA & ACCESS TOKEN INTO SUPABASE
 export async function handleFacebookIntegration(userId: string, accessToken: string) {
-  const supabase = createServerClient();
+  const supabase = createSupabaseClient();
 
   try {
     //Fetch ad accounts and business account info
