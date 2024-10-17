@@ -1,7 +1,6 @@
 'use server'
 
 // import { FacebookAdsApi, AdAccount, Campaign } from 'facebook-nodejs-business-sdk';
-import { fetchAdAccountsAndAccountInfo } from '@/lib/integrations/facebook/facebook.api'; // Import your integration logic
 import { createSupabaseClient } from '@/lib/utils/supabase/clients/server'; 
 
 // interface Action {
@@ -38,71 +37,6 @@ export async function fetchFbUserDataFromSupabase(userId: string) {
     return { adAccounts: adAccountsData, accountsInfo: accountsInfoData };
   } catch (err) {
     throw new Error(err instanceof Error ? err.message : 'An unknown error occurred.');
-  }
-}
-
-// INSERT FACEBOOK INTEGRATION DATA & ACCESS TOKEN INTO SUPABASE
-export async function handleFacebookIntegration(userId: string, accessToken: string) {
-  const supabase = createSupabaseClient();
-
-  try {
-    //Fetch ad accounts and business account info
-    const { adAccounts, accountsInfo } = await fetchAdAccountsAndAccountInfo(accessToken);
-
-    //Insert Facebook access token into 'facebook_ids' table
-    const { error: facebookIdsError } = await supabase
-      .from('access_token')
-      .insert({
-        user_id: userId,
-        facebook_access_token: accessToken,
-      });
-
-    if (facebookIdsError) {
-      throw new Error(`Failed to store Facebook access token: ${facebookIdsError.message}`);
-    }
-
-    //Insert multiple Facebook pages into 'facebook_pages' table
-    const { error: pagesError } = await supabase
-      .from('facebook_pages')
-      .upsert(
-        accountsInfo.map((page) => ({
-          user_id: userId,
-          facebook_page_id: page.id,
-          facebook_page_name: page.name,
-          category: page.category || '',
-          updated_at: new Date(),
-        }))
-      );
-
-    if (pagesError) {
-      throw new Error(`Failed to store Facebook pages: ${pagesError.message}`);
-    }
-
-    //Insert multiple ad accounts into 'ad_accounts' table
-    const { error: adAccountsError } = await supabase
-      .from('ad_accounts')
-      .upsert(
-        adAccounts.map((account) => ({
-          id: account.id,
-          user_id: userId,
-          last_updated: new Date(),
-        }))
-      );
-
-    if (adAccountsError) {
-      throw new Error(`Failed to store ad accounts: ${adAccountsError.message}`);
-    }
-
-    return { success: true };
-  } catch (error) {
-    console.error('Error during Facebook integration on server:', error);
-
-    // Use type guard to check if error is instance of Error
-    if (error instanceof Error) {
-      throw new Error(`Integration failed: ${error.message}`);
-    } else {
-      throw new Error('Unknown error occurred during Facebook integration.');
-    }
   }
 }
 

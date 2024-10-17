@@ -9,7 +9,7 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const response = await axios.get(`https://graph.facebook.com/v20.0/me/adaccounts`, {
+    const response = await axios.get(`https://graph.facebook.com/v21.0/me/adaccounts`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
