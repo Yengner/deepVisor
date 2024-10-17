@@ -42,8 +42,8 @@ export async function handleSignUp(
             data: {
                 first_name,
                 last_name,
-                phone_number,
                 business_name,
+                phone_number,
             },
         },
     });
@@ -101,7 +101,7 @@ export async function getLoggedInUser() {
       }
   
       const user = data?.user;
-      
+
       return parseStringify(user)
       
     } catch (error) {

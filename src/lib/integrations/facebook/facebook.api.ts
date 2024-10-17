@@ -30,7 +30,7 @@ export const fetchAccessToken = async (code: string): Promise<string> => {
       throw new Error(errorData.error || 'Error fetching access token.');
     }
 
-    const data: { accessToken: string } = await response.json(); // Specify the expected response shape
+    const data: { accessToken: string } = await response.json(); 
     return data.accessToken;
   } catch (error) {
     console.error(error);
@@ -39,14 +39,22 @@ export const fetchAccessToken = async (code: string): Promise<string> => {
 };
 
 // Fetch ad accounts from Facebook using the access token
-export const fetchAdAccounts = async (accessToken: string): Promise<AdAccount[]> => {
+export async function fetchAdAccounts(accessToken: string): Promise<AdAccount[]> {
   try {
     // API call to fetch ad accounts
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/facebook/ad-accounts`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
       },
     });
+
+    const contentType = response.headers.get('content-type');
+    console.log('Response Content-Type:', contentType);  // This will help in debugging
+
+    if (!contentType?.includes('application/json')) {
+      throw new Error(`Invalid content type. Expected application/json but got ${contentType}`);
+    }
 
     if (!response.ok) {
       const errorData = await response.json();
@@ -59,7 +67,7 @@ export const fetchAdAccounts = async (accessToken: string): Promise<AdAccount[]>
     console.error(error);
     throw new Error('Error fetching ad accounts.');
   }
-};
+}
 
 // Fetch detailed account information
 export const fetchAccountInfo = async (accessToken: string): Promise<AccountInfo[]> => {
