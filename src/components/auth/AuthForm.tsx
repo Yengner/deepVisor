@@ -26,33 +26,32 @@ export default function AuthForm({ type }: AuthFormProps) {
         e.preventDefault();
         setLoading(true); // Start loading
         try {
-          if (type === "login") {
-            const { errorMessage } = await handleLogin(email, password);
-            if (errorMessage) {
-              toast.error(errorMessage);
-            } else {
-              router.push('/');
-              toast.success("YIPEEE YAYYYYY HURRAYYYYY");
-              
+            if (type === "login") {
+                const { errorMessage } = await handleLogin(email, password);
+                if (errorMessage) {
+                    toast.error(errorMessage);
+                } else {
+                    toast.success("Logged In!");
+                    window.location.reload();
+                }
             }
-          }
-          if (type === "signup") {
-            const { errorMessage } = await handleSignUp(email, password, firstName, lastName, businessName, phoneNo);
-            if (errorMessage) {
-              toast.error(errorMessage);
-            } else {
-              router.push('/');
-              toast.success("YOU SIGNED UP HIPP HIPP HURAYYY");
+            if (type === "signup") {
+                const { errorMessage } = await handleSignUp(email, password, firstName, lastName, businessName, phoneNo);
+                if (errorMessage) {
+                    toast.error(errorMessage);
+                } else {
+                    toast.success("Signed In!");
+                    router.push('/callback');
+                }
             }
-          }
         } catch (error) {
-          toast.error("An error occurred. Please try again.");
+            toast.error("An error occurred. Please try again.");
         } finally {
-          setLoading(false); // End loading
+            setLoading(false); // End loading
         }
-      }
+    }
 
-      
+
     return (
         <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
             <div className="flex flex-wrap items-center">

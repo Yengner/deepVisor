@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import CreateCampaign from '@/components/FbComponenets/CreateAdCampaign';
+import { createClient } from '@/lib/utils/supabase/clients/browser';
+import { getLoggedInUser } from '@/lib/actions/user.actions';
 
 const Campaigns = () => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
@@ -9,20 +11,60 @@ const Campaigns = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Using useEffect to retrieve values from localStorage
   useEffect(() => {
-    const token = localStorage.getItem('fb_access_token');
-    const id = localStorage.getItem('fb_ad_account_id');
+    const fetchData = async () => {
+      const supabase = createClient(); // Use the browser client since this will be client-side
 
-    if (!token || !id) {
-      setError('Access token or Ad Account ID is missing.');
-      setLoading(false);
-      return;
-    }
+      try {
+        const user = await getLoggedInUser(); 
+        const userId = user?.id;
 
-    setAccessToken(token);
-    setAdAccountId(id);
-    setLoading(false); // Stop loading once we have the tokens
+        if (!userId) {
+          throw new Error("No user is logged in.");
+        }
+        console.log("User ID:", userId);
+
+        // Query Supabase for the access token from the "access_token" table
+        const { data: accessTokenData, error: accessTokenError } = await supabase
+          .from("access_token") 
+          .select("facebook_access_token")
+          .eq("user_id", userId)
+          .single();
+
+        if (accessTokenError || !accessTokenData) {
+          throw new Error("Failed to retrieve the access token.");
+        }
+
+        const { data: adAccountData, error: adAccountError } = await supabase
+          .from("ad_accounts") 
+          .select("id")
+          .eq("user_id", userId)
+          .single();
+
+          if (adAccountError || !adAccountData) {
+            throw new Error("Failed to retrieve the ad account ID.");
+          }
+        const accessToken = accessTokenData.facebook_access_token;
+        console.log("Access Token from Supabase:", accessToken);
+
+        // Query Supabase for the ad account ID from the "ad_accounts" table
+
+
+        const adAccountId = adAccountData.id;
+        console.log("Ad Account ID from Supabase:", adAccountId);
+        // Set the state for access token and ad account ID
+        setAccessToken(accessToken);
+        setAdAccountId(adAccountId);
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message); // Handle any errors
+        }
+      } finally {
+        setLoading(false); // Stop loading regardless of the outcome
+      }
+    };
+
+    fetchData();
   }, []); // Empty dependency array ensures this effect runs once when the component mounts
 
   if (loading) {

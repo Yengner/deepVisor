@@ -19,7 +19,7 @@ const LogoutButton = () => {
         
     } else {
         router.push('/login'); // Redirect after logout
-        toast.success("BYE BYE MOTHER FUCKER")
+        toast.success("Signed Out!")
     }
 
     setLoading(false);
