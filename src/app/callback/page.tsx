@@ -1,6 +1,7 @@
 'use client';
 
 import { getLoggedInUser } from '@/lib/actions/user.actions';
+import { insertFbUserDataIntoSupabase } from '@/lib/integrations/facebook/facebook.actions';
 import { fetchAccessToken, fetchAdAccountsAndAccountInfo } from '@/lib/integrations/facebook/facebook.api';
 // import { createClient } from '@/lib/utils/supabase/clients/browser';
 // import { useRouter } from 'next/navigation';
@@ -26,8 +27,6 @@ const Page = () => {
           throw new Error("User is not logged in.");
         }
 
-        // Fetch the code from the URL
-
         // Fetch the Facebook access token using the authorization code
         const accessToken = await fetchAccessToken(code);
         console.log('Access token:', accessToken);
@@ -38,6 +37,8 @@ const Page = () => {
         // const userId = '00d47741-ba91-4540-82e8-e8039a892944'
 
         const { adAccounts, accountsInfo } = await fetchAdAccountsAndAccountInfo(accessToken);
+
+        const {insertedadAccounts, insertedaccountsInfo} = await insertFbUserDataIntoSupabase( userId, accessToken, adAccounts, accountsInfo);
         // try {
 
         //   const { error: facebookIdsError } = await supabase
@@ -87,8 +88,8 @@ const Page = () => {
         //   console.error('Error during Facebook integration on server:', error);
         // }
 
-        console.log('Ad Accounts:', adAccounts);
-        console.log('Account Info:', accountsInfo);
+        console.log('Ad Accounts:', insertedadAccounts);
+        console.log('Account Info:', insertedaccountsInfo);
 
         setLoading(false);
 

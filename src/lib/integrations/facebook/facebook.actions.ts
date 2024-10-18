@@ -8,6 +8,16 @@ import { createSupabaseClient } from '@/lib/utils/supabase/clients/server';
 //     value: string | number;
 //   }
 
+interface InfoData {
+    id: string;
+    name: string;
+    category: string;
+}
+
+interface AdAccountData {
+    id: string;
+}
+
 
 // FETCH FACEBOOK USER DATA FROM SUPABASE
 export async function fetchFbUserDataFromSupabase(userId: string) {
@@ -40,6 +50,57 @@ export async function fetchFbUserDataFromSupabase(userId: string) {
   }
 }
 
+export async function insertFbUserDataIntoSupabase(userId: string, accessToken: string, adAccountsData: AdAccountData[], accountsInfoData: InfoData[]) {
+  const supabase = createSupabaseClient(); 
+
+  try {
+    // Store access token
+    const { error: accessTokenError } = await supabase
+      .from('access_token')
+      .insert({
+        user_id: userId,
+        facebook_access_token: accessToken,
+      });
+
+    if (accessTokenError) {
+      throw new Error(`Failed to store Facebook access token: ${accessTokenError.message}`);
+    }
+
+    const {error: pagesError} = await supabase 
+      .from('facebook_pages')
+      .upsert(
+        accountsInfoData.map((page) => ({
+          user_id: userId,
+          facebook_page_id: page.id,
+          facebook_page_name: page.name,
+          category: page.category || '',
+          updated_at: new Date(),
+        }))
+      );
+
+    if (pagesError) {
+      throw new Error(`Failed to store Facebook pages: ${pagesError.message}`);
+    }
+
+    const { error: adAccountsError } = await supabase
+      .from('ad_accounts')
+      .upsert(
+        adAccountsData.map((account) => ({
+          id: account.id,
+          user_id: userId,
+          last_updated: new Date(),
+        }))
+      );
+
+      if (adAccountsError) {
+        throw new Error(`Failed to store ad accounts: ${adAccountsError.message}`);
+      }
+
+    return { insertedadAccounts: adAccountsData, insertedaccountsInfo: accountsInfoData };
+  } catch (err) {
+    throw new Error(err instanceof Error ? err.message : 'An unknown error occurred.');
+  }
+}
 
 // // Fetch Facebook campaign insights and store in Supabase
 // export const fetchFacebookCampaignInsightsAndStore = async (adAccountId: string, accessToken: string) => {
