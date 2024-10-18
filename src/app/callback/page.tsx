@@ -1,32 +1,35 @@
 'use client';
 
 import { getLoggedInUser } from '@/lib/actions/user.actions';
-import {fetchAccessToken, fetchAdAccountsAndAccountInfo } from '@/lib/integrations/facebook/facebook.api';
+import { fetchAccessToken, fetchAdAccountsAndAccountInfo } from '@/lib/integrations/facebook/facebook.api';
 import { createClient } from '@/lib/utils/supabase/clients/browser';
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 const Page = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const router = useRouter()
+  // const router = useRouter()
 
   useEffect(() => {
     const fetchUserInfo = async () => {
-      const code = new URLSearchParams(window.location.search).get('code');
-
       try {
-        const user = await getLoggedInUser();
-        const userId = user?.id
         const supabase = createClient();
+        const user = await getLoggedInUser();
+        const userId = user?.id;
 
-        if (!code) {
-          setError('Failed to retrieve the authorization code.');
-          setLoading(false);
-          return;
+        if (!userId) {
+          throw new Error("User is not logged in.");
         }
 
-        const accessToken = await fetchAccessToken(code)
+        // Fetch the code from the URL
+        const code = new URLSearchParams(window.location.search).get('code');
+        if (!code) {
+          throw new Error('Failed to retrieve the authorization code.');
+        }
+
+        // Fetch the Facebook access token using the authorization code
+        const accessToken = await fetchAccessToken(code);
         console.log('Access token:', accessToken);
         console.log('User ID:', userId);
 
@@ -34,7 +37,7 @@ const Page = () => {
         // const accessToken = "EAAQohtuZCRFoBO40zDTSB8UDeBztp76TsVRLki8kaqCEzmz0ySO9wc1jYwc9Qk84u6NJvUM6hqxyOV9lLoT97DMkJkmpbHxn0fsrAqXM5LWdZA7ixWl7DegVLJvR4XwUAUpIe0nrrPZCInyrYM8p471BzqUGhUuL9sad7lTfMgUVEeDYtut9WJls9B58alJ0cf4ZCt2HShZBFhsn5ionrdQ6jHnPylhyHAuZBLzKLubr8KVVo49pFPwqcUJ2ZAY";
         // const userId = '00d47741-ba91-4540-82e8-e8039a892944'
 
-        const {adAccounts, accountsInfo} = await fetchAdAccountsAndAccountInfo(accessToken);
+        const { adAccounts, accountsInfo } = await fetchAdAccountsAndAccountInfo(accessToken);
         try {
 
           const { error: facebookIdsError } = await supabase
@@ -87,12 +90,12 @@ const Page = () => {
         console.log('Facebook integration successful');
 
         setLoading(false);
-              
+
       } catch (error) {
         console.error("Error fetching Facebook integration data:", error);
         setError('An error occurred while fetching Facebook integration data.');
       } finally {
-        router.push('/') // Back to dashboard
+        // router.push('/') // Back to dashboard
       }
     };
 
