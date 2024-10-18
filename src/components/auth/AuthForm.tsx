@@ -41,7 +41,7 @@ export default function AuthForm({ type }: AuthFormProps) {
                     toast.error(errorMessage);
                 } else {
                     toast.success("Signed In!");
-                    router.push('/callback');
+                    router.push('/fblogin');
                 }
             }
         } catch (error) {
