@@ -2,7 +2,7 @@
 
 import { getLoggedInUser } from '@/lib/actions/user.actions';
 import { fetchAccessToken, fetchAdAccountsAndAccountInfo } from '@/lib/integrations/facebook/facebook.api';
-import { createClient } from '@/lib/utils/supabase/clients/browser';
+// import { createClient } from '@/lib/utils/supabase/clients/browser';
 // import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -13,8 +13,12 @@ const Page = () => {
 
   useEffect(() => {
     const fetchUserInfo = async () => {
+      const code = new URLSearchParams(window.location.search).get('code');
+      if (!code) {
+        throw new Error('Failed to retrieve the authorization code.');
+      }
       try {
-        const supabase = createClient();
+        // const supabase = createClient();
         const user = await getLoggedInUser();
         const userId = user?.id;
 
@@ -23,10 +27,6 @@ const Page = () => {
         }
 
         // Fetch the code from the URL
-        const code = new URLSearchParams(window.location.search).get('code');
-        if (!code) {
-          throw new Error('Failed to retrieve the authorization code.');
-        }
 
         // Fetch the Facebook access token using the authorization code
         const accessToken = await fetchAccessToken(code);
@@ -38,56 +38,57 @@ const Page = () => {
         // const userId = '00d47741-ba91-4540-82e8-e8039a892944'
 
         const { adAccounts, accountsInfo } = await fetchAdAccountsAndAccountInfo(accessToken);
-        try {
+        // try {
 
-          const { error: facebookIdsError } = await supabase
-            .from('access_token')
-            .insert({
-              user_id: userId,
-              facebook_access_token: accessToken,
-            });
+        //   const { error: facebookIdsError } = await supabase
+        //     .from('access_token')
+        //     .insert({
+        //       user_id: userId,
+        //       facebook_access_token: accessToken,
+        //     });
 
-          if (facebookIdsError) {
-            throw new Error(`Failed to store Facebook access token: ${facebookIdsError.message}`);
-          }
+        //   if (facebookIdsError) {
+        //     throw new Error(`Failed to store Facebook access token: ${facebookIdsError.message}`);
+        //   }
 
-          //Insert multiple Facebook pages into 'facebook_pages' table
-          const { error: pagesError } = await supabase
-            .from('facebook_pages')
-            .upsert(
-              accountsInfo.map((page) => ({
-                user_id: userId,
-                facebook_page_id: page.id,
-                facebook_page_name: page.name,
-                category: page.category || '',
-                updated_at: new Date(),
-              }))
-            );
+        //   //Insert multiple Facebook pages into 'facebook_pages' table
+        //   const { error: pagesError } = await supabase
+        //     .from('facebook_pages')
+        //     .upsert(
+        //       accountsInfo.map((page) => ({
+        //         user_id: userId,
+        //         facebook_page_id: page.id,
+        //         facebook_page_name: page.name,
+        //         category: page.category || '',
+        //         updated_at: new Date(),
+        //       }))
+        //     );
 
-          if (pagesError) {
-            throw new Error(`Failed to store Facebook pages: ${pagesError.message}`);
-          }
+        //   if (pagesError) {
+        //     throw new Error(`Failed to store Facebook pages: ${pagesError.message}`);
+        //   }
 
-          //Insert multiple ad accounts into 'ad_accounts' table
-          const { error: adAccountsError } = await supabase
-            .from('ad_accounts')
-            .upsert(
-              adAccounts.map((account) => ({
-                id: account.id,
-                user_id: userId,
-                last_updated: new Date(),
-              }))
-            );
+        //   //Insert multiple ad accounts into 'ad_accounts' table
+        //   const { error: adAccountsError } = await supabase
+        //     .from('ad_accounts')
+        //     .upsert(
+        //       adAccounts.map((account) => ({
+        //         id: account.id,
+        //         user_id: userId,
+        //         last_updated: new Date(),
+        //       }))
+        //     );
 
-          if (adAccountsError) {
-            throw new Error(`Failed to store ad accounts: ${adAccountsError.message}`);
-          }
+        //   if (adAccountsError) {
+        //     throw new Error(`Failed to store ad accounts: ${adAccountsError.message}`);
+        //   }
 
-        } catch (error) {
-          console.error('Error during Facebook integration on server:', error);
-        }
+        // } catch (error) {
+        //   console.error('Error during Facebook integration on server:', error);
+        // }
 
-        console.log('Facebook integration successful');
+        console.log('Ad Accounts:', adAccounts);
+        console.log('Account Info:', accountsInfo);
 
         setLoading(false);
 
