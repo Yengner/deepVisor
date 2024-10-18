@@ -18,6 +18,7 @@ const Page = () => {
       try {
         const user = await getLoggedInUser();
         const userId = user?.id
+        const supabase = createClient();
 
         if (!code) {
           setError('Failed to retrieve the authorization code.');
@@ -35,7 +36,6 @@ const Page = () => {
 
         const {adAccounts, accountsInfo} = await fetchAdAccountsAndAccountInfo(accessToken);
         try {
-          const supabase = createClient();
 
           const { error: facebookIdsError } = await supabase
             .from('access_token')
