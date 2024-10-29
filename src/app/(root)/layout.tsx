@@ -4,7 +4,7 @@ import React from "react";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import { Toaster } from "react-hot-toast";
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -16,8 +16,7 @@ export default async function RootLayout({
         <div className="min-h-dvh dark:bg-boxdark-2 dark:text-bodydark">
 
               <DefaultLayout>{children}</DefaultLayout>
-
-
+              
           <Toaster />
         </div>
       </body>
