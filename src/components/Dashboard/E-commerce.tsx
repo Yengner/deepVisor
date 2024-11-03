@@ -1,7 +1,7 @@
 "use client";
 import dynamic from "next/dynamic";
-import React from "react";
-import ChartOne from "../Charts/ChartOne";
+import React, { useState } from "react";
+import ChartOne from "../Charts/leads_vs_spend";
 import ChartTwo from "../Charts/ChartTwo";
 import ChatCard from "../Chat/ChatCard";
 import TableOne from "./TableOne";
@@ -31,9 +31,8 @@ interface accountInfo {
 
 interface Account {
   adAccountId: string;
-  accountInfo :  accountInfo[] | null;
+  accountInfo: accountInfo[] | null;
   campaigns: CampaignData[];
-  // other properties related to each account
 }
 
 interface ECommerceProps {
@@ -53,6 +52,13 @@ const ChartThree = dynamic(() => import("@/components/Charts/ChartThree"), {
 });
 
 const ECommerce: React.FC<ECommerceProps> = ({ campaignInsights, accounts, currentAccount }) => {
+
+  const costPerLead =
+    (Number((campaignInsights?.[0]?.cost_per_action as { action_type: string; value: number }[] | undefined)
+      ?.find((item) => item.action_type === 'lead')
+      ?.value ?? 0)).toLocaleString();
+
+  console.log('campaignInsights:', campaignInsights);
   return (
     <>
       <div className="flex mb-6">
@@ -78,7 +84,7 @@ const ECommerce: React.FC<ECommerceProps> = ({ campaignInsights, accounts, curre
             />
           </svg>
         </CardDataStats>
-        <CardDataStats title="Total Spend" total={`${campaignInsights[0].spend}`} rate="4.35%" levelUp>
+        <CardDataStats title="Total Spend" total={`$${campaignInsights[0].spend}`} rate="4.35%" levelUp>
           <svg
             className="fill-primary dark:fill-white"
             width="20"
@@ -101,7 +107,7 @@ const ECommerce: React.FC<ECommerceProps> = ({ campaignInsights, accounts, curre
             />
           </svg>
         </CardDataStats>
-        <CardDataStats title="Cost Per Result" total={`${campaignInsights?.[0]?.cost_per_action?.find(item => item.action_type === 'lead').value}`} rate="2.59%" levelUp>
+        <CardDataStats title="Cost Per Result" total={`$${costPerLead}`} rate="2.59%" levelUp>
           <svg
             className="fill-primary dark:fill-white"
             width="22"
@@ -120,7 +126,7 @@ const ECommerce: React.FC<ECommerceProps> = ({ campaignInsights, accounts, curre
             />
           </svg>
         </CardDataStats>
-        <CardDataStats title="Total Users" total="3.456" rate="0.95%" levelDown>
+        <CardDataStats title="Total Impressions" total={`${Number(campaignInsights[0]?.impressions).toLocaleString()}`} rate="0.95%" levelDown>
           <svg
             className="fill-primary dark:fill-white"
             width="22"

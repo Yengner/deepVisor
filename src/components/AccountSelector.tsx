@@ -38,7 +38,7 @@ export function SelectAccount({ accounts, currentAccount }: SelectAccountProps) 
   // console.log('Current Account:', currentAccount);
   const handleAccountChange = (adAccountId: string) => {
     // Update the URL with the new account ID
-    router.push(`test/?id=${adAccountId}`);
+    router.push(`/?id=${adAccountId}`);
   };
 
   return (
