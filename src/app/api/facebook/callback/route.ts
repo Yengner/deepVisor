@@ -4,17 +4,17 @@ import { fetchAccessToken, fetchAdAccountsAndAccountInfo } from '@/lib/integrati
 import { getLoggedInUser } from '@/lib/actions/user.actions';
 import { createSupabaseClient } from '@/lib/utils/supabase/clients/server';
 
-export async function POST(req: NextRequest) {
+export async function GET(req: NextRequest) {
   try {
-    const { code } = await req.json();
+    const { searchParams } = new URL(req.url);
+    const code = searchParams.get('code');
+
     if (!code) {
       return NextResponse.json({ error: 'Authorization code is missing.' }, { status: 400 });
     }
 
-    // Fetch the access token securely
     const accessToken = await fetchAccessToken(code);
-
-    // Fetch ad account and account info data
+    console
     const { adAccounts, accountsInfo } = await fetchAdAccountsAndAccountInfo(accessToken);
 
     const user = await getLoggedInUser();
