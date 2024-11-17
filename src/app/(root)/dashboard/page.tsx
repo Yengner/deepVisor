@@ -1,5 +1,5 @@
 import { getLoggedInUser } from "@/lib/actions/user.actions";
-import ECommerce from "@/components/Dashboard/Marketing";
+// import ECommerce from "@/components/Dashboard/Marketing";
 import { getFbAdAccount, getFbAdAccounts } from "@/lib/actions/facebook/facebook.actions";
 
 const Dashboard = async({ searchParams: { id }}:SearchParamProps) => {
