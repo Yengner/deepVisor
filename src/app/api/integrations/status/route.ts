@@ -24,7 +24,7 @@ export async function GET() {
         throw new Error(`Failed to fetch integration status: ${error.message}`);
       }
   
-      return NextResponse.json({ isIntegrated: data?.is_integrated || false });
+      return NextResponse.json({ isIntegrated: data?.is_integrated || false, platform: 'facebook' });
     } catch (error) {
       console.error('Error checking integration status:', error);
       return NextResponse.json({ error: 'Failed to check integration status.' }, { status: 500 });
