@@ -10,8 +10,9 @@ const FacebookCallbackPage = () => {
 
   useEffect(() => {
     const handleFacebookCallback = async () => {
+      const code = new URLSearchParams(window.location.search).get('code');
+      
       try {
-        const code = new URLSearchParams(window.location.search).get('code');
         if (!code) {
           throw new Error('Authorization code missing.');
         }
@@ -19,7 +20,7 @@ const FacebookCallbackPage = () => {
         setLoadingMessage('Fetching access token...');
 
        // Call a server-side API route to handle the code exchange and data fetching
-        const response = await fetch(`/api/facebook/callback?code=${code}`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/facebook/callback?code=${code}`, {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' },
         });
