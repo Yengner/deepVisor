@@ -1,5 +1,6 @@
 'use client';
 
+import { handleFacebookIntegration } from '@/lib/integrations/facebook/facebook.utils';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -19,22 +20,27 @@ const FacebookCallbackPage = () => {
 
         setLoadingMessage('Fetching access token...');
 
-       // Call a server-side API route to handle the code exchange and data fetching
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/facebook/callback?code=${code}`, {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' },
-        });
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.error || 'Integration failed.');
+        const result = await handleFacebookIntegration(code);
+        
+        if (!result.success) {
+          throw new Error(result.error || "Integration failed.");
         }
 
-        // If successful, redirect back to the integrations page
+        // Call a server-side API route to handle the code exchange and data fetching
+        // const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/facebook/callback?code=${code}`, {
+        //   method: 'GET',
+        //   headers: { 'Content-Type': 'application/json' },
+        // });
+
+        // if (!response.ok) {
+        //   const errorData = await response.json();
+        //   throw new Error(errorData.error || 'Integration failed.');
+        // }
+
         setLoadingMessage('Integration successful! Redirecting...');
         setTimeout(() => {
           router.push('/integration');
-        }, 2000);
+        }, 5000);
       } catch (error) {
         console.error('Error during Facebook integration:', error);
         setError('An unexpected error occurred.');
