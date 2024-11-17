@@ -52,20 +52,20 @@ const Campaigns = () => {
 
         const adAccountId = adAccountData.id;
         console.log("Ad Account ID from Supabase:", adAccountId);
-        // Set the state for access token and ad account ID
+        
         setAccessToken(accessToken);
         setAdAccountId(adAccountId);
       } catch (err: unknown) {
         if (err instanceof Error) {
-          setError(err.message); // Handle any errors
+          setError(err.message);
         }
       } finally {
-        setLoading(false); // Stop loading regardless of the outcome
+        setLoading(false); 
       }
     };
 
     fetchData();
-  }, []); // Empty dependency array ensures this effect runs once when the component mounts
+  }, []); 
 
   if (loading) {
     return <div>Loading...</div>;

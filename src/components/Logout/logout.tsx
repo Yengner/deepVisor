@@ -29,7 +29,7 @@ const LogoutButton = () => {
     <button
       onClick={handleLogout}
       disabled={loading}
-      className={`flex flex-row gap-3 opacity-90 focus:opacity-100 hover:opacity-100 bg-white text-center rounded py-3 px-4 justify-c font-semibold transition-opacity`}
+      className={`gap-3 opacity-90 focus:opacity-100 hover:opacity-100 bg-white text-center rounded py-3 px-4 justify-c font-semibold transition-opacity items-center`}
     >
       {loading ? 'Logging Out...' : 'Logout'}
     </button>

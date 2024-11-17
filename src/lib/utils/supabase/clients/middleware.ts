@@ -53,7 +53,7 @@ export async function updateSession(request: NextRequest) {
   ) {
     // user is logged in, respond by redirecting the user to the home page
     const url = request.nextUrl.clone()
-    url.pathname = '/'
+    url.pathname = '/dashboard'
     return NextResponse.redirect(url)
   }
   
