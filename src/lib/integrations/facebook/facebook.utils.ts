@@ -18,17 +18,17 @@ interface AccountInfo {
 // Fetch access token from the server
 export const fetchAccessToken = async (code: string): Promise<string> => {
   try {
-    // API call to fetch access token
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/facebook/access-token?code=${code}`, {
-      method: 'GET',
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/facebook/accessToken`, {
+      method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code }),
     });
 
     if (!response.ok) {
       const errorData = await response.json();
       throw new Error(errorData.error || 'Error fetching access token.');
     }
-
+    
     const data: { accessToken: string } = await response.json(); 
     return data.accessToken;
   } catch (error) {
