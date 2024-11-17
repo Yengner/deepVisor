@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { insertFbUserDataIntoSupabase } from '@/lib/actions/facebook/facebook.actions';
-import { fetchAccessToken, fetchAdAccountsAndAccountInfo } from '@/lib/integrations/facebook/facebook.utils';
+import { fetchAdAccountsAndAccountInfo } from '@/lib/integrations/facebook/facebook.utils';
 import { getLoggedInUser } from '@/lib/actions/user.actions';
 import { createSupabaseClient } from '@/lib/utils/supabase/clients/server';
 
 export async function GET(req: NextRequest) {
   try {
-    const code = new URLSearchParams(window.location.search).get('code');
+    const { searchParams } = new URL(req.url);
+    const code = searchParams.get('code');
 
     if (!code) {
       return NextResponse.json({ error: 'Authorization code is missing.' }, { status: 400 });
