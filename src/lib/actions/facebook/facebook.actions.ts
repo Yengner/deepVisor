@@ -16,12 +16,6 @@ interface InfoData {
   category: string;
 }
 
-interface AdAccountData {
-  id: string;
-  user_id: string;
-  platform: string;
-  ad_account_id: string;
-}
 
 export async function getFbAdAccounts({ userId }: getAccountsProps) {
   try {
