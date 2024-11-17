@@ -2,9 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createSupabaseClient } from '@/lib/utils/supabase/clients/server';
 import { getLoggedInUser } from '@/lib/actions/user.actions';
 
-interface AccessTokenData {
-  facebook_access_token: string;
-}
 
 interface FacebookInsightEntry {
   date_start: string;
@@ -42,16 +39,17 @@ export async function GET(request: NextRequest) {
 
   const { data: accessTokenData, error: accessTokenError } = await supabase
     .from('access_tokens')
-    .select('facebook_access_token')
+    .select('access_token')
     .eq('user_id', userId)
-    .single<AccessTokenData>();
+    .eq('platform', 'facebook')
+    .single();
 
   if (accessTokenError || !accessTokenData) {
     console.error('Error fetching access token:', accessTokenError);
     return NextResponse.json({ error: 'Failed to retrieve access token' }, { status: 500 });
   }
 
-  const accessToken = accessTokenData.facebook_access_token;
+  const accessToken = accessTokenData.access_token;
 
   // Set time range and time increment based on the view parameter
   let timeIncrement = '1';

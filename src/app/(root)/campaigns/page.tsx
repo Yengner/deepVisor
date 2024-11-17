@@ -27,7 +27,8 @@ const Campaigns = () => {
         // Query Supabase for the access token from the "access_token" table
         const { data: accessTokenData, error: accessTokenError } = await supabase
           .from("access_tokens") 
-          .select("facebook_access_token")
+          .select("access_token")
+          .eq("platform", 'facebook')
           .eq("user_id", userId)
           .single();
 
@@ -44,7 +45,7 @@ const Campaigns = () => {
           if (adAccountError || !adAccountData) {
             throw new Error("Failed to retrieve the ad account ID.");
           }
-        const accessToken = accessTokenData.facebook_access_token;
+        const accessToken = accessTokenData.access_token;
         console.log("Access Token from Supabase:", accessToken);
 
         // Query Supabase for the ad account ID from the "ad_accounts" table

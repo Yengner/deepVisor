@@ -5,13 +5,6 @@ import { insertFbUserDataIntoSupabase } from "@/lib/actions/facebook/facebook.ac
 import { getLoggedInUser } from "@/lib/actions/user.actions";
 import { createSupabaseClient } from "@/lib/utils/supabase/clients/server";
 
-interface AdAccount {
-  id: string;
-  account_status: number;
-  account_id: string;
-  name: string;
-}
-
 interface AccountInfo {
   id: string;
   name: string;
@@ -42,7 +35,7 @@ export const fetchAccessToken = async (code: string): Promise<string> => {
 };
 
 // Fetch ad accounts from Facebook using the access token
-export async function fetchAdAccounts(accessToken: string): Promise<AdAccount[]> {
+export async function fetchAdAccounts(accessToken: string): Promise<AdAccountData[]> {
   try {
     // API call to fetch ad accounts
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/facebook/ad-accounts`, {
@@ -64,7 +57,7 @@ export async function fetchAdAccounts(accessToken: string): Promise<AdAccount[]>
       throw new Error(errorData.error || 'Error fetching ad accounts.');
     }
 
-    const adAccountsData: { accounts: AdAccount[] } = await response.json();
+    const adAccountsData: { accounts: AdAccountData[] } = await response.json();
     return adAccountsData.accounts || [];
   } catch (error) {
     console.error(error);
@@ -98,7 +91,7 @@ export const fetchAccountInfo = async (accessToken: string): Promise<AccountInfo
 // Fetch both ad accounts and account info concurrently
 export const fetchAdAccountsAndAccountInfo = async (
   accessToken: string
-): Promise<{ adAccounts: AdAccount[], accountsInfo: AccountInfo[] }> => {
+): Promise<{ adAccounts: AdAccountData[], accountsInfo: AccountInfo[] }> => {
   try {
     const [adAccounts, accountsInfo] = await Promise.all([
       fetchAdAccounts(accessToken),

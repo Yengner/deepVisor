@@ -2,7 +2,7 @@
 import dynamic from "next/dynamic";
 import React, { useState } from "react";
 import ChartOne from "../Charts/leads_vs_spend";
-// import ChartTwo from "../Charts/ChartTwo";
+import ChartTwo from "../Charts/ChartTwo";
 import ChatCard from "../Chat/ChatCard";
 import TableOne from "./TableOne";
 import CardDataStats from "../CardDataStats";
@@ -52,7 +52,7 @@ const ChartThree = dynamic(() => import("@/components/Charts/ChartThree"), {
   ssr: false,
 });
 
-const ECommerce: React.FC<ECommerceProps> = ({ campaignInsights, accounts, currentAccount, userId }) => {
+const Marketing: React.FC<ECommerceProps> = ({ campaignInsights, accounts, currentAccount, userId }) => {
   const [selectedAdAccount, setSelectedAdAccount] = useState<string | null>(null);
   const [selectedCampaign, setSelectedCampaign] = useState<CampaignData | null>(campaignInsights[0] || null);
 
@@ -167,9 +167,9 @@ const ECommerce: React.FC<ECommerceProps> = ({ campaignInsights, accounts, curre
         {selectedAdAccount && selectedCampaign && (
           <ChartOne adAccountId={selectedAdAccount} campaignId={selectedCampaign.campaign_id} userId={userId} />
         )}
-        {/* {selectedAdAccount && selectedCampaign && (
-        // <ChartTwo adAccountId={selectedAdAccount} campaignId={selectedCampaign.campaign_id} userId={userId}/>
-        )} */}
+        {selectedAdAccount && selectedCampaign && (
+        <ChartTwo adAccountId={selectedAdAccount} campaignId={selectedCampaign.campaign_id} userId={userId}/>
+        )}
         <ChartThree />
         <MapOne />
         <div className="col-span-12 xl:col-span-8">
@@ -181,4 +181,4 @@ const ECommerce: React.FC<ECommerceProps> = ({ campaignInsights, accounts, curre
   );
 };
 
-export default ECommerce;
+export default Marketing;

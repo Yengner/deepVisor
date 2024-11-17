@@ -100,3 +100,10 @@ declare interface AccessTokenData {
   facebook_access_token: string; // Facebook access token
   updated_at?: Date; // Timestamp for when the token was last updated
 }
+
+interface AdAccountData {
+  id: string;
+  user_id: string;
+  platform: string;
+  ad_account_id: string;
+}
