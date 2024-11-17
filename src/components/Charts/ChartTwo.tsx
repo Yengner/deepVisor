@@ -123,7 +123,7 @@ const options: ApexOptions = {
     fontSize: "14px",
 
     markers: {
-    //@ts-expect-error
+    //@ts-expect-error ill figure this out later lmao 
       radius: 99,
     },
   },
