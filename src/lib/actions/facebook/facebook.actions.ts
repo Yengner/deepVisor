@@ -18,18 +18,22 @@ interface InfoData {
 
 interface AdAccountData {
   id: string;
+  user_id: string;
+  platform: string;
+  ad_account_id: string;
 }
 
 export async function getFbAdAccounts({ userId }: getAccountsProps) {
   try {
     const supabase = createSupabaseClient();
 
-    // Fetching the Facebook access token for the user from Supabase
-    const { data } = await supabase
-      .from('access_token')
-      .select('facebook_access_token')
+    const { data: FbAccessToken } = await supabase
+      .from('access_tokens')
+      .select('access_token')
       .eq('user_id', userId)
-
+      .eq('platform', 'facebook')
+      .single(); 
+    
     // Fetching facebook account info from supabase ei. name, category etc.
     const { data: accountInfo } = await supabase
     .from('facebook_pages')
@@ -38,19 +42,26 @@ export async function getFbAdAccounts({ userId }: getAccountsProps) {
 
     const adAccounts = await getAdAccounts({ userId })
     const accountInfoData = accountInfo || [];
-
-    if (!data || data.length === 0) {
+    
+    if (!FbAccessToken || !FbAccessToken.access_token) {
       throw new Error('No access token found for the user');
     }
-
-    const accessToken = data[0]?.facebook_access_token;
+    const accessToken = FbAccessToken.access_token;
 
     const accounts = await Promise.all(
-      adAccounts?.map(async (adAccount: FbAccountData) => {
-        const campaignInsights = await fetchFacebookCampaignInsights({ adAccountId: adAccount.id, accessToken: accessToken });
+      adAccounts?.map(async (adAccount: AdAccountData) => {
+      const adAccountId = adAccount.ad_account_id; 
+
+        if (!adAccount.ad_account_id) {
+          console.warn(`Ad account ID missing for ad account: ${JSON.stringify(adAccount)}`);
+          return null; // Skip invalid ad accounts
+        }
+        
+        // Function to fetch campaign insights for an ad account
+        const campaignInsights = await fetchFacebookCampaignInsights({ adAccountId: adAccountId, accessToken: accessToken });
 
         return {
-          adAccountId: adAccount.id,
+          adAccountId: adAccount.ad_account_id,
           campaigns: campaignInsights
         };
       })
@@ -60,7 +71,8 @@ export async function getFbAdAccounts({ userId }: getAccountsProps) {
 
     return parseStringify({ data: accounts, totalAdAccounts, accountInfoData });
   } catch (error) {
-
+    console.error('Error fetching Facebook ad accounts:', error);
+    throw new Error('Failed to fetch Facebook ad accounts.');
   }
 }
 
@@ -69,10 +81,11 @@ export async function getFbAdAccount({ adAccountId, userId }: GetAdAccountProps)
     const supabase = createSupabaseClient();
 
     // Get the Facebook access token for the user from Supabase
-    const { data } = await supabase
-      .from('access_token')
-      .select('facebook_access_token')
+    const { data: FbAccessToken } = await supabase
+      .from('access_tokens')
+      .select('access_token')
       .eq('user_id', userId)
+      .eq('platform', 'facebook')
       .single(); 
     
     const { data: accountInfo } = await supabase
@@ -80,11 +93,11 @@ export async function getFbAdAccount({ adAccountId, userId }: GetAdAccountProps)
       .select('facebook_page_id, facebook_page_name, category')
       .eq('user_id', userId);
 
-    if (!data || !data.facebook_access_token) {
+    if (!FbAccessToken || !FbAccessToken.access_token) {
       throw new Error('No access token found for the user');
     }
 
-    const accessToken = data.facebook_access_token;
+    const accessToken = FbAccessToken.access_token;
 
     // get campaign insights for the specific adAccountId
     const campaignInsights = await fetchFacebookCampaignInsights({
@@ -184,7 +197,7 @@ export async function insertFbUserDataIntoSupabase(
         adAccountsData.map((account) => ({
           user_id: userId,
           platform: 'facebook',
-          ad_account_id: account.id,
+          ad_account_id: account.ad_account_id,
           updated_at: new Date(),
         })),
         { onConflict: 'ad_account_id' }
@@ -261,8 +274,8 @@ export const fetchFacebookCampaignInsights = async ({ adAccountId, accessToken }
 
     return campaignData;
   } catch (error) {
-    console.error('Error fetching and storing Facebook campaign insights:', error);
-    throw new Error('Failed to fetch and store Facebook campaign insights');
+    console.error('Error fetching Facebook campaign insights:', error);
+    throw new Error('Failed to fetch Facebook campaign insights');
   }
 };
 
