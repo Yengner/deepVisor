@@ -3,66 +3,63 @@
 import { createSupabaseClient } from '@/lib/utils/supabase/clients/server';
 import { getErrorMessage, parseStringify } from '../utils/utils';
 
-// Create a helper function to initialize Supabase server-side
 
-// Helper function for handling login
 export async function handleLogin(email: string, password: string) {
-    
-    try{
-    const { auth } = createSupabaseClient();
-    const { error } = await auth.signInWithPassword({ email, password });
-  
-    if (error) {
-        throw error;
-    }
 
-    return { errorMessage: null}
-    
-    } catch(error) {
-        return { errorMessage: getErrorMessage(error)}
+    try {
+        const { auth } = createSupabaseClient();
+        const { error } = await auth.signInWithPassword({ email, password });
+
+        if (error) {
+            throw error;
+        }
+
+        return { errorMessage: null }
+
+    } catch (error) {
+        return { errorMessage: getErrorMessage(error) }
     }
 }
 
-// Helper function for handling sign-up
 export async function handleSignUp(
-  email: string,
-  password: string,
-  first_name: string,
-  last_name: string,
-  phone_number: string,
-  business_name: string
+    email: string,
+    password: string,
+    first_name: string,
+    last_name: string,
+    phone_number: string,
+    business_name: string
 ) {
-    try{
+    try {
         const { auth } = createSupabaseClient();
 
         const { error } = await auth.signUp({
             email,
             password,
             options: {
-            data: {
-                first_name,
-                last_name,
-                business_name,
-                phone_number,
+                data: {
+                    first_name,
+                    last_name,
+                    business_name,
+                    phone_number,
+                },
             },
-        },
-    });
+        });
 
         if (error) {
             throw error;
         }
 
-        return { errorMessage: null}
+        return { errorMessage: null }
 
-    } catch(error) {
-        return { errorMessage: getErrorMessage(error)}
+    } catch (error) {
+        return { errorMessage: getErrorMessage(error) }
     }
 }
 
 // Helper function for handling sign-out
 export async function handleSignOut() {
 
-    try{
+    try {
         const { auth } = createSupabaseClient();
         const { error } = await auth.signOut();
 
@@ -70,11 +67,11 @@ export async function handleSignOut() {
             throw error;
         }
 
-        return { errorMessage: null}
+        return { errorMessage: null }
 
-    } catch(error) {
+    } catch (error) {
 
-        return { errorMessage: getErrorMessage(error)}
+        return { errorMessage: getErrorMessage(error) }
 
     }
 }
@@ -92,19 +89,52 @@ export async function handleSignOut() {
 
 export async function getLoggedInUser() {
     try {
-      const { auth } = createSupabaseClient();
-      
-      const { data, error } = await auth.getUser();
-      // Handle any user errors
-      if (error || !data?.user) {
-        throw error || new Error('No active user found.');
-      }
-  
-      const user = data?.user;
+        const { auth } = createSupabaseClient();
 
-      return parseStringify(user)
-      
+        const { data, error } = await auth.getUser();
+        // Handle any errors that comes through
+        if (error || !data?.user) {
+            throw error || new Error('No active user found.');
+        }
+
+        const user = await getUserInfo({ userId: data.user.id });
+
+        return parseStringify(user);
     } catch (error) {
-      return { errorMessage: getErrorMessage(error) }; // Handle any errors
+        return { errorMessage: getErrorMessage(error) }; // Handle any errors
     }
-  }
+};
+
+export async function getUserInfo({ userId }: getUserInfoProps) {
+
+    try {
+        const supabase = createSupabaseClient();
+
+        const { data } = await supabase
+            .from('users') // The table where user data is stored
+            .select('*')
+            .eq('id', userId)
+            .single();
+            
+        return parseStringify(data);
+    } catch (error) {
+        return { errorMessage: getErrorMessage(error) }
+    }
+};
+
+export async function getAdAccounts({ userId }: getAdAccountsProps) {
+    
+    try {
+        const supabase = createSupabaseClient();
+        
+        const { data } = await supabase
+            .from('ad_accounts') // The table where social media data is stored
+            .select('*')
+            .eq('user_id', userId);
+
+        return parseStringify(data);
+    } catch (error) {
+        
+    }
+
+}

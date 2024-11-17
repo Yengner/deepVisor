@@ -15,7 +15,7 @@ const FacebookBusinessIntegration = () => {
       const loginUrl = `https://www.facebook.com/v20.0/dialog/oauth?client_id=${appId}&redirect_uri=${redirectUri}&config_id=${configId}&response_type=code&override_default_response_type=true`;
 
       // Redirect to Facebook OAuth login
-      window.open(loginUrl, '_blank');
+      window.location.href = loginUrl; // Navigate directly to the login URL
     } catch (err) {
       setError('An error occurred during login.');
     }
@@ -23,8 +23,13 @@ const FacebookBusinessIntegration = () => {
 
   return (
     <div>
-      <button onClick={handleLogin}>Integrate Facebook Business</button>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      <button
+        onClick={handleLogin}
+        className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+      >
+        Integrate Facebook Business
+      </button>
+      {error && <p className="text-red-600 mt-2">{error}</p>}
     </div>
   );
 };

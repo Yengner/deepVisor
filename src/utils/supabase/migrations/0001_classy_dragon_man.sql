@@ -1,4 +1,0 @@
-ALTER TABLE public.users ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.facebook_accounts ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.facebook_ad_campaigns ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.user_activity_logs ENABLE ROW LEVEL SECURITY;

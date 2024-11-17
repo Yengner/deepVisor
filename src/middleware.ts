@@ -8,7 +8,7 @@ export async function middleware(request: NextRequest) {
 // In the config, make sure you're excluding login/signup pages
 export const config = {
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$|/callback$).*)',
-    '/',
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$|$).*)',
+    '/dashboard',
   ],
 };

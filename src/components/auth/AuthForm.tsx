@@ -30,7 +30,7 @@ export default function AuthForm({ type }: AuthFormProps) {
                 const { errorMessage } = await handleLogin(email, password);
                 if (errorMessage) {
                     toast.error(errorMessage);
-                } else {
+            } else {
                     toast.success("Logged In!");
                     window.location.reload();
                 }
@@ -41,7 +41,7 @@ export default function AuthForm({ type }: AuthFormProps) {
                     toast.error(errorMessage);
                 } else {
                     toast.success("Signed In!");
-                    router.push('/fblogin');
+                    router.push('/integration');
                 }
             }
         } catch (error) {
