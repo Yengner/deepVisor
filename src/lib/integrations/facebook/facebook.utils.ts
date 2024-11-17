@@ -22,7 +22,6 @@ interface AccountInfo {
 
 // Fetch access token from the server
 export const fetchAccessToken = async (code: string): Promise<string> => {
-  console.log('CODE REACHE FEtCH ACCESS TOKEN', code)
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/facebook/accessToken`, {
       method: 'POST',
@@ -34,7 +33,6 @@ export const fetchAccessToken = async (code: string): Promise<string> => {
       const errorData = await response.json();
       throw new Error(errorData.error || 'Error fetching access token.');
     }
-    console.log('RESPONSE IT WORKED', response)
     const data: { accessToken: string } = await response.json(); 
     return data.accessToken;
   } catch (error) {
@@ -118,7 +116,7 @@ export const fetchAdAccountsAndAccountInfo = async (
 export async function handleFacebookIntegration(code: string): Promise<{ success: boolean; error?: string }> {
   try {
     const accessToken = await fetchAccessToken(code);
-
+  
     const { adAccounts, accountsInfo } = await fetchAdAccountsAndAccountInfo(accessToken);
 
     const user = await getLoggedInUser();

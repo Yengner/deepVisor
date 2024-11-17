@@ -26,6 +26,7 @@
     "facebook-nodejs-business-sdk": "^20.0.3",
     "fb": "^2.0.0",
     "flatpickr": "^4.6.13",
+    "framer-motion": "^11.11.17",
     "i": "^0.3.7",
     "jsvectormap": "^1.6.0",
     "lucide-react": "^0.452.0",

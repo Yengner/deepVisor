@@ -143,17 +143,20 @@ export async function insertFbUserDataIntoSupabase(
   const supabase = createSupabaseClient();
 
   try {
-    // Insert access token into `access_token` table
+    // Upsert access token into `access_token` table
     const { error: accessTokenError } = await supabase
       .from('access_tokens')
-      .insert({
+      .upsert({
         user_id: userId,
-        facebook_access_token: accessToken,
+        platform: 'facebook',
+        access_token: accessToken,
         updated_at: new Date(),
-      });
+      },
+      { onConflict: 'access_token' }
+      );
 
     if (accessTokenError) {
-      throw new Error(`Failed to store Facebook access token: ${accessTokenError.message}`);
+      console.warn(`Failed to store Facebook access token: ${accessTokenError.message}`);
     }
 
     // Upsert Facebook pages into `facebook_pages` table
@@ -167,13 +170,11 @@ export async function insertFbUserDataIntoSupabase(
           category: page.category || '',
           updated_at: new Date(),
         })),
-        {
-          onConflict: 'facebook_page_id', // Conflict resolution based on the `facebook_page_id` column
-        }
+        { onConflict: 'facebook_page_id' }
       );
 
     if (pagesError) {
-      throw new Error(`Failed to store Facebook pages: ${pagesError.message}`);
+      console.warn(`Failed to store Facebook pages: ${pagesError.message}`);
     }
 
     // Upsert Ad accounts into `ad_accounts` table
@@ -181,17 +182,16 @@ export async function insertFbUserDataIntoSupabase(
       .from('ad_accounts')
       .upsert(
         adAccountsData.map((account) => ({
-          id: account.id,
           user_id: userId,
-          last_updated: new Date(),
+          platform: 'facebook',
+          ad_account_id: account.id,
+          updated_at: new Date(),
         })),
-        {
-          onConflict: 'id', // Conflict resolution based on the `id` column
-        }
+        { onConflict: 'ad_account_id' }
       );
 
     if (adAccountsError) {
-      throw new Error(`Failed to store ad accounts: ${adAccountsError.message}`);
+      console.warn(`Failed to store ad accounts: ${adAccountsError.message}`);
     }
 
     return { insertedAdAccounts: adAccountsData, insertedAccountsInfo: accountsInfoData };
