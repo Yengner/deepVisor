@@ -2,7 +2,7 @@
 import dynamic from "next/dynamic";
 import React, { useState } from "react";
 import ChartOne from "../Charts/leads_vs_spend";
-import ChartTwo from "../Charts/ChartTwo";
+// import ChartTwo from "../Charts/ChartTwo";
 import ChatCard from "../Chat/ChatCard";
 import TableOne from "./TableOne";
 import CardDataStats from "../CardDataStats";
@@ -167,9 +167,9 @@ const ECommerce: React.FC<ECommerceProps> = ({ campaignInsights, accounts, curre
         {selectedAdAccount && selectedCampaign && (
           <ChartOne adAccountId={selectedAdAccount} campaignId={selectedCampaign.campaign_id} userId={userId} />
         )}
-        {selectedAdAccount && selectedCampaign && (
-        <ChartTwo adAccountId={selectedAdAccount} campaignId={selectedCampaign.campaign_id} userId={userId}/>
-        )}
+        {/* {selectedAdAccount && selectedCampaign && (
+        // <ChartTwo adAccountId={selectedAdAccount} campaignId={selectedCampaign.campaign_id} userId={userId}/>
+        )} */}
         <ChartThree />
         <MapOne />
         <div className="col-span-12 xl:col-span-8">

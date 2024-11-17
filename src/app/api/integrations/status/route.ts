@@ -1,11 +1,11 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { createSupabaseClient } from '@/lib/utils/supabase/clients/server';
 import { getLoggedInUser } from '@/lib/actions/user.actions';
 
-export async function GET(req: NextRequest) {
+export async function GET() {
     try {
       const supabase = createSupabaseClient();
-      const loggedInUser = await getLoggedInUser(); // Pass user ID in headers
+      const loggedInUser = await getLoggedInUser();
       const userId = loggedInUser.id;
   
       if (!userId) {

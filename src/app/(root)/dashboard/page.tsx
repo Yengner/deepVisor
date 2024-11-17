@@ -3,7 +3,7 @@ import ECommerce from "@/components/Dashboard/Marketing";
 import { getFbAdAccount, getFbAdAccounts } from "@/lib/actions/facebook/facebook.actions";
 
 const Test = async({ searchParams: { id, page }}:SearchParamProps) => {
-  const currentPage = Number(page as string) || 1;
+  // const currentPage = Number(page as string) || 1;
   const loggedIn = await getLoggedInUser();
   const userId = loggedIn.id;
   const fBAdAccounts = await getFbAdAccounts({ userId });
