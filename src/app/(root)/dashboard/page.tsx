@@ -2,7 +2,7 @@ import { getLoggedInUser } from "@/lib/actions/user.actions";
 import ECommerce from "@/components/Dashboard/Marketing";
 import { getFbAdAccount, getFbAdAccounts } from "@/lib/actions/facebook/facebook.actions";
 
-const Test = async({ searchParams: { id, page }}:SearchParamProps) => {
+const Dashboard = async({ searchParams: { id }}:SearchParamProps) => {
   // const currentPage = Number(page as string) || 1;
   const loggedIn = await getLoggedInUser();
   const userId = loggedIn.id;
@@ -31,4 +31,4 @@ const Test = async({ searchParams: { id, page }}:SearchParamProps) => {
   );
 };
 
-export default Test;
+export default Dashboard;
