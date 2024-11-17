@@ -6,15 +6,27 @@ import { createSupabaseClient } from '@/lib/utils/supabase/clients/server';
 
 export async function GET(req: NextRequest) {
   try {
-    const { searchParams } = new URL(req.url);
-    const code = searchParams.get('code');
+    const code = new URLSearchParams(window.location.search).get('code');
 
     if (!code) {
       return NextResponse.json({ error: 'Authorization code is missing.' }, { status: 400 });
     }
 
-    const accessToken = await fetchAccessToken(code);
-    console
+    // const accessToken = await fetchAccessToken(code);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/facebook/access-token`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Error fetching access token.');
+    }
+
+    const data: { accessToken: string } = await response.json(); 
+    const accessToken = data.accessToken;
+
     const { adAccounts, accountsInfo } = await fetchAdAccountsAndAccountInfo(accessToken);
 
     const user = await getLoggedInUser();
