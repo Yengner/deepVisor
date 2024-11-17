@@ -1,6 +1,6 @@
 import { getLoggedInUser } from "@/lib/actions/user.actions";
 // import ECommerce from "@/components/Dashboard/Marketing";
-import { getFbAdAccount, getFbAdAccounts } from "@/lib/actions/facebook/facebook.actions";
+import { getFbAdAccounts } from "@/lib/actions/facebook/facebook.actions";
 
 const Dashboard = async() => {
   // put back id YENGNER { searchParams: { id }}:SearchParamProps
