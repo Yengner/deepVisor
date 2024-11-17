@@ -26,7 +26,7 @@ const Campaigns = () => {
 
         // Query Supabase for the access token from the "access_token" table
         const { data: accessTokenData, error: accessTokenError } = await supabase
-          .from("access_token") 
+          .from("access_tokens") 
           .select("facebook_access_token")
           .eq("user_id", userId)
           .single();

@@ -26,8 +26,13 @@ const Dashboard = async({ searchParams: { id }}:SearchParamProps) => {
   
   const adAccountCampaigns = account.campaigns
   return (
-    <ECommerce campaignInsights={adAccountCampaigns} accounts={fBAdAccountsData} currentAccount={safeAccount} userId={userId} // Pass userId to ECommerce
-    />
+    <h1>dashboard</h1>
+    // <ECommerce 
+    // campaignInsights={adAccountCampaigns} 
+    // accounts={fBAdAccountsData} 
+    // currentAccount={safeAccount} 
+    // userId={userId}
+    // />
   );
 };
 
