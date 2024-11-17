@@ -41,7 +41,7 @@ export async function GET(request: NextRequest) {
   }
 
   const { data: accessTokenData, error: accessTokenError } = await supabase
-    .from('access_token')
+    .from('access_tokens')
     .select('facebook_access_token')
     .eq('user_id', userId)
     .single<AccessTokenData>();
