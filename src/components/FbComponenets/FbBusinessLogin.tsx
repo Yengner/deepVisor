@@ -11,7 +11,6 @@ const FacebookBusinessIntegration = () => {
     const configId = process.env.NEXT_PUBLIC_FACEBOOK_CONFIG_ID;
 
     try {
-      // Construct the login URL with config_id instead of scope
       const loginUrl = `https://www.facebook.com/v20.0/dialog/oauth?client_id=${appId}&redirect_uri=${redirectUri}&config_id=${configId}&response_type=code&override_default_response_type=true`;
 
       // Redirect to Facebook OAuth login

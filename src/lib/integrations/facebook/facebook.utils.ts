@@ -19,10 +19,9 @@ interface AccountInfo {
 export const fetchAccessToken = async (code: string): Promise<string> => {
   try {
     // API call to fetch access token
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/facebook/access-token`, {
-      method: 'POST',
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/facebook/access-token?code=${code}`, {
+      method: 'GET',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ code }),
     });
 
     if (!response.ok) {

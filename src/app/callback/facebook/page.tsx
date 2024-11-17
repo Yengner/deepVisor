@@ -19,10 +19,9 @@ const FacebookCallbackPage = () => {
         setLoadingMessage('Fetching access token...');
 
        // Call a server-side API route to handle the code exchange and data fetching
-        const response = await fetch('/api/facebook/callback', {
-          method: 'POST',
+        const response = await fetch(`/api/facebook/callback?code=${code}`, {
+          method: 'GET',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ code }),
         });
 
         if (!response.ok) {
