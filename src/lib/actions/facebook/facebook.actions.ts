@@ -10,13 +10,6 @@ interface Action {
   value: string | number;
 }
 
-interface InfoData {
-  id: string;
-  name: string;
-  category: string;
-}
-
-
 export async function getFbAdAccounts({ userId }: getAccountsProps) {
   try {
     const supabase = createSupabaseClient();
@@ -43,10 +36,9 @@ export async function getFbAdAccounts({ userId }: getAccountsProps) {
     const accessToken = FbAccessToken.access_token;
 
     const accounts = await Promise.all(
-      adAccounts?.map(async (adAccount: AdAccountData) => {
+      adAccounts?.map(async (adAccount: getUserAdAccount) => {
       const adAccountId = adAccount.ad_account_id; 
-
-        if (!adAccount.ad_account_id) {
+        if (!adAccountId) {
           console.warn(`Ad account ID missing for ad account: ${JSON.stringify(adAccount)}`);
           return null; // Skip invalid ad accounts
         }
@@ -55,7 +47,7 @@ export async function getFbAdAccounts({ userId }: getAccountsProps) {
         const campaignInsights = await fetchFacebookCampaignInsights({ adAccountId: adAccountId, accessToken: accessToken });
 
         return {
-          adAccountId: adAccount.ad_account_id,
+          adAccountId: adAccountId,
           campaigns: campaignInsights
         };
       })
@@ -144,11 +136,10 @@ export async function fetchFbUserDataFromSupabase(userId: string) {
 export async function insertFbUserDataIntoSupabase(
   userId: string,
   accessToken: string,
-  adAccountsData: AdAccountData[],
-  accountsInfoData: InfoData[]
+  adAccountsData: AdAccountsData,
+  accountsInfoData: AccountInfoData
 ) {
   const supabase = createSupabaseClient();
-
   try {
     // Upsert access token into `access_token` table
     const { error: accessTokenError } = await supabase
@@ -191,7 +182,7 @@ export async function insertFbUserDataIntoSupabase(
         adAccountsData.map((account) => ({
           user_id: userId,
           platform: 'facebook',
-          ad_account_id: account.ad_account_id,
+          ad_account_id: account.id,
           updated_at: new Date(),
         })),
         { onConflict: 'ad_account_id' }

@@ -64,13 +64,6 @@ declare type FbAccountData = {
     last_updated: string;
 }
 
-// Type for Ad Account Data
-declare interface AdAccountData {
-  id: string; // Ad account ID from Facebook
-  account_id: string; // Ad account number (e.g., 'act_12345678')
-  name: string; // Name of the ad account
-  account_status: number; // Status of the ad account (e.g., active, disabled)
-}
 
 // Type for Facebook Page Information
 declare interface InfoData {
@@ -101,9 +94,30 @@ declare interface AccessTokenData {
   updated_at?: Date; // Timestamp for when the token was last updated
 }
 
-interface AdAccountData {
-  id: string;
-  user_id: string;
-  platform: string;
+interface AdAccount {
+  account_id: string; // Facebook Ad Account ID (numeric string)
+  id: string;         // Facebook Ad Account Object ID (prefixed with 'act_')
+}
+
+interface AdAccountsResponse {
+  accounts: AdAccount[]; // Array of AdAccount objects
+}
+
+type AdAccountsData = AdAccount[]; // Alias for array of AdAccount
+
+interface AccountInfo {
+  id: string;        // Facebook Page ID
+  name: string;      // Facebook Page Name
+  category: string;  // Page Category
+}
+
+interface AdAccount {
+  account_id: string; // Facebook Ad Account ID (numeric string)
+  id: string;         // Facebook Ad Account Object ID (prefixed with 'act_')
+}
+
+type AccountInfoData = AccountInfo[]; // Alias for array of AccountInfo
+
+declare interface getUserAdAccount {
   ad_account_id: string;
 }

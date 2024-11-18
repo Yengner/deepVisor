@@ -129,7 +129,8 @@ export async function getAdAccounts({ userId }: getAdAccountsProps) {
         
         const { data } = await supabase
             .from('ad_accounts') // The table where social media data is stored
-            .select('*')
+            .select('ad_account_id')
+            .eq('platform', 'facebook')
             .eq('user_id', userId);
 
         return parseStringify(data);
