@@ -10,13 +10,6 @@ interface Action {
   value: string | number;
 }
 
-interface InfoData {
-  id: string;
-  name: string;
-  category: string;
-}
-
-
 export async function getFbAdAccounts({ userId }: getAccountsProps) {
   try {
     const supabase = createSupabaseClient();
