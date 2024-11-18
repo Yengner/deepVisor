@@ -38,7 +38,7 @@ const Campaigns = () => {
 
         const { data: adAccountData, error: adAccountError } = await supabase
           .from("ad_accounts") 
-          .select("id")
+          .select("ad_account_id")
           .eq("user_id", userId)
           .single();
 
@@ -51,7 +51,7 @@ const Campaigns = () => {
         // Query Supabase for the ad account ID from the "ad_accounts" table
 
 
-        const adAccountId = adAccountData.id;
+        const adAccountId = adAccountData.ad_account_id;
         console.log("Ad Account ID from Supabase:", adAccountId);
         
         setAccessToken(accessToken);
