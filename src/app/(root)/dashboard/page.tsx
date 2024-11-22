@@ -1,34 +1,55 @@
-import { getLoggedInUser } from "@/lib/actions/user.actions";
-import Marketing from "@/components/Dashboard/Marketing";
-import { getFbAdAccount, getFbAdAccounts } from "@/lib/actions/facebook/facebook.actions";
+'use client'
 
-const Dashboard = async({ searchParams: { id }}:SearchParamProps) => {
-  // const currentPage = Number(page as string) || 1;
-  const loggedIn = await getLoggedInUser();
-  const userId = loggedIn.id;
-  const fBAdAccounts = await getFbAdAccounts({ userId });
-  
-  if(!fBAdAccounts) return;
+import { useDashboardMetrics, useInsights, useTopCampaigns } from '@/hooks/useDashboardData';
+import { useGlobalState } from '@/lib/store/globalState';
 
-  const fBAdAccountsData = fBAdAccounts?.data;
-  const adAccountId = (id as string) || fBAdAccountsData[0]?.adAccountId;
+const DashboardPage = () => {
+  const { selectedPlatform, selectedAdAccount } = useGlobalState();
 
-  const account = await getFbAdAccount({ adAccountId, userId });
+  const { data: metrics, isLoading: metricsLoading } = useDashboardMetrics(selectedPlatform, selectedAdAccount);
+  const { data: insights, isLoading: insightsLoading } = useInsights(selectedPlatform, selectedAdAccount, 'daily');
+  const { data: topCampaigns, isLoading: topCampaignsLoading } = useTopCampaigns(selectedPlatform, selectedAdAccount);
 
-  const safeAccount = {
-    ...account,
-    accountInfo: account.accountInfo || [], // Fallback to empty array if `null`
-  };
-  
-  const adAccountCampaigns = account.campaigns
+  if (!selectedPlatform || !selectedAdAccount) {
+    return <p>Please select a platform and ad account to view data.</p>;
+  }
+
   return (
-    <Marketing 
-    campaignInsights={adAccountCampaigns} 
-    accounts={fBAdAccountsData} 
-    currentAccount={safeAccount} 
-    userId={userId}
-    />
+    <div>
+      <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
+      {metricsLoading || insightsLoading || topCampaignsLoading ? (
+        <p>Loading...</p>
+      ) : (
+        <div>
+          <h2 className="font-bold text-xl">Performance Metrics</h2>
+          <ul>
+            <li>Impressions: {metrics?.impressions}</li>
+            <li>Clicks: {metrics?.clicks}</li>
+            <li>Spend: {metrics?.spend}</li>
+            <li>Conversions: {metrics?.conversions}</li>
+          </ul>
+
+          <h2 className="font-bold text-xl mt-4">Insights</h2>
+          <ul>
+            {insights?.map((data: any, index: number) => (
+              <li key={index}>
+                Date: {data.date || data.week || data.month}, Spend: {data.spend}, Leads: {data.leads}
+              </li>
+            ))}
+          </ul>
+
+          <h2 className="font-bold text-xl mt-4">Top Campaigns</h2>
+          <ul>
+            {topCampaigns?.map((campaign: any) => (
+              <li key={campaign.id}>
+                {campaign.name}: {campaign.leads} leads, {campaign.spend} spend
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
   );
 };
 
-export default Dashboard;
+export default DashboardPage;

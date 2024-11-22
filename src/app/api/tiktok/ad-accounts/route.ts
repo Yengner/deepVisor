@@ -6,8 +6,8 @@ export async function GET(req: NextRequest) {
 
   // Mocked ad account data
   const adAccounts = [
-    { id: 'act_123456', account_id: '123456' },
-    { id: 'act_789101', account_id: '789101' },
+    { id: 'act_800880', account_id: '800880' },
+    { id: 'act_102938', account_id: '102938' },
   ];
 
   return NextResponse.json(adAccounts);

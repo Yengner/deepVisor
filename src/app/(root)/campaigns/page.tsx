@@ -1,92 +1,51 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import CreateCampaign from '@/components/FbComponenets/CreateAdCampaign';
-import { createClient } from '@/lib/utils/supabase/clients/browser';
-import { getLoggedInUser } from '@/lib/actions/user.actions';
+import { useCampaigns } from '@/hooks/useCampaigns';
+import { useGlobalState } from '@/lib/store/globalState';
 
-const Campaigns = () => {
-  const [accessToken, setAccessToken] = useState<string | null>(null);
-  const [adAccountId, setAdAccountId] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+const CampaignsPage = () => {
+  const { selectedPlatform, selectedAdAccount } = useGlobalState();
+  const { data: campaigns, isLoading, error } = useCampaigns(selectedPlatform, selectedAdAccount);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const supabase = createClient(); // Use the browser client since this will be client-side
+  if (!selectedPlatform || !selectedAdAccount) {
+    return <p>Please select a platform and an ad account to view campaigns.</p>;
+  }
 
-      try {
-        const user = await getLoggedInUser(); 
-        const userId = user?.id;
-
-        if (!userId) {
-          throw new Error("No user is logged in.");
-        }
-        console.log("User ID:", userId);
-
-        // Query Supabase for the access token from the "access_token" table
-        const { data: accessTokenData, error: accessTokenError } = await supabase
-          .from("access_tokens") 
-          .select("access_token")
-          .eq("platform", 'facebook')
-          .eq("user_id", userId)
-          .single();
-
-        if (accessTokenError || !accessTokenData) {
-          throw new Error("Failed to retrieve the access token.");
-        }
-
-        const { data: adAccountData, error: adAccountError } = await supabase
-          .from("ad_accounts") 
-          .select("ad_account_id")
-          .eq("user_id", userId)
-          .single();
-
-          if (adAccountError || !adAccountData) {
-            throw new Error("Failed to retrieve the ad account ID.");
-          }
-        const accessToken = accessTokenData.access_token;
-        console.log("Access Token from Supabase:", accessToken);
-
-        // Query Supabase for the ad account ID from the "ad_accounts" table
-
-
-        const adAccountId = adAccountData.ad_account_id;
-        console.log("Ad Account ID from Supabase:", adAccountId);
-        
-        setAccessToken(accessToken);
-        setAdAccountId(adAccountId);
-      } catch (err: unknown) {
-        if (err instanceof Error) {
-          setError(err.message);
-        }
-      } finally {
-        setLoading(false); 
-      }
-    };
-
-    fetchData();
-  }, []); 
-
-  if (loading) {
-    return <div>Loading...</div>;
+  if (isLoading) {
+    return <p>Loading campaigns...</p>;
   }
 
   if (error) {
-    return <div style={{ color: 'red' }}>{error}</div>;
+    return <p className="text-red-500">Error fetching campaigns: {error.message}</p>;
   }
 
   return (
     <div>
-      <h1>Facebook Campaigns</h1>
+      <h1 className="text-2xl font-bold mb-6">Campaigns</h1>
 
-      {accessToken && adAccountId ? (
-        <CreateCampaign accessToken={accessToken} adAccountId={adAccountId} />
+      {campaigns?.length ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {campaigns.map((campaign: { id: string; name: string; status: string }) => (
+            <div
+              key={campaign.id}
+              className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-white dark:bg-gray-800 shadow-md"
+            >
+              <h2 className="font-semibold text-lg mb-2">{campaign.name}</h2>
+              <p>Status: <span className={campaign.status === 'active' ? 'text-green-600' : 'text-red-600'}>{campaign.status}</span></p>
+              <button
+                onClick={() => alert(`Details for Campaign ID: ${campaign.id}`)}
+                className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+              >
+                View Details
+              </button>
+            </div>
+          ))}
+        </div>
       ) : (
-        <p>Access token or Ad Account ID is missing.</p>
+        <p>No campaigns available for this ad account.</p>
       )}
     </div>
   );
 };
 
-export default Campaigns;
+export default CampaignsPage;
