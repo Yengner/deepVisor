@@ -1,21 +1,11 @@
-import { fetchAccessToken } from "@/lib/api/adAccounts";
 import { fetchAdAccounts } from "@/lib/api/adAccounts";
-
 import { useQuery } from "@tanstack/react-query";
+import { useAccessToken } from "./useAccessToken";
+
 interface AdAccount {
   id: string;
   account_id: string;
 }
-
-// Hook for getting accessToken for specific platform from supabase
-export const useAccessToken = (platform: string | null) => {
-  return useQuery<string, Error>({
-    queryKey: ["accessToken", platform],
-    queryFn: () => fetchAccessToken(platform!), // `!` because `enabled` ensures platform is not null
-    enabled: !!platform,
-  });
-};
-
 // Hook for ad accounts dynamically after getting the access token
 export const useAdAccounts = (platform: string | null) => {
   const {

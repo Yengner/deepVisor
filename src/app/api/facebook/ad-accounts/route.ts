@@ -6,8 +6,10 @@ export async function GET(req: NextRequest) {
 
   // Mocked ad account data
   const adAccounts = [
-    { id: 'act_123456', account_id: '123456' },
-    { id: 'act_789101', account_id: '789101' },
+    { id: 'act_782974607026594', account_id: '782974607026594' },
+    { id: 'act_1570674830419448', account_id: '1570674830419448' },
+    { id: 'act_1034892224237983', account_id: '1034892224237983' },
+    { id: 'act_553617767123729', account_id: '553617767123729' },
   ];
 
   return NextResponse.json(adAccounts);

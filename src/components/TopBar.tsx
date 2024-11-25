@@ -5,7 +5,7 @@ import AdAccountSelector from './AdAccountSelector';
 import { useRouter } from 'next/navigation';
 
 const TopBar = () => {
-  const { selectedPlatform, setPlatform } = useGlobalState();
+  const { selectedPlatform, setPlatform, toggleSidebar } = useGlobalState();
   const router = useRouter();
 
   const navigationItems = [
@@ -22,6 +22,27 @@ const TopBar = () => {
 
   return (
     <div className="flex justify-between items-center px-6 py-4 bg-white shadow dark:bg-gray-800">
+      {/* Burger Menu */}
+      <button
+        onClick={toggleSidebar}
+        className="text-gray-700 dark:text-gray-300 focus:outline-none"
+      >
+        <svg
+          className="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M4 6h16M4 12h16m-7 6h7"
+          />
+        </svg>
+      </button>
+
       {/* Navigation */}
       <div className="flex items-center gap-6">
         {navigationItems.map((item) => (
@@ -48,7 +69,7 @@ const TopBar = () => {
           <option value="facebook">Facebook</option>
           <option value="tiktok">TikTok</option>
           <option value="instagram">Instagram</option>
-          {/* Add more platforms as needed | Also make sure that this become dynamic through integration check*/} 
+          {/* Dynamically populate based on integration */}
         </select>
 
         {selectedPlatform && <AdAccountSelector />}

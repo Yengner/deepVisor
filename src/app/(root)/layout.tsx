@@ -13,11 +13,13 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 
   return (
     <html lang="en">
-      <body className="flex h-screen overflow-hidden bg-gray-100 dark:bg-gray-900">
+      <body className="relative h-screen bg-gray-100 dark:bg-gray-900">
         <QueryClientProvider client={queryClient}>
           {/* Sidebar and TopBar are shared components */}
           <Sidebar />
-          <div className="flex flex-col flex-1">
+
+          {/* Main Content */}
+          <div className="flex flex-col h-full">
             <TopBar />
             <main className="flex-1 p-6 overflow-y-auto">{children}</main>
           </div>
