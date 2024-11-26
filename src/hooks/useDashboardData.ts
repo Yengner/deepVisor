@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchTotalAdAccountInsights, fetchInsights, fetchTopCampaigns, fetchPerformanceMetrics } from '@/lib/api/dashboard';
+import { fetchTotalAdAccountInsights, fetchInsights, fetchTopCampaigns, fetchPerformanceMetrics, fetechAccountInfo } from '@/lib/api/dashboard';
 import { useAccessToken } from './useAccessToken';
 
 export const useTotalAdAccountInsights = (platform: string | null, adAccountId: string | null) => {
@@ -8,6 +8,7 @@ export const useTotalAdAccountInsights = (platform: string | null, adAccountId: 
     queryKey: ['dashboardMetrics', platform, adAccountId],
     queryFn: () => fetchTotalAdAccountInsights(platform!, adAccountId!, accessToken!),
     enabled: !!platform && !!adAccountId && !!accessToken,
+    staleTime: 1000 * 60 * 5, // Cache data for 5 minutes
   });
 };
 
@@ -16,10 +17,20 @@ export const usePerformanceMetrics = (platform: string | null, adAccountId: stri
   return useQuery({
     queryKey: ['performanceMetrics', adAccountId],
     queryFn: () => fetchPerformanceMetrics(adAccountId!, accessToken!),
-    enabled: !!adAccountId && !!accessToken, // Ensure both are available before fetching
-    staleTime: 1000 * 60 * 3, // Cache data for 5 minutes
+    enabled: !!adAccountId && !!accessToken,
+    staleTime: 1000 * 60 * 5, // Cache data for 5 minutes
   });
 };
+
+export const useAccountInfo = (platform: string | null, adAccountId: string | null) => {
+  const { data: accessToken } = useAccessToken(platform);
+  return useQuery({
+    queryKey: ['performanceMetrics', adAccountId, platform],
+    queryFn: () => fetechAccountInfo(platform!, adAccountId!, accessToken!),
+    enabled: !!platform && !!adAccountId && !!accessToken,
+    staleTime: 1000 * 60 * 5, // Cache data for 5 minutes
+  });
+}
 
 export const useInsights = (platform: string | null, adAccountId: string | null, timeRange: string = 'daily') => {
   const { data: accessToken } = useAccessToken(platform);
@@ -28,6 +39,7 @@ export const useInsights = (platform: string | null, adAccountId: string | null,
     queryKey: ['insights', platform, adAccountId, timeRange],
     queryFn: () => fetchInsights(platform!, adAccountId!, timeRange, accessToken!),
     enabled: !!platform && !!adAccountId && !!accessToken,
+    staleTime: 1000 * 60 * 5, // Cache data for 5 minutes
   });
 };
 
@@ -38,5 +50,6 @@ export const useTopCampaigns = (platform: string | null, adAccountId: string | n
     queryKey: ['topCampaigns', platform, adAccountId, metric],
     queryFn: () => fetchTopCampaigns(platform!, adAccountId!, metric, accessToken!),
     enabled: !!platform && !!adAccountId && !!accessToken,
+    staleTime: 1000 * 60 * 5, // Cache data for 5 minutes
   });
 };

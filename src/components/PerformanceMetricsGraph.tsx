@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { ApexOptions } from 'apexcharts';
 
@@ -16,9 +16,8 @@ interface GraphMetricCardProps {
 const GraphMetricCard = ({ title, value, isSelected, onClick }: GraphMetricCardProps) => (
   <button
     onClick={onClick}
-    className={`p-4 border rounded-lg ${
-      isSelected ? 'bg-blue-100 dark:bg-blue-700' : 'bg-white dark:bg-gray-800'
-    } shadow-sm text-left hover:bg-gray-100 dark:hover:bg-gray-700 transition`}
+    className={`p-4 border rounded-lg ${isSelected ? 'bg-blue-100 dark:bg-blue-700' : 'bg-white dark:bg-gray-800'
+      } shadow-sm text-left hover:bg-gray-100 dark:hover:bg-gray-700 transition`}
   >
     <h3 className="text-sm font-medium text-gray-500 dark:text-gray-300">{title}</h3>
     <p className="text-lg font-bold text-gray-900 dark:text-white mt-2">{value}</p>
@@ -30,8 +29,11 @@ interface TrendDataPoint {
   cost: number;
   impressions: number;
   clicks: number;
-  conversions: number;
+  leads: number;
   messagingConversationsStarted: number;
+  reach: number;
+  ctr: number;
+  cpc: number;
 }
 
 interface PerformanceMetricsGraphProps {
@@ -39,8 +41,11 @@ interface PerformanceMetricsGraphProps {
     cost: number;
     impressions: number;
     clicks: number;
-    conversions: number;
+    leads: number;
     messagingConversationsStarted: number;
+    reach: number;
+    ctr: number;
+    cpc: number;
     trendData: TrendDataPoint[];
   };
 }
@@ -68,7 +73,7 @@ const PerformanceMetricsGraph = ({ graphInsights }: PerformanceMetricsGraphProps
   const graphData = selectedMetrics.map((metric) => ({
     name: metric.charAt(0).toUpperCase() + metric.slice(1),
     data: graphInsights.trendData.map((point) =>
-    Number(point[metric as keyof TrendDataPoint])
+      Number(point[metric as keyof TrendDataPoint]) || 0
     ),
   }));
 
@@ -163,38 +168,26 @@ const PerformanceMetricsGraph = ({ graphInsights }: PerformanceMetricsGraphProps
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       {/* Metrics Selection */}
       <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
-        <h2 className="text-lg font-bold mb-4">Select Metrics</h2>
-        <div className="space-y-4">
-          <GraphMetricCard
-            title="Cost"
-            value={`$${graphInsights.cost.toLocaleString()}`}
-            isSelected={selectedMetrics.includes('cost')}
-            onClick={() => toggleMetric('cost')}
-          />
-          <GraphMetricCard
-            title="Impressions"
-            value={graphInsights.impressions.toLocaleString()}
-            isSelected={selectedMetrics.includes('impressions')}
-            onClick={() => toggleMetric('impressions')}
-          />
-          <GraphMetricCard
-            title="Clicks"
-            value={graphInsights.clicks.toLocaleString()}
-            isSelected={selectedMetrics.includes('clicks')}
-            onClick={() => toggleMetric('clicks')}
-          />
-          <GraphMetricCard
-            title="Conversions"
-            value={graphInsights.conversions.toLocaleString()}
-            isSelected={selectedMetrics.includes('conversions')}
-            onClick={() => toggleMetric('conversions')}
-          />
-          <GraphMetricCard
-            title="Messages"
-            value={graphInsights.messagingConversationsStarted.toLocaleString()}
-            isSelected={selectedMetrics.includes('messagingConversationsStarted')}
-            onClick={() => toggleMetric('messagingConversationsStarted')}
-          />
+        <h2 className="text-lg font-bold mb-4">Metrics</h2>
+        <div className="grid grid-cols-2 gap-4">
+          {[
+            { key: 'cost', label: 'Cost', value: `$${graphInsights.cost.toFixed(2)}` },
+            { key: 'impressions', label: 'Impressions', value: graphInsights.impressions },
+            { key: 'clicks', label: 'Clicks', value: graphInsights.clicks },
+            { key: 'leads', label: 'Leads', value: graphInsights.leads },
+            { key: 'messagingConversationsStarted', label: 'Messages', value: graphInsights.messagingConversationsStarted },
+            { key: 'reach', label: 'Reach', value: graphInsights.reach },
+            { key: 'ctr', label: 'CTR', value: graphInsights.ctr.toFixed(2) + '%' },
+            { key: 'cpc', label: 'CPC', value: graphInsights.cpc.toFixed(2) },
+          ].map((metric) => (
+            <GraphMetricCard
+              key={metric.key}
+              title={metric.label}
+              value={metric.value}
+              isSelected={selectedMetrics.includes(metric.key)}
+              onClick={() => toggleMetric(metric.key)}
+            />
+          ))}
         </div>
       </div>
 

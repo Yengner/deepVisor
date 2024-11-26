@@ -2,7 +2,7 @@
 
 import PerformanceMetricsGraph from '@/components/PerformanceMetricsGraph';
 import MetricCard from '@/components/MetricsCard';
-import { useTotalAdAccountInsights, useInsights, useTopCampaigns, usePerformanceMetrics } from '@/hooks/useDashboardData';
+import { useTotalAdAccountInsights, useInsights, useTopCampaigns, usePerformanceMetrics, useAccountInfo } from '@/hooks/useDashboardData';
 import { useGlobalState } from '@/lib/store/globalState';
 import { MdKeyboardDoubleArrowRight } from 'react-icons/md';
 
@@ -13,14 +13,14 @@ const DashboardPage = () => {
   const { data: insights, isLoading: insightsLoading, error: insightsError } = useInsights(selectedPlatform, selectedAdAccount);
   const { data: topCampaigns, isLoading: topCampaignsLoading, error: topCampaignsError } = useTopCampaigns(selectedPlatform, selectedAdAccount);
   const { data: graphInsights, isLoading: graphInsightsLoading, error: graphInsightsError } = usePerformanceMetrics(selectedPlatform, selectedAdAccount);
-  // const { data: sp}
+  const { data: accountInfo, isLoading: accountInfoLoading, error: accountInfoError } = useAccountInfo(selectedPlatform, selectedAdAccount);
+
   if (!selectedPlatform || !selectedAdAccount) {
     return <p className="text-center mt-6">Please select a platform and ad account to view data.</p>;
   }
 
-  const isLoading = metricsLoading || topCampaignsLoading || insightsLoading || graphInsightsLoading;
-  const hasError = metricsError || topCampaignsError || insightsError || graphInsightsError;
-
+  const isLoading = metricsLoading || topCampaignsLoading || insightsLoading || graphInsightsLoading || accountInfoLoading;
+  const hasError = metricsError || topCampaignsError || insightsError || graphInsightsError || accountInfoError;
   return (
     <div className="p-2 space-y-8">
       {isLoading && <p>Loading data...</p>}
@@ -44,8 +44,8 @@ const DashboardPage = () => {
               <MetricCard title="Spend" value={`$${Number(metrics?.spend || 0).toLocaleString()}`} />
               <MetricCard title="Reach" value={Number(metrics?.reach || 0).toLocaleString()} />
               <MetricCard title="CTR" value={`${metrics?.ctr || 0}%`} />
-              <MetricCard title="CPC" value={`$${metrics?.cpc || 0}`} />
-              <MetricCard title="CPM" value={`$${metrics?.cpm || 0}`} />
+              <MetricCard title="CPC" value={`$${metrics?.cpc || 0}`} tooltip="Cost Per Click (CPC): The cost for each click."/>
+              <MetricCard title="CPM" value={`$${metrics?.cpm || 0}`} tooltip="Cost Per Mille (CPM): The cost of 1,000 ad impressions."/>
               <MetricCard title="Leads" value={Number(metrics?.leads || 0).toLocaleString()} />
               <MetricCard title="Post Engage." value={Number(metrics?.postEngagement || 0).toLocaleString()} />
               <MetricCard title="Link Clicks" value={Number(metrics?.linkClicks || 0).toLocaleString()} />
@@ -61,12 +61,34 @@ const DashboardPage = () => {
               <h2 className="text-lg font-bold mb-4">Account Info</h2>
               <div className="space-y-4">
                 <div>
-                  <p className="text-sm text-gray-500">Available balance</p>
-                  <p className="text-2xl font-bold">${metrics?.balance || '0.00'} USD</p>
+                  <p className="text-sm text-gray-500">Ad Account Name</p>
+                  <p className="text-2xl font-bold">{accountInfo?.name || 'N/A'}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Today's spend</p>
-                  <p className="text-2xl font-bold">${metrics?.todaySpend || '0.00'} USD</p>
+                  <p className="text-sm text-gray-500">Available Balance</p>
+                  <p className="text-2xl font-bold">${accountInfo?.balance || '0.00'} {accountInfo?.currency || 'USD'}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">Today's Spend</p>
+                  <p className="text-2xl font-bold">${accountInfo?.todaySpend || '0.00'} {accountInfo?.currency || 'USD'}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">Lifetime Spend</p>
+                  <p className="text-2xl font-bold">${Number(accountInfo?.lifetimeSpend).toLocaleString() || '0.00'} {accountInfo?.currency || 'USD'}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">Spend Cap</p>
+                  <p className="text-2xl font-bold">{accountInfo?.spendCap ? `$${accountInfo?.spendCap}` : 'No Limit'}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">Account Status</p>
+                  <p className={`text-2xl font-bold ${accountInfo?.accountStatus === 1 ? 'text-green-500' : 'text-red-500'}`}>
+                    {accountInfo?.accountStatus === 1 ? 'Active' : 'Inactive'}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">Total Campaigns</p>
+                  <p className="text-2xl font-bold">{accountInfo?.totalCampaigns}</p>
                 </div>
               </div>
               <a href="/billing" className="text-sm text-blue-500 hover:underline mt-4">View details →</a>
@@ -75,7 +97,8 @@ const DashboardPage = () => {
             {/* Performance Metrics Section */}
             <section className="lg:col-span-2 bg-white dark:bg-gray-800 shadow rounded-lg p-6">
               {!graphInsightsLoading && graphInsights && (
-                <PerformanceMetricsGraph graphInsights={graphInsights} />
+                <PerformanceMetricsGraph key={`${selectedAdAccount}-${Date.now()}`} // Ensure unique key for re-render
+                  graphInsights={graphInsights} />
               )}
 
             </section>
