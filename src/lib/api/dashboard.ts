@@ -56,7 +56,6 @@ export const fetechAccountInfo = async (
   // );
 
   const today = new Date().toISOString().split('T')[0];
-  console.log('today', today)
   // Facebook API URLs for balance and today's spend
   const balanceUrl = `https://graph.facebook.com/v21.0/${adAccountId}?fields=balance`;
   const spendUrl = `https://graph.facebook.com/v21.0/${adAccountId}/insights?fields=spend&time_range[since]=${today}&time_range[until]=${today}`;
@@ -125,11 +124,10 @@ export const fetechAccountInfo = async (
 export const fetchTopCampaigns = async (
   platform: string,
   adAccountId: string,
-  metric: string,
   accessToken: string
 ) => {
   const response = await fetch(
-    `/api/${platform}/ad-accounts/${adAccountId}/top-campaigns?metric=${metric}`,
+    `/api/${platform}/ad-accounts/${adAccountId}/top-campaigns`,
     {
       headers: {
         Authorization: `Bearer ${accessToken}`,

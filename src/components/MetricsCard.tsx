@@ -35,6 +35,7 @@ const MetricCard = ({ title, value, percentageChange, tooltip }: MetricCardProps
           id={`${title}-tooltip`}
           content={tooltip}
           place="top"
+          delayShow={500}
           style={{
             backgroundColor: '#e3e3e3', // Light gray background
             color: '#3e4040', // Muted dark text

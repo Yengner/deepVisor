@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET(req: NextRequest, { params }: { params: { platform: string; adAccountId: string } }) {
-  const { platform, adAccountId } = params;
+export async function GET(req: NextRequest, { params }: { params: { adAccountId: string } }) {
+  const {adAccountId } = params;
 
   const url = new URL(req.url);
   const timeRange = url.searchParams.get('time_range') || 'maximum'; // e.g., 'lifetime', 'daily', etc.

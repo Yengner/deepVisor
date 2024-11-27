@@ -43,12 +43,12 @@ export const useInsights = (platform: string | null, adAccountId: string | null,
   });
 };
 
-export const useTopCampaigns = (platform: string | null, adAccountId: string | null, metric: string = 'leads') => {
+export const useTopCampaigns = (platform: string | null, adAccountId: string | null) => {
   const { data: accessToken } = useAccessToken(platform);
 
   return useQuery({
-    queryKey: ['topCampaigns', platform, adAccountId, metric],
-    queryFn: () => fetchTopCampaigns(platform!, adAccountId!, metric, accessToken!),
+    queryKey: ['topCampaigns', platform, adAccountId],
+    queryFn: () => fetchTopCampaigns(platform!, adAccountId!, accessToken!),
     enabled: !!platform && !!adAccountId && !!accessToken,
     staleTime: 1000 * 60 * 5, // Cache data for 5 minutes
   });
