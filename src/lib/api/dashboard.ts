@@ -197,3 +197,66 @@ export const fetchPerformanceMetrics = async (
     trendData,
   };
 };
+
+export const fetchAgeGenderCountryMetrics = async (
+  adAccountId: string,
+  accessToken: string
+) => {
+
+  const ageGenderUrl = `https://graph.facebook.com/v21.0/${adAccountId}/insights?breakdowns=age,gender&date_preset=maximum`
+  const countryUrl = `https://graph.facebook.com/v21.0/${adAccountId}/insights?breakdowns=country&date_preset=maximum`
+
+  const [ageGenderResponse, countryResponse] = await Promise.all([
+    fetch(ageGenderUrl, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    }),
+    fetch(countryUrl, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    }),
+  ]);
+
+  // Validate responses
+  if (!ageGenderResponse.ok) {
+    throw new Error('Failed to fetch age and gender metrics');
+  }
+  if (!countryResponse.ok) {
+    throw new Error('Failed to fetch country metrics');
+  }
+
+  const ageGenderDatas = await ageGenderResponse.json();
+  const countryDatas = await countryResponse.json();
+
+  // Validate API data structure
+  if (!ageGenderDatas.data || !Array.isArray(ageGenderDatas.data)) {
+    throw new Error('Invalid age and gender data format');
+  }
+  if (!countryDatas.data || !Array.isArray(countryDatas.data)) {
+    throw new Error('Invalid country data format');
+  }
+
+  // Transform age and gender data
+  const ageGenderData = ageGenderDatas.data.map((entry: any) => ({
+    age: entry.age || 'unknown',
+    gender: entry.gender || 'unknown',
+    impressions: parseInt(entry.impressions || '0', 10), 
+  }));
+
+  // Transform country data
+  const countryData = countryDatas.data.map((entry: any) => ({
+    date_start: entry.date_start,
+    date_stop: entry.date_stop,
+    spend: entry.spend || '0',
+    country: entry.country || 'unknown',
+    impressions: parseInt(entry.impressions || '0', 10), // Use 'reach' or 'impressions' based on your needs
+  }));
+
+  return {ageGenderData, countryData};
+    // countryData,
+  
+};

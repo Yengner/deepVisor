@@ -5,74 +5,69 @@ import { ApexOptions } from 'apexcharts';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
-interface DemographicsChartProps {
-  data: { age: string; gender: string; reach: number }[];
+interface DemographicsBarChartProps {
+  data: { age: string; gender: string; impressions: string };
 }
 
-const DemographicsChart = ({ data }: DemographicsChartProps) => {
-  // Aggregate the data by "age-gender" key
-  const aggregatedData = data.reduce((acc, curr) => {
-    const key = `${curr.age} ${curr.gender}`;
-    acc[key] = (acc[key] || 0) + curr.reach;
-    return acc;
-  }, {} as Record<string, number>);
+const DemographicsBarChart = ({ data }: DemographicsBarChartProps) => {
 
-  const chartLabels = Object.keys(aggregatedData);
-  const chartValues = Object.values(aggregatedData);
+  if (!data || !Array.isArray(data)) {
+    console.error('Invalid data passed to DemographicsBarChart:', data);
+    return <div>No data available to display.</div>;
+  }
+  const uniqueAges = [...new Set(data.map((item) => item.age))];
+  const genders = ['male', 'female', 'unknown'];
 
-  // ApexCharts configuration
+  const series = genders.map((gender) => ({
+    name: gender.charAt(0).toUpperCase() + gender.slice(1),
+    data: uniqueAges.map(
+      (age) =>
+        parseInt(data.find((item) => item.age === age && item.gender === gender)?.impressions) || 0
+    ),
+  }));
+
   const chartOptions: ApexOptions = {
     chart: {
-      fontFamily: 'Satoshi, sans-serif',
-      type: 'pie',
+      type: 'bar',
+      stacked: true,
+      toolbar: { show: false },
     },
-    colors: ['#3C50E0', '#6577F3', '#8FD0EF', '#0FADCF', '#F36F6F', '#FFC107'],
-    labels: chartLabels,
-    legend: {
-      show: true,
-      position: 'bottom',
-      labels: { colors: ['#6B7280'] },
+    xaxis: {
+      categories: uniqueAges,
+      title: { text: 'Age Groups', style: { fontSize: '14px', fontWeight: 'bold' } },
+    },
+    yaxis: {
+      title: { text: 'Impressions', style: { fontSize: '14px', fontWeight: 'bold' } },
+      labels: { formatter: (value) => `${value.toLocaleString()}` },
     },
     plotOptions: {
-      pie: {
-        donut: {
-          size: '65%',
-          background: 'transparent',
-        },
+      bar: {
+        horizontal: false,
+        dataLabels: { position: 'top' },
+        barHeight: '70%',
       },
     },
     dataLabels: {
       enabled: true,
-      formatter: (val, opts) => `${opts.w.globals.labels[opts.seriesIndex]}: ${Number(val).toLocaleString()}%`,
+      formatter: (value: number) => `${value.toLocaleString()}`,
+    },
+    legend: {
+      position: 'top',
+      horizontalAlign: 'center',
     },
     tooltip: {
       y: {
-        formatter: (val: number) => `${val.toLocaleString()} reach`,
+        formatter: (value: number) => `${value.toLocaleString()} impressions`,
       },
     },
-    responsive: [
-      {
-        breakpoint: 480,
-        options: {
-          chart: {
-            width: 300,
-          },
-          legend: {
-            position: 'bottom',
-          },
-        },
-      },
-    ],
+    colors: ['#0a3efa', '#f56cd0', '#8b12db'], // Male: Blue, Female: Red, Unknown: Purple
   };
 
   return (
     <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
-      <h2 className="text-xl font-bold mb-4 text-center">Audience Demographics</h2>
-      <div className="flex justify-center">
-        <Chart options={chartOptions} series={chartValues} type="pie" />
-      </div>
+      <Chart options={chartOptions} series={series} type="bar" height={400} />
     </div>
   );
 };
 
-export default DemographicsChart;
+export default DemographicsBarChart;

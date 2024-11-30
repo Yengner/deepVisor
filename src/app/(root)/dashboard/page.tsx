@@ -2,41 +2,30 @@
 
 import PerformanceMetricsGraph from '@/components/PerformanceMetricsGraph';
 import MetricCard from '@/components/MetricsCard';
-import { useTotalAdAccountInsights, useInsights, useTopCampaigns, usePerformanceMetrics, useAccountInfo } from '@/hooks/useDashboardData';
+import { useTotalAdAccountInsights, useTopCampaigns, usePerformanceMetrics, useAccountInfo, useAgeGenderCountryMetrics } from '@/hooks/useDashboardData';
 import { useGlobalState } from '@/lib/store/globalState';
 import { MdKeyboardDoubleArrowRight } from 'react-icons/md';
 import AccountInfo from '@/components/AccountInfo';
 import TopCampaigns from '@/components/TopCampaigns';
 import DemographicsChart from '@/components/DemographicsChart';
-import GeoHeatMap from '@/components/GeoHeatMap';
+import AudienceLocationChart from '@/components/AudienceConcentrationMap';
 
 const DashboardPage = () => {
   const { selectedPlatform, selectedAdAccount } = useGlobalState();
 
   const { data: metrics, isLoading: metricsLoading, error: metricsError } = useTotalAdAccountInsights(selectedPlatform, selectedAdAccount);
   const { data: topCampaigns, isLoading: topCampaignsLoading, error: topCampaignsError } = useTopCampaigns(selectedPlatform, selectedAdAccount);
-  const { data: graphInsights, isLoading: graphInsightsLoading, error: graphInsightsError } = usePerformanceMetrics(selectedPlatform, selectedAdAccount);
+  const { data: linegraphInsights, isLoading: linegraphInsightsLoading, error: linegraphInsightsError } = usePerformanceMetrics(selectedPlatform, selectedAdAccount);
   const { data: accountInfo, isLoading: accountInfoLoading, error: accountInfoError } = useAccountInfo(selectedPlatform, selectedAdAccount);
+  const { data: ageGenderCountryMetrics, isLoading: ageGenderCountryMetricsLoading, error: ageGenderCountryMetricsError } = useAgeGenderCountryMetrics(selectedPlatform, selectedAdAccount);
 
-  const demoInsights = {
-    ageGenderData: [
-      { age: '18-24', gender: 'female', reach: 5000 },
-      { age: '18-24', gender: 'male', reach: 3000 },
-      { age: '25-34', gender: 'female', reach: 7000 },
-      { age: '25-34', gender: 'male', reach: 5000 },
-    ],
-    geoData: [
-      { country: 'US', reach: 20000 },
-      { country: 'CA', reach: 15000 },
-      { country: 'UK', reach: 10000 },
-    ],
-  };
   if (!selectedPlatform || !selectedAdAccount) {
     return <p className="text-center mt-6">Please select a platform and ad account to view data.</p>;
   }
+  console.log('country', ageGenderCountryMetrics?.countryData)
 
-  const isLoading = metricsLoading || topCampaignsLoading || graphInsightsLoading || accountInfoLoading;
-  const hasError = metricsError || topCampaignsError || graphInsightsError || accountInfoError;
+  const isLoading = metricsLoading || topCampaignsLoading || linegraphInsightsLoading || accountInfoLoading || ageGenderCountryMetricsLoading;
+  const hasError = metricsError || topCampaignsError || linegraphInsightsError || accountInfoError || ageGenderCountryMetricsError;
   return (
     <div className="p-2 space-y-8">
       {isLoading && <p>Loading data...</p>}
@@ -80,9 +69,9 @@ const DashboardPage = () => {
 
             {/* Performance Metrics Section */}
             <section className="lg:col-span-2 bg-white dark:bg-gray-800 shadow rounded-lg p-6">
-              {!graphInsightsLoading && graphInsights && (
+              {!linegraphInsightsLoading && linegraphInsights && (
                 <PerformanceMetricsGraph key={`${selectedAdAccount}-${Date.now()}`} // Ensure unique key for re-render
-                  graphInsights={graphInsights} />
+                  graphInsights={linegraphInsights} />
               )}
             </section>
 
@@ -93,21 +82,42 @@ const DashboardPage = () => {
           <section>
             {/* Top Campaigns */}
             {!topCampaignsLoading && topCampaigns && (
-            <TopCampaigns campaignsData={topCampaigns} />
+              <TopCampaigns campaignsData={topCampaigns} />
             )}
           </section>
 
           {/* Section 4: Example Charts */}
           <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
+
             {/* Age & Gender Pie Chart */}
             <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
-              <h2 className="text-xl font-bold mb-4">Audience by Age & Gender</h2>
-              <DemographicsChart data={demoInsights.ageGenderData} />
+              <h2 className="text-xl font-bold mb-4 text-center">Audience by Age & Gender</h2>
+              <DemographicsChart data={ageGenderCountryMetrics?.ageGenderData} />
             </div>
-            {/* Geographic Heatmap */}
+            {/* AudienceLocationChart */}
             <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
-              <h2 className="text-xl font-bold mb-4">Audience by Location</h2>
-              <GeoHeatMap data={demoInsights.geoData} />
+              <h2 className="text-xl font-bold mb-4 text-center">Audience by Location</h2>
+              <AudienceLocationChart data={ageGenderCountryMetrics?.countryData} />
+            </div>
+
+          </section>
+          <section className='grid grid-cols-1 md:grid-cols-3 gap-8'>
+            <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 flex flex-row">
+              <div className='shadow rounded-md p-2'>
+                <h1 className='h-96 w-80'>
+                  post
+                </h1>
+                <h2 className='h-32'>
+                  items
+                </h2>
+              </div>
+
+              <div>
+                <h1>
+                  likes
+                </h1>
+              </div>
+
             </div>
           </section>
         </>
