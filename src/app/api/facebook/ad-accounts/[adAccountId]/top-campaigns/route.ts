@@ -29,6 +29,23 @@ export async function GET(req: NextRequest, { params }: { params: { adAccountId:
         const insightsResponse = await fetch(
           `https://graph.facebook.com/v21.0/${campaign.id}/insights?fields=impressions,clicks,spend,actions&date_preset=maximum&access_token=${accessToken}`
         );
+
+        if (!insightsResponse.ok) {
+          const errorDetails = await insightsResponse.json();
+          console.warn(`Failed to fetch insights for campaign ${campaign.id}:`, errorDetails);
+          return {
+            id: campaign.id,
+            name: campaign.name,
+            status: campaign.status,
+            start_time: campaign.start_time,
+            stop_time: campaign.stop_time,
+            impressions: 0,
+            clicks: 0,
+            spend: 0,
+            leads: 0,
+            messages: 0,
+          };
+        }
         const insightsData = await insightsResponse.json();
 
         const actions = insightsData.data?.[0]?.actions || [];
@@ -57,8 +74,14 @@ export async function GET(req: NextRequest, { params }: { params: { adAccountId:
     };
 
     return NextResponse.json(topCampaigns);
-  } catch (error) {
-    console.error('Error fetching campaign data:', error);
-    return NextResponse.json({ error: 'An error occurred while fetching campaign data' }, { status: 500 });
+  } catch (error: any) {
+    console.error('Error fetching campaign data:', error.message);
+    return NextResponse.json(
+      {
+        error: 'An error occurred while fetching campaign data',
+        details: error.message,
+      },
+      { status: 500 }
+    );
   }
 }

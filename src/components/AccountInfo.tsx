@@ -34,7 +34,7 @@ const AccountInfo = ({accountInfo}: any) => {
             <p className="text-2xl font-bold">{accountInfo?.totalCampaigns}</p>
           </div>
         </div>
-        <a href="/billing" className="text-sm text-blue-500 hover:underline mt-4">View details →</a>
+        <a href="/billing" className="block mt-4 text-center text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-800 rounded-md px-4 py-2">View details →</a>
         </section>
     )
 }

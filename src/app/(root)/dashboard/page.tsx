@@ -25,17 +25,30 @@ const DashboardPage = () => {
   console.log('country', ageGenderCountryMetrics?.countryData)
 
   const isLoading = metricsLoading || topCampaignsLoading || linegraphInsightsLoading || accountInfoLoading || ageGenderCountryMetricsLoading;
-  const hasError = metricsError || topCampaignsError || linegraphInsightsError || accountInfoError || ageGenderCountryMetricsError;
+  const errors = [
+    metricsError && `Metrics Error: ${metricsError.message}`,
+    topCampaignsError && `Top Campaigns Error: ${topCampaignsError.message}`,
+    linegraphInsightsError && `Performance Metrics Error: ${linegraphInsightsError.message}`,
+    accountInfoError && `Account Info Error: ${accountInfoError.message}`,
+    ageGenderCountryMetricsError && `Age, Gender, Country Metrics Error: ${ageGenderCountryMetricsError.message}`,
+  ].filter(Boolean);
+
   return (
     <div className="p-2 space-y-8">
       {isLoading && <p>Loading data...</p>}
-      {hasError && (
-        <p className="text-red-500">
-          An error occurred while fetching data. Please try again later.
-        </p>
+      {errors.length > 0 && (
+        <div className="bg-red-100 text-red-800 p-4 rounded shadow">
+          <p className="font-bold">An error occurred while fetching data:</p>
+          <ul className="mt-2 list-disc list-inside">
+            {errors.map((error, index) => (
+              <li key={index}>{error}</li>
+            ))}
+          </ul>
+        </div>
       )}
 
-      {!isLoading && !hasError && (
+      {/* Your dashboard content goes here */}
+      {!isLoading && errors.length === 0 && (
         <>
           {/* Section 1: Metrics */}
           <section className=" rounded-lg p-3">
@@ -63,12 +76,12 @@ const DashboardPage = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
             {/* Account Info Section */}
-            <section className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 flex flex-col justify-between">
+            <section className="bg-white dark:bg-gray-800 shadow rounded-lg border p-6 flex flex-col justify-between">
               <AccountInfo accountInfo={accountInfo} />
             </section>
 
             {/* Performance Metrics Section */}
-            <section className="lg:col-span-2 bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+            <section className="lg:col-span-2 bg-white dark:bg-gray-800 shadow border rounded-lg p-6">
               {!linegraphInsightsLoading && linegraphInsights && (
                 <PerformanceMetricsGraph key={`${selectedAdAccount}-${Date.now()}`} // Ensure unique key for re-render
                   graphInsights={linegraphInsights} />

@@ -1,48 +1,81 @@
 'use client';
 
-import { useCampaigns } from '@/hooks/useCampaigns';
+import React, { useState } from 'react';
+import CampaignTable from '@/components/CampaignTable';
 import { useGlobalState } from '@/lib/store/globalState';
+import AdGroupTable from '@/components/AdGroupTable';
+import AdTable from '@/components/AdTable';
 
 const CampaignsPage = () => {
   const { selectedPlatform, selectedAdAccount } = useGlobalState();
-  const { data: campaigns, isLoading, error } = useCampaigns(selectedPlatform, selectedAdAccount);
+  const [activeTab, setActiveTab] = useState<'campaigns' | 'adGroups' | 'ads'>('campaigns');
+  const [selectedCampaigns, setSelectedCampaigns] = useState<string[]>([]);
+  const [selectedAdGroups, setSelectedAdGroups] = useState<string[]>([]);
+
+  const handleTabClick = (tab: 'campaigns' | 'adGroups' | 'ads') => setActiveTab(tab);
 
   if (!selectedPlatform || !selectedAdAccount) {
-    return <p>Please select a platform and an ad account to view campaigns.</p>;
-  }
-
-  if (isLoading) {
-    return <p>Loading campaigns...</p>;
-  }
-
-  if (error) {
-    return <p className="text-red-500">Error fetching campaigns: {error.message}</p>;
+    return <p>Please select a platform and ad account to view campaigns.</p>;
   }
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-6">Campaigns</h1>
+    <div className="p-6 space-y-8">
+      {/* Tabs Header */}
+      <div className="flex space-x-4 border-b border-gray-300 dark:border-gray-700 mb-4">
+        <button
+          className={`px-4 py-2 ${
+            activeTab === 'campaigns'
+              ? 'text-blue-500 border-b-2 border-blue-500'
+              : 'text-gray-600 dark:text-gray-400'
+          }`}
+          onClick={() => handleTabClick('campaigns')}
+        >
+          Campaigns
+        </button>
+        <button
+          className={`px-4 py-2 ${
+            activeTab === 'adGroups'
+              ? 'text-blue-500 border-b-2 border-blue-500'
+              : 'text-gray-600 dark:text-gray-400'
+          }`}
+          onClick={() => handleTabClick('adGroups')}
+        >
+          Ad Groups
+        </button>
+        <button
+          className={`px-4 py-2 ${
+            activeTab === 'ads'
+              ? 'text-blue-500 border-b-2 border-blue-500'
+              : 'text-gray-600 dark:text-gray-400'
+          }`}
+          onClick={() => handleTabClick('ads')}
+        >
+          Ads
+        </button>
+      </div>
 
-      {campaigns?.length ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {campaigns.map((campaign: { id: string; name: string; status: string }) => (
-            <div
-              key={campaign.id}
-              className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-white dark:bg-gray-800 shadow-md"
-            >
-              <h2 className="font-semibold text-lg mb-2">{campaign.name}</h2>
-              <p>Status: <span className={campaign.status === 'active' ? 'text-green-600' : 'text-red-600'}>{campaign.status}</span></p>
-              <button
-                onClick={() => alert(`Details for Campaign ID: ${campaign.id}`)}
-                className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
-              >
-                View Details
-              </button>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <p>No campaigns available for this ad account.</p>
+      {/* Tabs Content */}
+      {activeTab === 'campaigns' && (
+        <CampaignTable
+          platform={selectedPlatform}
+          adAccountId={selectedAdAccount}
+          onSelect={(selectedIds) => setSelectedCampaigns(selectedIds)}
+        />
+      )}
+      {activeTab === 'adGroups' && (
+        <AdGroupTable
+          platform={selectedPlatform}
+          adAccountId={selectedAdAccount}
+          selectedCampaigns={selectedCampaigns}
+          onSelect={(selectedIds) => setSelectedAdGroups(selectedIds)}
+        />
+      )}
+      {activeTab === 'ads' && (
+        <AdTable
+          platform={selectedPlatform}
+          adAccountId={selectedAdAccount}
+          selectedAdGroups={selectedAdGroups}
+        />
       )}
     </div>
   );

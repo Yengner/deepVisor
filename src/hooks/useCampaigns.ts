@@ -1,10 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
 import { fetchCampaigns } from '@/lib/api/campaigns';
+import { useAccessToken } from './useAccessToken';
 
 export const useCampaigns = (platform: string | null, adAccount: string | null) => {
+  const { data: accessToken } = useAccessToken(platform);
+
   return useQuery({
-    queryKey: ['campaigns', platform, adAccount], // Unique query key
-    queryFn: () => fetchCampaigns(platform!, adAccount!), // Use `!` since `enabled` ensures non-null
-    enabled: !!platform && !!adAccount, // Fetch only when both platform and ad account are non-null
+    queryKey: ['campaigns', platform, adAccount],
+    queryFn: () => fetchCampaigns(platform!, adAccount!, accessToken!),
+    enabled: !!platform && !!adAccount && !!accessToken,
   });
 };

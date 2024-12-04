@@ -31,6 +31,7 @@ const DemographicsBarChart = ({ data }: DemographicsBarChartProps) => {
       type: 'bar',
       stacked: true,
       toolbar: { show: false },
+      fontFamily: 'Satoshi, sans-serif',
     },
     xaxis: {
       categories: uniqueAges,

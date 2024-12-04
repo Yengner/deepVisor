@@ -8,7 +8,7 @@ export const useTotalAdAccountInsights = (platform: string | null, adAccountId: 
     queryKey: ['dashboardMetrics', platform, adAccountId],
     queryFn: () => fetchTotalAdAccountInsights(platform!, adAccountId!, accessToken!),
     enabled: !!platform && !!adAccountId && !!accessToken,
-    staleTime: 1000 * 60 * 5, // Cache data for 5 minutes
+    staleTime: 1000 * 60 * 10, // Cache data for 5 minutes
   });
 };
 
@@ -18,7 +18,7 @@ export const usePerformanceMetrics = (platform: string | null, adAccountId: stri
     queryKey: ['performanceMetrics', adAccountId],
     queryFn: () => fetchPerformanceMetrics(adAccountId!, accessToken!),
     enabled: !!adAccountId && !!accessToken,
-    staleTime: 1000 * 60 * 5, // Cache data for 5 minutes
+    staleTime: 1000 * 60 * 10, // Cache data for 5 minutes
   });
 };
 
@@ -28,7 +28,7 @@ export const useAgeGenderCountryMetrics = (platform: string | null, adAccountId:
     queryKey: ['ageGenderMetrics', adAccountId],
     queryFn: () => fetchAgeGenderCountryMetrics(adAccountId!, accessToken!),
     enabled: !!adAccountId && !!accessToken,
-    staleTime: 1000 * 60 * 5, // Cache data for 5 minutes
+    staleTime: 1000 * 60 * 10, // Cache data for 5 minutes
   });
 }
 
@@ -38,7 +38,7 @@ export const useAccountInfo = (platform: string | null, adAccountId: string | nu
     queryKey: ['performanceMetrics', adAccountId, platform],
     queryFn: () => fetechAccountInfo(platform!, adAccountId!, accessToken!),
     enabled: !!platform && !!adAccountId && !!accessToken,
-    staleTime: 1000 * 60 * 5, // Cache data for 5 minutes
+    staleTime: 1000 * 60 * 10, // Cache data for 5 minutes
   });
 }
 
@@ -49,7 +49,7 @@ export const useInsights = (platform: string | null, adAccountId: string | null,
     queryKey: ['insights', platform, adAccountId, timeRange],
     queryFn: () => fetchInsights(platform!, adAccountId!, timeRange, accessToken!),
     enabled: !!platform && !!adAccountId && !!accessToken,
-    staleTime: 1000 * 60 * 5, // Cache data for 5 minutes
+    staleTime: 1000 * 60 * 10, // Cache data for 5 minutes
   });
 };
 
@@ -60,6 +60,6 @@ export const useTopCampaigns = (platform: string | null, adAccountId: string | n
     queryKey: ['topCampaigns', platform, adAccountId],
     queryFn: () => fetchTopCampaigns(platform!, adAccountId!, accessToken!),
     enabled: !!platform && !!adAccountId && !!accessToken,
-    staleTime: 1000 * 60 * 5, // Cache data for 5 minutes
+    staleTime: 1000 * 60 * 10, // Cache data for 5 minutes
   });
 };

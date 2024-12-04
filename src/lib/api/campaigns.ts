@@ -1,9 +1,17 @@
-export const fetchCampaigns = async (platform: string, adAccount: string) => {
-    const response = await fetch(`/api/${platform}/insights/${adAccount}`);
+export const fetchCampaigns = async (platform: string, adAccount: string, accessToken: string) => {
+    const response = await fetch(`/api/${platform}/campaigns/${adAccount}`, 
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+
     if (!response.ok) {
       throw new Error('Error fetching campaigns');
     }
-    const campaignss = await response.json();
-    return campaignss;
+    const campaigns = await response.json();
+    return campaigns;
   };
   

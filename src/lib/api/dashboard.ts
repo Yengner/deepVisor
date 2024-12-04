@@ -126,19 +126,34 @@ export const fetchTopCampaigns = async (
   adAccountId: string,
   accessToken: string
 ) => {
-  const response = await fetch(
-    `/api/${platform}/ad-accounts/${adAccountId}/top-campaigns`,
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-      },
-    }
-  );
+  try {
+    const response = await fetch(
+      `/api/${platform}/ad-accounts/${adAccountId}/top-campaigns`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
 
-  if (!response.ok) throw new Error('Error fetching top campaigns');
-  return response.json();
+    if (!response.ok) {
+      // Parse the error details returned by the server
+      const errorDetails = await response.json();
+      throw new Error(
+        errorDetails.error
+          ? `${errorDetails.error} (Status: ${response.status})`
+          : `Error fetching top campaigns (Status: ${response.status})`
+      );
+    }
+
+    return response.json();
+  } catch (error:any) {
+    console.error('fetchTopCampaigns Error:', error.message);
+    throw error; // Pass the error to the caller for further handling
+  }
 };
+
 
 export const fetchPerformanceMetrics = async (
   adAccountId: string,

@@ -109,14 +109,14 @@ const PerformanceMetricsGraph = ({ graphInsights }: PerformanceMetricsGraphProps
         title: {
           text: selectedMetrics[0].charAt(0).toUpperCase() + selectedMetrics[0].slice(1),
           style: {
-            color: '#546E7A',
+            color: '#00A3A3',
             fontSize: '14px',
             fontWeight: 'bold',
           },
         },
         labels: {
           style: {
-            colors: ['#546E7A'],
+            colors: ['#00A3A3'],
             fontSize: '12px',
           },
         },
@@ -126,14 +126,14 @@ const PerformanceMetricsGraph = ({ graphInsights }: PerformanceMetricsGraphProps
         title: {
           text: selectedMetrics[1].charAt(0).toUpperCase() + selectedMetrics[1].slice(1),
           style: {
-            color: '#33B2DF',
+            color: '#FFA500',
             fontSize: '14px',
             fontWeight: 'bold',
           },
         },
         labels: {
           style: {
-            colors: ['#33B2DF'],
+            colors: ['#FFA500'],
             fontSize: '12px',
           },
         },
@@ -147,11 +147,11 @@ const PerformanceMetricsGraph = ({ graphInsights }: PerformanceMetricsGraphProps
     grid: {
       borderColor: '#f1f1f1',
     },
-    colors: ['#546E7A', '#33B2DF'],
+    colors: ['#00A3A3', '#FFA500'],
     markers: {
       size: 4,
       colors: ['#fff'],
-      strokeColors: ['#546E7A', '#33B2DF'],
+      strokeColors: ['#00A3A3', '#FFA500'],
       strokeWidth: 2,
     },
     legend: {
@@ -159,7 +159,7 @@ const PerformanceMetricsGraph = ({ graphInsights }: PerformanceMetricsGraphProps
       horizontalAlign: 'right',
       fontSize: '14px',
       labels: {
-        colors: ['#888'],
+        colors: ['#000000'],
       },
     },
   };
