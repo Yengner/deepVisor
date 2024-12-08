@@ -18,7 +18,7 @@ export const usePerformanceMetrics = (platform: string | null, adAccountId: stri
     queryKey: ['performanceMetrics', adAccountId],
     queryFn: () => fetchPerformanceMetrics(adAccountId!, accessToken!),
     enabled: !!adAccountId && !!accessToken,
-    staleTime: 1000 * 60 * 10, // Cache data for 5 minutes
+    staleTime: 1000 * 60 * 5, // Cache data for 5 minutes
   });
 };
 
@@ -42,20 +42,8 @@ export const useAccountInfo = (platform: string | null, adAccountId: string | nu
   });
 }
 
-export const useInsights = (platform: string | null, adAccountId: string | null, timeRange: string = 'daily') => {
-  const { data: accessToken } = useAccessToken(platform);
-
-  return useQuery({
-    queryKey: ['insights', platform, adAccountId, timeRange],
-    queryFn: () => fetchInsights(platform!, adAccountId!, timeRange, accessToken!),
-    enabled: !!platform && !!adAccountId && !!accessToken,
-    staleTime: 1000 * 60 * 10, // Cache data for 5 minutes
-  });
-};
-
 export const useTopCampaigns = (platform: string | null, adAccountId: string | null) => {
   const { data: accessToken } = useAccessToken(platform);
-
   return useQuery({
     queryKey: ['topCampaigns', platform, adAccountId],
     queryFn: () => fetchTopCampaigns(platform!, adAccountId!, accessToken!),

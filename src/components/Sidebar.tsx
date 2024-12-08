@@ -3,7 +3,7 @@
 import { useGlobalState } from '@/lib/store/globalState';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { LuLogOut, LuUser2 } from 'react-icons/lu'
+import { LuLogOut, LuUser } from 'react-icons/lu'
 const Sidebar = () => {
   const { sidebarOpen, setSidebarOpen, selectedPlatform, setPlatform } = useGlobalState();
   const router = useRouter(); // Initialize router
@@ -83,7 +83,7 @@ const Sidebar = () => {
 
             <div>
               <button onClick={handlePush}>
-                <LuUser2 className='w-6 h-6'/>
+                <LuUser className='w-6 h-6'/>
               </button>
             </div>
           </div>

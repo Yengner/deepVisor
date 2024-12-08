@@ -11,10 +11,10 @@ interface DemographicsBarChartProps {
 
 const DemographicsBarChart = ({ data }: DemographicsBarChartProps) => {
 
-  if (!data || !Array.isArray(data)) {
-    console.error('Invalid data passed to DemographicsBarChart:', data);
+  if (!Array.isArray(data) || data.length === 0) {
     return <div>No data available to display.</div>;
   }
+
   const uniqueAges = [...new Set(data.map((item) => item.age))];
   const genders = ['male', 'female', 'unknown'];
 

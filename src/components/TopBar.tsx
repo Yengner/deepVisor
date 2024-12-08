@@ -3,9 +3,12 @@
 import { useGlobalState } from '@/lib/store/globalState';
 import AdAccountSelector from './AdAccountSelector';
 import { useRouter } from 'next/navigation';
+import { ClipLoader } from 'react-spinners';
+import { useAdAccounts } from '@/hooks/useAdAccounts';
 
 const TopBar = () => {
-  const { selectedPlatform, setPlatform, toggleSidebar } = useGlobalState();
+  const { selectedPlatform, setPlatform, toggleSidebar, selectedAdAccount, setAdAccount, isHydrated } = useGlobalState();
+  const { data, isLoading } = useAdAccounts(selectedPlatform);
   const router = useRouter();
 
   const user = {
@@ -24,6 +27,15 @@ const TopBar = () => {
   const handleNavigation = (path: string) => {
     router.push(path);
   };
+
+  // Wait until hydration is complete and `selectedAdAccount` is valid
+  if (!isHydrated || isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <ClipLoader color="#3498db" size={50} />
+      </div>
+    );
+  }
 
   return (
     <div className="flex justify-between items-center px-10 py-4 bg-emerald-700 shadow-md dark:bg-gray-800">
@@ -90,7 +102,14 @@ const TopBar = () => {
           {/* Dynamically populate based on integration */}
         </select>
 
-        {selectedPlatform && <AdAccountSelector />}
+        {selectedPlatform &&
+          <AdAccountSelector
+            adAccounts={data?.adAccounts || []}
+            selectedAdAccount={selectedAdAccount}
+            setAdAccount={setAdAccount}
+            isLoading={isLoading}
+            selectedPlatform={selectedPlatform}
+          />}
       </div>
     </div>
   );

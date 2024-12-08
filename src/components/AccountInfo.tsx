@@ -1,3 +1,5 @@
+'use client';
+
 const AccountInfo = ({accountInfo}: any) => {
     return (
         <section>
