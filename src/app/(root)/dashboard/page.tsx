@@ -3,7 +3,7 @@
 import dynamic from 'next/dynamic';
 import { toast } from 'react-hot-toast';
 import { ClipLoader } from 'react-spinners';
-import { MdKeyboardDoubleArrowRight } from 'react-icons/md';
+import { MdAttachMoney, MdGroup, MdKeyboardDoubleArrowRight, MdLink, MdMessage, MdMouse, MdPersonAdd, MdShowChart, MdThumbUp, MdTrendingUp, MdVisibility } from 'react-icons/md';
 import { useGlobalState } from '@/lib/store/globalState';
 import { useTotalAdAccountInsights, useTopCampaigns, usePerformanceMetrics, useAccountInfo, useAgeGenderCountryMetrics } from '@/hooks/useDashboardData';
 import PerformanceMetricsGraph from '@/components/PerformanceMetricsGraph';
@@ -14,6 +14,8 @@ import DemographicsChart from '@/components/DemographicsChart';
 
 const AudienceLocationChart = dynamic(() => import('@/components/AudienceLocationChart'), {
   ssr: false, // Disable server-side rendering for this component
+  loading: () => <ClipLoader color="#00bfa5" size={50} />,
+
 });
 
 const DashboardPage = () => {
@@ -77,25 +79,92 @@ const DashboardPage = () => {
   return (
     <div className="p-2 space-y-8">
       <>
-        {/* Section 1: Metrics */}
-        <section className=" rounded-lg p-3">
-          <div className="sm:flex flex-row py-1 gap-4 mb-5 items-center text-lightGray text-sm hidden">
-            <MdKeyboardDoubleArrowRight size={24} />
-            <span className='text-2xl'>{new Date().toDateString()}</span>
+        <section className="rounded-lg p-3">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">Dashboard Overview</h2>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
+            </p>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-11 gap-4">
-            <MetricCard title="Spend" value={`$${Number(metrics?.spend || 0).toLocaleString()}`} />
-            <MetricCard title="Leads" value={Number(metrics?.leads || 0).toLocaleString()} />
-            <MetricCard title="Clicks" value={Number(metrics?.clicks || 0).toLocaleString()} />
-            <MetricCard title="CTR" value={`${metrics?.ctr || 0}%`} tooltip="Click Through Rate (CTR): Click per impression" />
-            <MetricCard title="CPC" value={`$${metrics?.cpc || 0}`} tooltip="Cost Per Click (CPC): The cost for each click." />
-            <MetricCard title="Impressions" value={Number(metrics?.impressions || 0).toLocaleString()} />
-            <MetricCard title="CPM" value={`$${metrics?.cpm || 0}`} tooltip="Cost Per Mille (CPM): The cost of 1,000 ad impressions." />
-            <MetricCard title="Reach" value={Number(metrics?.reach || 0).toLocaleString()} />
-            <MetricCard title="Post Engage." value={Number(metrics?.postEngagement || 0).toLocaleString()} />
-            <MetricCard title="Link Clicks" value={Number(metrics?.linkClicks || 0).toLocaleString()} />
-            <MetricCard title="Messaging conver..." value={Number(metrics?.messagingConversationsStarted || 0).toLocaleString()} />
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-11 gap-2">
+            <MetricCard
+              title="Spend"
+              value={`$${Number(metrics?.spend || 0).toLocaleString()}`}
+              tooltip="Total ad spend for the selected period."
+              icon={<MdAttachMoney className="text-emerald-700" />}
+              backgroundClass="bg-white dark:bg-gray-900"
+            />
+            <MetricCard
+              title="Leads"
+              value={Number(metrics?.leads || 0).toLocaleString()}
+              tooltip="Number of leads generated through your ads."
+              icon={<MdPersonAdd className="text-emerald-700" />}
+              backgroundClass="bg-white dark:bg-gray-900"
+            />
+            <MetricCard
+              title="Clicks"
+              value={Number(metrics?.clicks || 0).toLocaleString()}
+              tooltip="Total number of ad clicks."
+              icon={<MdMouse className="text-emerald-700" />}
+              backgroundClass="bg-white dark:bg-gray-900"
+            />
+            <MetricCard
+              title="CTR"
+              value={`${metrics?.ctr || 0}%`}
+              tooltip="Click Through Rate (CTR): Percentage of users who clicked your ad after viewing it."
+              icon={<MdShowChart className="text-emerald-700" />}
+              backgroundClass="bg-white dark:bg-gray-900"
+            />
+            <MetricCard
+              title="CPC"
+              value={`$${metrics?.cpc || 0}`}
+              tooltip="Cost Per Click (CPC): Average cost for each click."
+              icon={<MdTrendingUp className="text-emerald-700" />}
+              backgroundClass="bg-white dark:bg-gray-900"
+            />
+            <MetricCard
+              title="Impression"
+              value={Number(metrics?.impressions || 0).toLocaleString()}
+              tooltip="Total number of times your ad was displayed."
+              icon={<MdVisibility className="text-emerald-700" />}
+              backgroundClass="bg-white dark:bg-gray-900"
+            />
+            <MetricCard
+              title="CPM"
+              value={`$${metrics?.cpm || 0}`}
+              tooltip="Cost Per Mille (CPM): Average cost for 1,000 ad impressions."
+              icon={<MdShowChart className="text-emerald-700" />}
+              backgroundClass="bg-white dark:bg-gray-900"
+            />
+            <MetricCard
+              title="Reach"
+              value={Number(metrics?.reach || 0).toLocaleString()}
+              tooltip="Total number of unique users who saw your ad."
+              icon={<MdGroup className="text-emerald-700" />}
+              backgroundClass="bg-white dark:bg-gray-900"
+            />
+            <MetricCard
+              title="Post Eng."
+              value={Number(metrics?.postEngagement || 0).toLocaleString()}
+              tooltip="Total number of interactions (likes, shares, comments) on your posts."
+              icon={<MdThumbUp className="text-emerald-700" />}
+              backgroundClass="bg-white dark:bg-gray-900"
+            />
+            <MetricCard
+              title="Link Click"
+              value={Number(metrics?.linkClicks || 0).toLocaleString()}
+              tooltip="Total number of link clicks on your ad."
+              icon={<MdLink className="text-emerald-700" />}
+              backgroundClass="bg-white dark:bg-gray-900"
+            />
+            <MetricCard
+              title="Messages"
+              value={Number(metrics?.messagingConversationsStarted || 0).toLocaleString()}
+              tooltip="Number of messaging conversations started via your ad."
+              icon={<MdMessage className="text-emerald-700" />}
+              backgroundClass="bg-white dark:bg-gray-900"
+            />
           </div>
         </section>
 
@@ -141,25 +210,7 @@ const DashboardPage = () => {
           </div>
 
         </section>
-        <section className='grid grid-cols-1 md:grid-cols-3 gap-8'>
-          <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 flex flex-row">
-            <div className='shadow rounded-md p-2'>
-              <h1 className='h-96 w-80'>
-                post
-              </h1>
-              <h2 className='h-32'>
-                items
-              </h2>
-            </div>
-
-            <div>
-              <h1>
-                likes
-              </h1>
-            </div>
-
-          </div>
-        </section>
+        
       </>
     </div>
   );

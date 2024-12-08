@@ -1,3 +1,4 @@
+import { platform } from "os";
 
 // Getting the Total Ad Account Insights | maximum time range | for dashboard
 export const fetchTotalAdAccountInsights = async (
@@ -275,3 +276,4 @@ export const fetchAgeGenderCountryMetrics = async (
     // countryData,
   
 };
+

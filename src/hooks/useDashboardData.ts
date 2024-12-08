@@ -51,3 +51,4 @@ export const useTopCampaigns = (platform: string | null, adAccountId: string | n
     staleTime: 1000 * 60 * 10, // Cache data for 5 minutes
   });
 };
+

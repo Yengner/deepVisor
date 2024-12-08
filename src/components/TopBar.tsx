@@ -5,6 +5,8 @@ import AdAccountSelector from './AdAccountSelector';
 import { useRouter } from 'next/navigation';
 import { ClipLoader } from 'react-spinners';
 import { useAdAccounts } from '@/hooks/useAdAccounts';
+import PlatformAdAccountSelector from './Platform&AdAccountSelector';
+import { useEffect } from 'react';
 
 const TopBar = () => {
   const { selectedPlatform, setPlatform, toggleSidebar, selectedAdAccount, setAdAccount, isHydrated } = useGlobalState();
@@ -28,6 +30,13 @@ const TopBar = () => {
     router.push(path);
   };
 
+  // Automatically select the first ad account when a platform is selected and no ad account is selected
+  useEffect(() => {
+    if (selectedPlatform && !selectedAdAccount && data?.adAccounts?.length) {
+      setAdAccount(data.adAccounts[0].ad_account_id);
+    }
+  }, [selectedPlatform, selectedAdAccount, data, setAdAccount]);
+
   // Wait until hydration is complete and `selectedAdAccount` is valid
   if (!isHydrated || isLoading) {
     return (
@@ -37,49 +46,45 @@ const TopBar = () => {
     );
   }
 
+
   return (
-    <div className="flex justify-between items-center px-10 py-4 bg-emerald-700 shadow-md dark:bg-gray-800">
+    <div className="flex justify-between items-center px-10 py-4 bg-emerald-700 shadow-lg">
       {/* Left Section: Burger Menu and Logo */}
-      <div className="flex items-center gap-16">
+      <div className="flex items-center gap-8">
         {/* Burger Menu */}
-        <div className="bg-white shadow-md focus:opacity-100 hover:opacity-80 transition-opacity pb-1 pl-2 pr-2 pt-1 rounded-full">
-          <button
-            onClick={toggleSidebar}
-            className="text-gray-700 dark:text-gray-300 flex flex-row gap-2 items-center"
+        <button
+          onClick={toggleSidebar}
+          className="bg-white text-gray-700 shadow-md rounded-full p-2 hover:bg-gray-100 transition"
+        >
+          <svg
+            className="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M4 6h16M4 12h16m-7 6h7"
-              />
-            </svg>
-            <h2 className="flex size-8 items-center justify-center rounded-full bg-gray-200 max-xl:hidden">
-              {user.firstName[0]}
-            </h2>
-          </button>
-        </div>
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M4 6h16M4 12h16m-7 6h7"
+            />
+          </svg>
+        </button>
 
         {/* LOGO */}
-        <div className="items-center text-white text-xl">
-          <h1>LOGO 'DEEPVISOR'</h1>
-        </div>
+        <h1 className="text-white text-xl font-bold tracking-wide">
+          LOGO <span className="text-blue-200">DEEPVISOR</span>
+        </h1>
       </div>
 
       {/* Navigation */}
-      <div className="flex items-center gap-6">
+      <div className="flex items-center gap-8">
         {navigationItems.map((item) => (
           <button
             key={item.path}
             onClick={() => handleNavigation(item.path)}
-            className="font-medium text-lg text-white hover:text-opacity-50 dark:text-gray-300"
+            className="text-lg text-white font-bold hover:text-gray-200 transition"
           >
             {item.label}
           </button>
@@ -87,29 +92,9 @@ const TopBar = () => {
       </div>
 
       {/* Platform & Ad Account Selectors */}
-      <div className="flex items-center gap-4">
-        <select
-          value={selectedPlatform || ''}
-          onChange={(e) => setPlatform(e.target.value)}
-          className="py-2 px-4 border rounded dark:bg-gray-700 dark:text-white"
-        >
-          <option value="" disabled>
-            Select Platform
-          </option>
-          <option value="facebook">Facebook</option>
-          <option value="tiktok">TikTok</option>
-          <option value="instagram">Instagram</option>
-          {/* Dynamically populate based on integration */}
-        </select>
+      <div className="flex items-center">
+        <PlatformAdAccountSelector />
 
-        {selectedPlatform &&
-          <AdAccountSelector
-            adAccounts={data?.adAccounts || []}
-            selectedAdAccount={selectedAdAccount}
-            setAdAccount={setAdAccount}
-            isLoading={isLoading}
-            selectedPlatform={selectedPlatform}
-          />}
       </div>
     </div>
   );

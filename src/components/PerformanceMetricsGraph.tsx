@@ -95,14 +95,6 @@ const PerformanceMetricsGraph = ({ graphInsights }: PerformanceMetricsGraphProps
           colors: ['#888'],
         },
       },
-      title: {
-        text: 'Date',
-        style: {
-          fontSize: '14px',
-          fontWeight: 'bold',
-          color: '#666',
-        },
-      },
     },
     yaxis: [
       {

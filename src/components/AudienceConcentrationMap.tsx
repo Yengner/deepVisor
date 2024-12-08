@@ -243,7 +243,6 @@ const countryFullNames: Record<string, string> = {
 };
 
 const AudienceLocationChart: React.FC<AudienceLocationChartProps> = ({ data = [] }) => {
-
   if (!Array.isArray(data) || data.length === 0) {
     return <div>No data available to display.</div>;
   }
@@ -256,7 +255,7 @@ const AudienceLocationChart: React.FC<AudienceLocationChartProps> = ({ data = []
   });
 
   
-  const countries = sortedData.map((item) => item.country); 
+  const countries = sortedData.map((item) => item.country); // Keep two-letter country codes for the x-axis
   const impressions = sortedData.map((item) => parseInt(item.impressions, 10));
   const spend = sortedData.map((item) => parseFloat(item.spend));
 
@@ -294,7 +293,7 @@ const AudienceLocationChart: React.FC<AudienceLocationChartProps> = ({ data = []
     dataLabels: {
       enabled: false, 
     },
-    colors: ['#00A3A3', '#FFA500'], 
+    colors: ['#1E90FF', '#FFA500'], 
     legend: {
       position: 'top',
       horizontalAlign: 'center',

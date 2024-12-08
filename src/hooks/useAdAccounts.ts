@@ -3,6 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 
 interface AdAccount {
   ad_account_id: string;
+  platform: string;
+  name: string;
 }
 
 interface FetchAdAccountsResponse {
