@@ -1,11 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET(
-    req: NextRequest,
-    { params }: { params: { adAccountId: string } }
-) {
-    const { adAccountId } = params;
-
+export async function GET(req: NextRequest, context: { params: { adAccountId: string } }) {
+    const { adAccountId } = await context.params;
+  
     if (!adAccountId) {
         return NextResponse.json({ error: 'Ad Account ID is required' }, { status: 400 });
     }

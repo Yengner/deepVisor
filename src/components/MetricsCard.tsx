@@ -26,14 +26,14 @@ const MetricCard = ({
 
   return (
     <div
-      className={`shadow-md rounded-md p-4 flex flex-col items-start justify-between hover:scale-105 transition-transform hover:bg-emerald-100 hover:text-white duration-150 ease-in-out ${backgroundClass}`}
+      className={`shadow-md rounded-md p-4 flex flex-col items-start justify-between hover:scale-105 transition-transform hover:bg-[#f8ebd2] hover:text-[#fbfbe9] duration-150 ease-in-out ${backgroundClass}`}
       data-tooltip-id={`${title}-tooltip`}
     >
       <div className="flex justify-between items-center w-full gap-1">
         {icon && <span className="text-2xl">{icon}</span>}
-        <h2 className="text-sm font-medium text-gray-700 dark:text-gray-300">{title}</h2>
+        <h2 className="text-sm font-medium text-[#614d25] dark:text-gray-300">{title}</h2>
       </div>
-      <p className="text-lg font-bold mt-1 text-gray-900 dark:text-gray-100">{value}</p>
+      <p className="text-lg font-bold mt-1 text-[#614d25] dark:text-gray-100">{value}</p>
       {percentageChange !== undefined && (
         <p className={`text-xs font-medium mt-1 ${changeColor}`}>
           {percentageChange > 0 ? '+' : ''}
@@ -47,8 +47,8 @@ const MetricCard = ({
           place="top"
           delayShow={500}
           style={{
-            backgroundColor: '#1e1e1e', // Dark tooltip background
-            color: '#fff', // White tooltip text
+            backgroundColor: '#3e4e38', 
+            color: '#fff', 
             borderRadius: '4px',
             padding: '6px 8px',
             fontSize: '12px',

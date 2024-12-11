@@ -9,7 +9,7 @@ import PlatformAdAccountSelector from './Platform&AdAccountSelector';
 import { useEffect } from 'react';
 
 const TopBar = () => {
-  const { selectedPlatform, setPlatform, toggleSidebar, selectedAdAccount, setAdAccount, isHydrated } = useGlobalState();
+  const { selectedPlatform, toggleSidebar, selectedAdAccount, setAdAccount, isHydrated } = useGlobalState();
   const { data, isLoading } = useAdAccounts(selectedPlatform);
   const router = useRouter();
 
@@ -48,7 +48,7 @@ const TopBar = () => {
 
 
   return (
-    <div className="flex justify-between items-center px-10 py-4 bg-emerald-700 shadow-lg">
+    <div className="flex justify-between items-center px-10 py-4 bg-[#3e4e38] shadow-lg h-auto">
       {/* Left Section: Burger Menu and Logo */}
       <div className="flex items-center gap-8">
         {/* Burger Menu */}
@@ -84,7 +84,7 @@ const TopBar = () => {
           <button
             key={item.path}
             onClick={() => handleNavigation(item.path)}
-            className="text-lg text-white font-bold hover:text-gray-200 transition"
+            className="text-lg text-[#fbfbe9] font-bold hover:text-gray-200 transition"
           >
             {item.label}
           </button>
@@ -92,7 +92,7 @@ const TopBar = () => {
       </div>
 
       {/* Platform & Ad Account Selectors */}
-      <div className="flex items-center">
+      <div className="flex items-center selector-container">
         <PlatformAdAccountSelector />
 
       </div>

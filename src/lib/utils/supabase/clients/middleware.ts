@@ -31,26 +31,26 @@ export async function updateSession(request: NextRequest) {
   // supabase.auth.getUser(). A simple mistake could make it very hard to debug
   // issues with users being randomly logged out.
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  // const {
+  //   data: { user },
+  // } = await supabase.auth.getUser();
 
-  const isLoginPage = request.nextUrl.pathname.startsWith('/login');
-  const isSignUpPage = request.nextUrl.pathname.startsWith('/sign-up');
+  // const isLoginPage = request.nextUrl.pathname.startsWith('/login');
+  // const isSignUpPage = request.nextUrl.pathname.startsWith('/sign-up');
 
-  // Handle unauthenticated user trying to access protected routes
-  if (!user && !isLoginPage && !isSignUpPage) {
-    const url = request.nextUrl.clone();
-    url.pathname = '/login';
-    return NextResponse.redirect(url);
-  }
+  // // Handle unauthenticated user trying to access protected routes
+  // if (!user && !isLoginPage && !isSignUpPage) {
+  //   const url = request.nextUrl.clone();
+  //   url.pathname = '/login';
+  //   return NextResponse.redirect(url);
+  // }
 
-  // Handle authenticated user trying to access public pages
-  if (user && (isLoginPage || isSignUpPage)) {
-    const url = request.nextUrl.clone();
-    url.pathname = '/dashboard';
-    return NextResponse.redirect(url);
-  }
+  // // Handle authenticated user trying to access public pages
+  // if (user && (isLoginPage || isSignUpPage)) {
+  //   const url = request.nextUrl.clone();
+  //   url.pathname = '/dashboard';
+  //   return NextResponse.redirect(url);
+  // }
 
   // IMPORTANT: You *must* return the supabaseResponse object as it is. If you're
   // creating a new response object with NextResponse.next() make sure to:

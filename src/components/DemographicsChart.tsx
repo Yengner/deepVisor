@@ -61,11 +61,11 @@ const DemographicsBarChart = ({ data }: DemographicsBarChartProps) => {
         formatter: (value: number) => `${value.toLocaleString()} impressions`,
       },
     },
-    colors: ['#0a3efa', '#f56cd0', '#8b12db'], // Male: Blue, Female: Red, Unknown: Purple
+    colors: ['#5a93a8', '#eb7a81', '#6f79a3'], // Male: Blue, Female: Red, Unknown: Purple
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+    <div className="bg-[#fbfbd8] dark:bg-gray-800 shadow rounded-lg p-6">
       <Chart options={chartOptions} series={series} type="bar" height={400} />
     </div>
   );

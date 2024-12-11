@@ -69,6 +69,7 @@ const PlatformAdAccountSelector = () => {
                                             key={account.ad_account_id}
                                             onClick={() => {
                                                 setAdAccount(account.ad_account_id);
+                                                setIsOpen(false);
                                             }}
                                             className={`block w-full px-4 py-2 text-left hover:bg-gray-100 ${selectedAdAccount === account.ad_account_id ? 'bg-gray-200' : ''
                                                 }`}

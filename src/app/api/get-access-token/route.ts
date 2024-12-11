@@ -3,7 +3,7 @@ import { createSupabaseClient } from '@/lib/utils/supabase/clients/server';
 
 export async function GET(request: Request) {
   try {
-    const supabase = createSupabaseClient();
+    const supabase = await createSupabaseClient();
     const userId = '6d9a0842-3887-43a0-8909-16589f8eae2a'; // Replace with actual logic to get the user ID
     const platform = new URL(request.url).searchParams.get('platform');
 

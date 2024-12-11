@@ -1,4 +1,3 @@
-import { platform } from "os";
 
 // Getting the Total Ad Account Insights | maximum time range | for dashboard
 export const fetchTotalAdAccountInsights = async (
@@ -46,15 +45,6 @@ export const fetechAccountInfo = async (
   adAccountId: string,
   accessToken: string
 ) => {
-  // const response = await fetch(
-  //   `/api/${platform}/ad-accounts/${adAccountId}/account-Info`,
-  //   {
-  //     headers: {
-  //       Authorization: `Bearer ${accessToken}`,
-  //       'Content-Type': 'application/json',
-  //     },
-  //   }
-  // );
 
   const today = new Date().toISOString().split('T')[0];
   // Facebook API URLs for balance and today's spend

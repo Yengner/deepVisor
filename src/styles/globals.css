@@ -30,4 +30,11 @@ body {
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
   }
+
+  .selector-container {
+    width: 400px; /* Or any suitable fixed width */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }

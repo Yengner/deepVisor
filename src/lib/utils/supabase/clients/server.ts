@@ -1,8 +1,8 @@
-import { createServerClient} from '@supabase/ssr'
+import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 
-export function createSupabaseClient() {
-  const cookieStore = cookies()
+export async function createSupabaseClient() {
+  const cookieStore = await cookies()
 
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -26,22 +26,4 @@ export function createSupabaseClient() {
       },
     }
   )
-}
-
-export async function getUser() {
-  const { auth } = createSupabaseClient(); // Use the server-side client here
-  const { data, error } = await auth.getUser();
-
-  if (error) {
-    throw new Error(`Error retrieving user: ${error.message}`);
-  }
-
-  return data.user;
-}
-
-export async function protectRoute() {
-  const user = await getUser();
-  if (!user) {
-    throw new Error('Unauthorized');
-  }
 }

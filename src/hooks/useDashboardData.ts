@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchTotalAdAccountInsights, fetchInsights, fetchTopCampaigns, fetchPerformanceMetrics, fetechAccountInfo, fetchAgeGenderCountryMetrics } from '@/lib/api/dashboard';
+import { fetchTotalAdAccountInsights, fetchTopCampaigns, fetchPerformanceMetrics, fetechAccountInfo, fetchAgeGenderCountryMetrics } from '@/lib/api/dashboard';
 import { useAccessToken } from './useAccessToken';
 
 export const useTotalAdAccountInsights = (platform: string | null, adAccountId: string | null) => {

@@ -16,11 +16,11 @@ interface GraphMetricCardProps {
 const GraphMetricCard = ({ title, value, isSelected, onClick }: GraphMetricCardProps) => (
   <button
     onClick={onClick}
-    className={`p-4 border rounded-lg ${isSelected ? 'bg-blue-100 dark:bg-blue-700' : 'bg-white dark:bg-gray-800'
-      } shadow-sm text-left hover:bg-gray-100 dark:hover:bg-gray-700 transition`}
+    className={`p-4 border rounded-lg ${isSelected ? 'bg-[#b3be5ec5] dark:bg-blue-700' : 'bg-[#7e8649c5] dark:bg-gray-800'
+      } shadow-sm text-left hover:bg-[#b3ba78c5] dark:hover:bg-gray-700 transition`}
   >
-    <h3 className="text-sm font-medium text-gray-500 dark:text-gray-300">{title}</h3>
-    <p className="text-lg font-bold text-gray-900 dark:text-white mt-2">{value}</p>
+    <h3 className="text-sm font-medium text-[#fbfbe9]">{title}</h3>
+    <p className="text-lg font-bold text-[#fbfbe9] mt-2">{value}</p>
   </button>
 );
 
@@ -101,14 +101,14 @@ const PerformanceMetricsGraph = ({ graphInsights }: PerformanceMetricsGraphProps
         title: {
           text: selectedMetrics[0].charAt(0).toUpperCase() + selectedMetrics[0].slice(1),
           style: {
-            color: '#00A3A3',
+            color: '#138749',
             fontSize: '14px',
             fontWeight: 'bold',
           },
         },
         labels: {
           style: {
-            colors: ['#00A3A3'],
+            colors: ['#138749'],
             fontSize: '12px',
           },
         },
@@ -118,14 +118,14 @@ const PerformanceMetricsGraph = ({ graphInsights }: PerformanceMetricsGraphProps
         title: {
           text: selectedMetrics[1].charAt(0).toUpperCase() + selectedMetrics[1].slice(1),
           style: {
-            color: '#FFA500',
+            color: '#c9a918',
             fontSize: '14px',
             fontWeight: 'bold',
           },
         },
         labels: {
           style: {
-            colors: ['#FFA500'],
+            colors: ['#c9a918'],
             fontSize: '12px',
           },
         },
@@ -139,11 +139,11 @@ const PerformanceMetricsGraph = ({ graphInsights }: PerformanceMetricsGraphProps
     grid: {
       borderColor: '#f1f1f1',
     },
-    colors: ['#00A3A3', '#FFA500'],
+    colors: ['#138749', '#c9a918'],
     markers: {
       size: 4,
       colors: ['#fff'],
-      strokeColors: ['#00A3A3', '#FFA500'],
+      strokeColors: ['#138749', '#c9a918'],
       strokeWidth: 2,
     },
     legend: {
@@ -159,8 +159,8 @@ const PerformanceMetricsGraph = ({ graphInsights }: PerformanceMetricsGraphProps
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       {/* Metrics Selection */}
-      <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
-        <h2 className="text-lg font-bold mb-4">Metrics</h2>
+      <div className="bg-[#7e8649c5]shadow rounded-lg p-6">
+        <h2 className="text-lg font-bold mb-4 text-[#fbfbe9]">Metrics</h2>
         <div className="grid grid-cols-2 gap-4">
           {[
             { key: 'cost', label: 'Cost', value: `$${graphInsights.cost.toFixed(2)}` },
@@ -184,7 +184,7 @@ const PerformanceMetricsGraph = ({ graphInsights }: PerformanceMetricsGraphProps
       </div>
 
       {/* Metrics Graph */}
-      <div className="lg:col-span-2 bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+      <div className="lg:col-span-2 bg-[#fbfbd8] dark:bg-gray-800 shadow rounded-lg p-6">
         <h2 className="text-lg font-bold mb-4">Performance Over Time</h2>
         <Chart
           key={selectedMetrics.join('-')}

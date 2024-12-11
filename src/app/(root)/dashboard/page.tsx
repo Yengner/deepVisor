@@ -11,9 +11,10 @@ import MetricCard from '@/components/MetricsCard';
 import AccountInfo from '@/components/AccountInfo';
 import TopCampaigns from '@/components/TopCampaigns';
 import DemographicsChart from '@/components/DemographicsChart';
+import AdSpendPieChart from '@/components/AdSpendPieChart';
 
 const AudienceLocationChart = dynamic(() => import('@/components/AudienceLocationChart'), {
-  ssr: false, // Disable server-side rendering for this component
+  ssr: false, 
   loading: () => <ClipLoader color="#00bfa5" size={50} />,
 
 });
@@ -81,7 +82,7 @@ const DashboardPage = () => {
       <>
         <section className="rounded-lg p-3">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">Dashboard Overview</h2>
+            <h2 className="text-xl font-semibold text-[#3e4e38] dark:text-gray-200">Dashboard Overview</h2>
             <p className="text-sm text-gray-600 dark:text-gray-400">
               {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
             </p>
@@ -92,92 +93,92 @@ const DashboardPage = () => {
               title="Spend"
               value={`$${Number(metrics?.spend || 0).toLocaleString()}`}
               tooltip="Total ad spend for the selected period."
-              icon={<MdAttachMoney className="text-emerald-700" />}
-              backgroundClass="bg-white dark:bg-gray-900"
+              icon={<MdAttachMoney className="text-[#b6985c]" />}
+              backgroundClass="bg-[#e9d094] dark:bg-gray-900"
             />
             <MetricCard
               title="Leads"
               value={Number(metrics?.leads || 0).toLocaleString()}
               tooltip="Number of leads generated through your ads."
-              icon={<MdPersonAdd className="text-emerald-700" />}
-              backgroundClass="bg-white dark:bg-gray-900"
+              icon={<MdPersonAdd className="text-[#b6985c]" />}
+              backgroundClass="bg-[#e9d094] dark:bg-gray-900"
             />
             <MetricCard
               title="Clicks"
               value={Number(metrics?.clicks || 0).toLocaleString()}
               tooltip="Total number of ad clicks."
-              icon={<MdMouse className="text-emerald-700" />}
-              backgroundClass="bg-white dark:bg-gray-900"
+              icon={<MdMouse className="text-[#b6985c]" />}
+              backgroundClass="bg-[#e9d094] dark:bg-gray-900"
             />
             <MetricCard
               title="CTR"
               value={`${metrics?.ctr || 0}%`}
               tooltip="Click Through Rate (CTR): Percentage of users who clicked your ad after viewing it."
-              icon={<MdShowChart className="text-emerald-700" />}
-              backgroundClass="bg-white dark:bg-gray-900"
+              icon={<MdShowChart className="text-[#b6985c]" />}
+              backgroundClass="bg-[#e9d094] dark:bg-gray-900"
             />
             <MetricCard
               title="CPC"
               value={`$${metrics?.cpc || 0}`}
               tooltip="Cost Per Click (CPC): Average cost for each click."
-              icon={<MdTrendingUp className="text-emerald-700" />}
-              backgroundClass="bg-white dark:bg-gray-900"
+              icon={<MdTrendingUp className="text-[#b6985c]" />}
+              backgroundClass="bg-[#e9d094] dark:bg-gray-900"
             />
             <MetricCard
               title="Impression"
               value={Number(metrics?.impressions || 0).toLocaleString()}
               tooltip="Total number of times your ad was displayed."
-              icon={<MdVisibility className="text-emerald-700" />}
-              backgroundClass="bg-white dark:bg-gray-900"
+              icon={<MdVisibility className="text-[#b6985c]" />}
+              backgroundClass="bg-[#e9d094] dark:bg-gray-900"
             />
             <MetricCard
               title="CPM"
               value={`$${metrics?.cpm || 0}`}
               tooltip="Cost Per Mille (CPM): Average cost for 1,000 ad impressions."
-              icon={<MdShowChart className="text-emerald-700" />}
-              backgroundClass="bg-white dark:bg-gray-900"
+              icon={<MdShowChart className="text-[#b6985c]" />}
+              backgroundClass="bg-[#e9d094] dark:bg-gray-900"
             />
             <MetricCard
               title="Reach"
               value={Number(metrics?.reach || 0).toLocaleString()}
               tooltip="Total number of unique users who saw your ad."
-              icon={<MdGroup className="text-emerald-700" />}
-              backgroundClass="bg-white dark:bg-gray-900"
+              icon={<MdGroup className="text-[#b6985c]" />}
+              backgroundClass="bg-[#e9d094] dark:bg-gray-900"
             />
             <MetricCard
               title="Post Eng."
               value={Number(metrics?.postEngagement || 0).toLocaleString()}
               tooltip="Total number of interactions (likes, shares, comments) on your posts."
-              icon={<MdThumbUp className="text-emerald-700" />}
-              backgroundClass="bg-white dark:bg-gray-900"
+              icon={<MdThumbUp className="text-[#b6985c]" />}
+              backgroundClass="bg-[#e9d094] dark:bg-gray-900"
             />
             <MetricCard
               title="Link Click"
               value={Number(metrics?.linkClicks || 0).toLocaleString()}
               tooltip="Total number of link clicks on your ad."
-              icon={<MdLink className="text-emerald-700" />}
-              backgroundClass="bg-white dark:bg-gray-900"
+              icon={<MdLink className="text-[#b6985c]" />}
+              backgroundClass="bg-[#e9d094] dark:bg-gray-900"
             />
             <MetricCard
               title="Messages"
               value={Number(metrics?.messagingConversationsStarted || 0).toLocaleString()}
               tooltip="Number of messaging conversations started via your ad."
-              icon={<MdMessage className="text-emerald-700" />}
-              backgroundClass="bg-white dark:bg-gray-900"
+              icon={<MdMessage className="text-[#b6985c]" />}
+              backgroundClass="bg-[#e9d094] dark:bg-gray-900"
             />
           </div>
         </section>
 
         {/* Section 2: Account Info + Performance Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 justify-center">
 
           {/* Account Info Section */}
-          <section className="bg-white dark:bg-gray-800 shadow rounded-lg border p-6 flex flex-col justify-between">
+          <section className=" bg-[#566a3d] dark:bg-gray-800 shadow rounded-lg border p-6 flex flex-col justify-between">
             <AccountInfo accountInfo={accountInfo} />
           </section>
 
           {/* Performance Metrics Section */}
-          <section className="lg:col-span-2 bg-white dark:bg-gray-800 shadow border rounded-lg p-6">
+          <section className="lg:col-span-2 bg-[#7e8649c5] dark:bg-gray-800 shadow border rounded-lg p-6">
             {!linegraphInsightsLoading && linegraphInsights && (
               <PerformanceMetricsGraph key={selectedAdAccount} // Ensure unique key for re-render
                 graphInsights={linegraphInsights} />
@@ -199,8 +200,8 @@ const DashboardPage = () => {
         <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
           {/* Age & Gender Pie Chart */}
-          <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
-            <h2 className="text-xl font-bold mb-4 text-center">Audience by Age & Gender</h2>
+          <div className="bg-[#7e8649c5] dark:bg-gray-800 shadow rounded-lg p-6">
+            <h2 className="text-xl font-bold mb-4 text-center text-[#ededd2]">Audience by Age & Gender</h2>
             <DemographicsChart data={ageGenderCountryMetrics?.ageGenderData} />
           </div>
           {/* AudienceLocationChart */}
@@ -210,7 +211,10 @@ const DashboardPage = () => {
           </div>
 
         </section>
-        
+        <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Ad Spend Allocation Pie Chart */}
+          <AdSpendPieChart metrics={metrics} />
+        </section>;
       </>
     </div>
   );

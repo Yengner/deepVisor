@@ -23,8 +23,8 @@ const TopCampaigns = ({ campaignsData }: TopCampaignsProps) => {
   const campaigns = campaignsData.top3ByLeads || []; 
 
   return (
-    <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
-      <h2 className="text-xl font-bold text-black mb-4">Top 3 Campaigns by Leads</h2>
+    <div className="bg-[#e1e6cb]p-6">
+      <h2 className="text-xl font-bold text-[#3e4e38] mb-4">Top 3 Campaigns by Leads</h2>
       {campaigns.length === 0 ? (
         <p className="text-sm text-gray-200">
           No campaigns available.
@@ -34,23 +34,23 @@ const TopCampaigns = ({ campaignsData }: TopCampaignsProps) => {
           {campaigns.map((campaign) => (
             <div
               key={campaign.id}
-              className="bg-white dark:bg-gray-700 shadow border border-gray-300 dark:border-gray-700 rounded-lg p-4 hover:shadow-lg transition-shadow"
+              className="bg-[#faffe3] shadow border border-gray-300 dark:border-gray-700 rounded-lg p-4 hover:shadow-lg transition-shadow"
             >
               {/* Campaign Name */}
-              <h3 className="text-lg font-semibold text-emerald-700 dark:text-white truncate">
+              <h3 className="text-lg font-semibold text-[#5f743b] truncate">
                 {campaign.name || 'Unnamed Campaign'}
               </h3>
 
               {/* Campaign Details in Two Columns */}
-              <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-2">
+              <div className="mt-4 grid grid-cols-2 gap-x-3 gap-y-2  overflow-hidden whitespace-nowrap text-ellipsis">
                 {/* Status */}
                 <div className="text-sm">
-                  <span className="font-medium text-gray-700 dark:text-gray-300">Status:</span>{' '}
+                  <span className="font-medium text-gray-700 dark:text-gray-300 ">Status:</span>{' '}
                   <span
                     className={`px-2 py-1 text-xs font-bold rounded ${
                       campaign.status === 'ACTIVE'
                         ? 'bg-green-100 text-green-700'
-                        : 'bg-red-100 text-red-700'
+                        : 'bg-amber-100 text-amber-700'
                     }`}
                   >
                     {campaign.status}
@@ -94,7 +94,7 @@ const TopCampaigns = ({ campaignsData }: TopCampaignsProps) => {
               {/* View Details Link */}
               <a
                 href={`/campaigns/${campaign.id}`}
-                className="block mt-4 text-center text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-800 rounded-md px-4 py-2"
+                className="block mt-4 text-center text-sm font-medium text-white bg-[#dba866] hover:bg-emerald-800 rounded-md px-4 py-2"
               >
                 View Details →
               </a>
