@@ -50,17 +50,18 @@ export const fetechAccountInfo = async (
   // Facebook API URLs for balance and today's spend
   const balanceUrl = `https://graph.facebook.com/v21.0/${adAccountId}?fields=balance`;
   const spendUrl = `https://graph.facebook.com/v21.0/${adAccountId}/insights?fields=spend&time_range[since]=${today}&time_range[until]=${today}`;
+  const insightsUrl = `https://graph.facebook.com/v21.0/${adAccountId}/insights?fields=clicks,spend,actions&date_preset=maximum`;
   const accountDetails = `https://graph.facebook.com/v21.0/${adAccountId}?fields=name,currency,spend_cap,amount_spent,account_status`;
   const campaigns = `https://graph.facebook.com/v21.0/${adAccountId}/campaigns?fields=id`;
 
-  const [balanceResponse, spendResponse, accountDetailsResponse, campaignsResponse] = await Promise.all([
+  const [balanceResponse, insightsResponse, accountDetailsResponse, campaignsResponse, spendResponse] = await Promise.all([
     fetch(balanceUrl, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
     }),
-    fetch(spendUrl, {
+    fetch(insightsUrl, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
@@ -77,14 +78,20 @@ export const fetechAccountInfo = async (
         Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
-    })
+    }),
+    fetch(spendUrl, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    }),
   ]);
 
   if (!balanceResponse.ok) {
     throw new Error(`Error fetching balance: ${balanceResponse.statusText}`);
   }
-  if (!spendResponse.ok) {
-    throw new Error(`Error fetching today's spend: ${spendResponse.statusText}`);
+  if (!insightsResponse.ok) {
+    throw new Error(`Error fetching today's insights: ${insightsResponse.statusText}`);
   }
   if (!accountDetailsResponse.ok) {
     throw new Error(`Error fetching account details: ${accountDetailsResponse.statusText}`);
@@ -92,21 +99,35 @@ export const fetechAccountInfo = async (
   if (!campaignsResponse.ok) {
     throw new Error(`Error fetching campaigns: ${campaignsResponse.statusText}`);
   }
+  if (!spendResponse.ok) {
+    throw new Error(`Error fetching today's spend: ${spendResponse.statusText}`);
+  }
 
   const balanceData = await balanceResponse.json();
+  const insightsData = await insightsResponse.json();
   const spendData = await spendResponse.json();
   const accountDetailsData = await accountDetailsResponse.json();
   const campaignsData = await campaignsResponse.json();
 
+  const processedData = insightsData.data.map((entry: any) => {
+    const linkClicks = entry.actions?.find((action: any) => action.action_type === 'link_click')?.value || 0;
+    const postEngagement = entry.actions?.find((action: any) => action.action_type === 'post_engagement')?.value || 0;
+    return {
+      clicks: parseInt(entry.clicks, 10),
+      linkClicks: parseInt(linkClicks, 10),
+      postEngagement: parseInt(postEngagement, 10),
+    };
+  });
   return {
     balance: parseFloat(balanceData.balance),
-    todaySpend: parseFloat(spendData.data?.[0]?.spend || 0),
+    todaySpend: parseFloat(spendData.spend) || 0,
     name: accountDetailsData.name,
     currency: accountDetailsData.currency,
-    spendCap: accountDetailsData.spend_cap ? parseFloat(accountDetailsData.spend_cap) / 100 : null, // Divide by 100 if spend cap exists
-    lifetimeSpend: parseFloat(accountDetailsData.amount_spent) / 100, // Correct for minor units
+    spendCap: parseFloat(accountDetailsData.spend_cap) || 0,
+    lifetimeSpend: parseFloat(accountDetailsData.amount_spent) / 100,
     accountStatus: accountDetailsData.account_status,
     totalCampaigns: campaignsData.data?.length || 0,
+    insights: processedData[0],
   };
   // if (!response.ok) throw new Error('Error fetching account info');
   // return response.json();
@@ -139,7 +160,7 @@ export const fetchTopCampaigns = async (
     }
 
     return response.json();
-  } catch (error:any) {
+  } catch (error: any) {
     console.error('fetchTopCampaigns Error:', error.message);
     throw error; // Pass the error to the caller for further handling
   }
@@ -250,7 +271,7 @@ export const fetchAgeGenderCountryMetrics = async (
   const ageGenderData = ageGenderDatas.data.map((entry: any) => ({
     age: entry.age || 'unknown',
     gender: entry.gender || 'unknown',
-    impressions: parseInt(entry.impressions || '0', 10), 
+    impressions: parseInt(entry.impressions || '0', 10),
   }));
 
   // Transform country data
@@ -262,8 +283,8 @@ export const fetchAgeGenderCountryMetrics = async (
     impressions: parseInt(entry.impressions || '0', 10), // Use 'reach' or 'impressions' based on your needs
   }));
 
-  return {ageGenderData, countryData};
-    // countryData,
-  
+  return { ageGenderData, countryData };
+  // countryData,
+
 };
 

@@ -65,7 +65,7 @@ const PerformanceMetricsGraph = ({ graphInsights }: PerformanceMetricsGraphProps
       setSelectedMetrics((prev) => [...prev, metric]);
     }
   };
-
+  
   if (!graphInsights || !graphInsights.trendData) {
     return <p>No data available for the selected metrics.</p>;
   }
@@ -157,45 +157,45 @@ const PerformanceMetricsGraph = ({ graphInsights }: PerformanceMetricsGraphProps
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div className="space-y-6">
       {/* Metrics Selection */}
-      <div className="bg-[#7e8649c5]shadow rounded-lg p-6">
-        <h2 className="text-lg font-bold mb-4 text-[#fbfbe9]">Metrics</h2>
-        <div className="grid grid-cols-2 gap-4">
-          {[
-            { key: 'cost', label: 'Cost', value: `$${graphInsights.cost.toFixed(2)}` },
-            { key: 'impressions', label: 'Impressions', value: graphInsights.impressions },
-            { key: 'clicks', label: 'Clicks', value: graphInsights.clicks },
-            { key: 'leads', label: 'Leads', value: graphInsights.leads },
-            { key: 'messagingConversationsStarted', label: 'Messages', value: graphInsights.messagingConversationsStarted },
-            { key: 'reach', label: 'Reach', value: graphInsights.reach },
-            { key: 'ctr', label: 'CTR', value: graphInsights.ctr.toFixed(2) + '%' },
-            { key: 'cpc', label: 'CPC', value: graphInsights.cpc.toFixed(2) },
-          ].map((metric) => (
-            <GraphMetricCard
-              key={metric.key}
-              title={metric.label}
-              value={metric.value}
-              isSelected={selectedMetrics.includes(metric.key)}
-              onClick={() => toggleMetric(metric.key)}
-            />
-          ))}
-        </div>
+      <div className="grid grid-cols-8 gap-4">
+        {[
+          { key: 'cost', label: 'Cost', value: `$${graphInsights.cost.toFixed(2)}` },
+          { key: 'impressions', label: 'Impressions', value: graphInsights.impressions },
+          { key: 'clicks', label: 'Clicks', value: graphInsights.clicks },
+          { key: 'leads', label: 'Leads', value: graphInsights.leads },
+          { key: 'messagingConversationsStarted', label: 'Messages', value: graphInsights.messagingConversationsStarted },
+          { key: 'reach', label: 'Reach', value: graphInsights.reach },
+          { key: 'ctr', label: 'CTR', value: graphInsights.ctr.toFixed(2) + '%' },
+          { key: 'cpc', label: 'CPC', value: graphInsights.cpc.toFixed(2) },
+        ].map((metric) => (
+          <GraphMetricCard
+            key={metric.key}
+            title={metric.label}
+            value={metric.value}
+            isSelected={selectedMetrics.includes(metric.key)}
+            onClick={() => toggleMetric(metric.key)}
+          />
+        ))}
       </div>
-
+  
       {/* Metrics Graph */}
-      <div className="lg:col-span-2 bg-[#fbfbd8] dark:bg-gray-800 shadow rounded-lg p-6">
-        <h2 className="text-lg font-bold mb-4">Performance Over Time</h2>
+      <div className="bg-[#fbfbd8] dark:bg-gray-800 shadow rounded-lg p-6">
+        <h2 className="text-lg font-bold mb-4 text-gray-800 dark:text-gray-200">
+          Performance Over Time
+        </h2>
         <Chart
           key={selectedMetrics.join('-')}
           options={graphOptions}
           series={graphData}
           type="line"
-          height={350}
+          height={250}
         />
       </div>
     </div>
   );
+  
 };
 
 export default PerformanceMetricsGraph;
