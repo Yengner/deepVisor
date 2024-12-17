@@ -1,14 +1,16 @@
 'use client';
 
-import React, { useState } from 'react';
-import { useGlobalState } from '@/lib/store/globalState';
+import React, { useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useAdAccounts } from '@/hooks/useAdAccounts';
 import { ClipLoader } from 'react-spinners';
 
 const PlatformAdAccountSelector = () => {
-    const { selectedPlatform, setPlatform, selectedAdAccount, setAdAccount } = useGlobalState();
-    const { data, isLoading } = useAdAccounts(selectedPlatform);
+    const router = useRouter();
+    const searchParams = useSearchParams();
 
+    const [selectedPlatform, setSelectedPlatform] = useState<string | null>('facebook');
+    const [selectedAdAccount, setSelectedAdAccount] = useState<string | null>(null);
     const [isOpen, setIsOpen] = useState(false);
 
     const platforms = [
@@ -17,9 +19,38 @@ const PlatformAdAccountSelector = () => {
         { id: 'tiktok', name: 'TikTok' },
     ];
 
+    const { data, isLoading } = useAdAccounts(selectedPlatform);
+
     const adAccounts = data?.adAccounts || [];
     const adAccountName = selectedAdAccount && adAccounts.find((account) => account.ad_account_id === selectedAdAccount)?.name;
     const platformName = platforms.find((platform) => platform.id === selectedPlatform)?.name;
+
+    useEffect(() => {
+        const platform = searchParams.get('platform') || localStorage.getItem('selectedPlatform');
+        const adAccountId = searchParams.get('adAccountId') || localStorage.getItem('selectedAdAccount');
+
+        setSelectedPlatform(platform);
+        setSelectedAdAccount(adAccountId);
+    }, [searchParams]);
+
+    useEffect(() => {
+        if (selectedPlatform) {
+            localStorage.setItem('selectedPlatform', selectedPlatform);
+            const queryParams = new URLSearchParams(searchParams as any);
+            queryParams.set('platform', selectedPlatform);
+
+            if (selectedAdAccount) {
+                queryParams.set('adAccountId', selectedAdAccount);
+                localStorage.setItem('selectedAdAccount', selectedAdAccount);
+            } else {
+                queryParams.delete('adAccountId');
+                localStorage.removeItem('selectedAdAccount');
+            }
+
+            router.push(`?${queryParams.toString()}`);
+        }
+    }, [selectedPlatform, selectedAdAccount, router, searchParams]);
+
     return (
         <div className="relative"> {/* Move the selector away from the edge */}
             {/* Main Button */}
@@ -37,18 +68,16 @@ const PlatformAdAccountSelector = () => {
             {/* Dropdown Widget */}
             {isOpen && (
                 <div className="absolute top-full left-[-200px] mt-2 w-[400px] bg-white border border-gray-300 rounded shadow-lg z-10 flex">
-
                     {/* Left Side: Platforms */}
                     <div className="w-1/3 border-r border-gray-300">
                         {platforms.map((platform) => (
                             <button
                                 key={platform.id}
                                 onClick={() => {
-                                    setPlatform(platform.id);
-                                    setAdAccount(null);
+                                    setSelectedPlatform(platform.id);
+                                    setSelectedAdAccount(null); // Reset ad account when switching platforms
                                 }}
-                                className={`block w-full px-4 py-2 text-left hover:bg-gray-100 ${selectedPlatform === platform.id ? 'bg-gray-200' : ''
-                                    }`}
+                                className={`block w-full px-4 py-2 text-left hover:bg-gray-100 ${selectedPlatform === platform.id ? 'bg-gray-200' : ''}`}
                             >
                                 {platform.name}
                             </button>
@@ -68,7 +97,7 @@ const PlatformAdAccountSelector = () => {
                                         <button
                                             key={account.ad_account_id}
                                             onClick={() => {
-                                                setAdAccount(account.ad_account_id);
+                                                setSelectedAdAccount(account.ad_account_id);
                                                 setIsOpen(false);
                                             }}
                                             className={`block w-full px-4 py-2 text-left hover:bg-gray-100 ${selectedAdAccount === account.ad_account_id ? 'bg-gray-200' : ''

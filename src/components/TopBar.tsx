@@ -1,16 +1,11 @@
 'use client';
 
 import { useGlobalState } from '@/lib/store/globalState';
-import AdAccountSelector from './AdAccountSelector';
 import { useRouter } from 'next/navigation';
-import { ClipLoader } from 'react-spinners';
-import { useAdAccounts } from '@/hooks/useAdAccounts';
 import PlatformAdAccountSelector from './Platform&AdAccountSelector';
-import { useEffect } from 'react';
 
 const TopBar = () => {
-  const { selectedPlatform, toggleSidebar, selectedAdAccount, setAdAccount, isHydrated } = useGlobalState();
-  const { data, isLoading } = useAdAccounts(selectedPlatform);
+  const { toggleSidebar } = useGlobalState();
   const router = useRouter();
 
   const user = {
@@ -29,22 +24,6 @@ const TopBar = () => {
   const handleNavigation = (path: string) => {
     router.push(path);
   };
-
-  // Automatically select the first ad account when a platform is selected and no ad account is selected
-  useEffect(() => {
-    if (selectedPlatform && !selectedAdAccount && data?.adAccounts?.length) {
-      setAdAccount(data.adAccounts[0].ad_account_id);
-    }
-  }, [selectedPlatform, selectedAdAccount, data, setAdAccount]);
-
-  // Wait until hydration is complete and `selectedAdAccount` is valid
-  if (!isHydrated || isLoading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <ClipLoader color="#3498db" size={50} />
-      </div>
-    );
-  }
 
 
   return (
@@ -94,8 +73,8 @@ const TopBar = () => {
       {/* Platform & Ad Account Selectors */}
       <div className="flex items-center selector-container">
         <PlatformAdAccountSelector />
-
       </div>
+      
     </div>
   );
 };

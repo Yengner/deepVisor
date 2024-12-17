@@ -4,8 +4,14 @@ import { FacebookAdsApi, AdAccount, Campaign, AdSet, Ad } from 'facebook-nodejs-
 
 
 export const fetchCampaignsIds = async (adAccountId: string, accessToken: string) => {
+  const API_BASE_URL = process.env.FACEBOOK_GRAPH_API_BASE_URL;
+
+  if (!API_BASE_URL) {
+    throw new Error("FACEBOOK_GRAPH_API_BASE_URL is not set in the environment variables");
+  }
+
   const response = await fetch(
-    `https://graph.facebook.com/v21.0/${adAccountId}/campaigns?fields=id,name,status,objective,daily_budget,lifetime_budget,created_time`,
+    `${API_BASE_URL}/${adAccountId}/campaigns?fields=id,name,status,objective,daily_budget,lifetime_budget,created_time`,
     {
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -148,7 +154,7 @@ export const fetchFacebookAdSetInsights = async ({ adAccountId, accessToken }: {
         AdSet.Fields.lifetime_budget,
         AdSet.Fields.end_time,
         AdSet.Fields.optimization_goal,
-        AdSet.Fields.campaign_id, 
+        AdSet.Fields.campaign_id,
 
       ],
       { limit: 100 }
@@ -188,7 +194,7 @@ export const fetchFacebookAdSetInsights = async ({ adAccountId, accessToken }: {
 
         return {
           ad_set_id: adSet.id,
-          campaign_id: adSet.campaign_id, 
+          campaign_id: adSet.campaign_id,
           name: adSet.name,
           status: adSet.status,
           daily_budget: adSet.daily_budget || null,

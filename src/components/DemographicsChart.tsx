@@ -49,8 +49,7 @@ const DemographicsBarChart = ({ data }: DemographicsBarChartProps) => {
       },
     },
     dataLabels: {
-      enabled: true,
-      formatter: (value: number) => `${value.toLocaleString()}`,
+      enabled: false,
     },
     legend: {
       position: 'top',
@@ -66,7 +65,7 @@ const DemographicsBarChart = ({ data }: DemographicsBarChartProps) => {
 
   return (
     <div className="bg-[#fbfbd8] dark:bg-gray-800 shadow rounded-lg p-6">
-      <Chart options={chartOptions} series={series} type="bar" height={400} />
+      <Chart options={chartOptions} series={series} type="bar" height={250} />
     </div>
   );
 };
