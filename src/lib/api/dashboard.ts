@@ -1,10 +1,10 @@
-import { fetchMetrics } from '@/lib/api/platforms/facebook/metrics';
-import { fetchAccountInfo } from '@/lib/api/platforms/facebook/accountInfo';
-import { fetchCampaignMetrics } from '@/lib/api/platforms/facebook/topCampaigns';
-import { fetchAgeGenderCountryMetrics } from './platforms/facebook/demographics';
-import { fetchPerformanceMetrics } from './platforms/facebook/performanceMetrics';
+import { fetchMetrics } from '@/lib/api/platforms/meta/metrics';
+import { fetchAccountInfo } from '@/lib/api/platforms/meta/accountInfo';
+import { fetchCampaignMetrics } from '@/lib/api/platforms/meta/topCampaigns';
+import { fetchAgeGenderCountryMetrics } from './platforms/meta/demographics';
+import { fetchPerformanceMetrics } from './platforms/meta/performanceMetrics';
 import { createSupabaseClient } from '@/lib/utils/supabase/clients/server';
-import { fetchHourlyBreakdown } from './platforms/facebook/hourlyBreakdown';
+import { fetchHourlyBreakdown } from './platforms/meta/hourlyBreakdown';
 
 export const fetchDashboardMetrics = async (platform: string, adAccountId: string) => {
   const supabase = await createSupabaseClient();
@@ -26,9 +26,6 @@ export const fetchDashboardMetrics = async (platform: string, adAccountId: strin
 
   const accessToken = data.access_token;
 
-  if (platform !== 'facebook') {
-    throw new Error('Unsupported platform. Only Facebook is currently supported.');
-  }
 
   // Fetch all data in parallel
   const [metrics, accountInfo, topCampaigns, ageGenderMetrics, performanceMetrics, hourlyBreakdown] = await Promise.all([

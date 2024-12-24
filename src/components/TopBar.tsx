@@ -1,17 +1,13 @@
 'use client';
 
 import { useGlobalState } from '@/lib/store/globalState';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import PlatformAdAccountSelector from './Platform&AdAccountSelector';
 
 const TopBar = () => {
   const { toggleSidebar } = useGlobalState();
   const router = useRouter();
-
-  const user = {
-    firstName: 'Yengner',
-    email: 'test@gmail.com'
-  };
+  const pathname = usePathname(); // Get the current route
 
   const navigationItems = [
     { label: 'Dashboard', path: '/dashboard' },
@@ -25,9 +21,17 @@ const TopBar = () => {
     router.push(path);
   };
 
+  const getPageTitle = () => {
+    if (pathname.startsWith('/dashboard')) return 'Dashboard';
+    if (pathname.startsWith('/campaigns')) return 'Campaigns';
+    if (pathname.startsWith('/integration')) return 'Integration';
+    if (pathname.startsWith('/analytics')) return 'Analytics';
+    return 'DeepVisor';
+  };
+
 
   return (
-    <div className="flex justify-between items-center px-10 py-4 bg-[#3e4e38] shadow-lg h-auto">
+    <div className="flex justify-between items-center px-10 py-4 bg-[#5c6bc0] shadow-lg h-auto">
       {/* Left Section: Burger Menu and Logo */}
       <div className="flex items-center gap-8">
         {/* Burger Menu */}
@@ -51,10 +55,8 @@ const TopBar = () => {
           </svg>
         </button>
 
-        {/* LOGO */}
-        <h1 className="text-white text-xl font-bold tracking-wide">
-          LOGO <span className="text-blue-200">DEEPVISOR</span>
-        </h1>
+        {/* Page Title */}
+        <h1 className="text-lg font-bold text-white">{getPageTitle()}</h1>
       </div>
 
       {/* Navigation */}
@@ -70,11 +72,6 @@ const TopBar = () => {
         ))}
       </div>
 
-      {/* Platform & Ad Account Selectors */}
-      <div className="flex items-center selector-container">
-        <PlatformAdAccountSelector />
-      </div>
-      
     </div>
   );
 };

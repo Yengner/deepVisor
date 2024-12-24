@@ -7,6 +7,13 @@ export const fetchAdAccounts = async (platform: string): Promise<{
   adAccounts: Array<{ ad_account_id: string, platform: string, name: string }>;
   hasAdAccounts: boolean;
 }> => {
+
+  if (!platform) {
+    return {
+      adAccounts: [],
+      hasAdAccounts: false,
+    };
+  }
   const supabase = await createSupabaseClient();
   const userId = '6d9a0842-3887-43a0-8909-16589f8eae2a'; // Replace with actual logic to get the user ID
 

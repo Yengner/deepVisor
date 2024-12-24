@@ -21,7 +21,7 @@ body {
 }
 
 @layer utilities {
-  /* Chrome, Safari and Opera */
+  /* Utility classes for hiding scrollbars */
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
@@ -31,10 +31,38 @@ body {
     scrollbar-width: none; /* Firefox */
   }
 
-  .selector-container {
-    width: 400px; /* Or any suitable fixed width */
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  /* Custom scrollbars */
+  .custom-scrollbar {
+    scrollbar-color: #5c6bc0 transparent;
+    scrollbar-width: thin; /* For Firefox */
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px; /* Adjust width as needed */
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #5c6bc0; /* Scrollbar color */
+    border-radius: 8px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: #3e4e94; /* Hover color */
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent; /* Track color */
+  }
+
+  /* Smooth drop-in animation */
+  @keyframes drop-in {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }

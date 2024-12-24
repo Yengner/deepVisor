@@ -90,7 +90,7 @@ export const upsertCampaigns = async (campaigns: any[]) => {
   const { data, error } = await supabase
     .from('campaigns')
     .upsert(campaigns, {
-      onConflict: 'campaign_id', // Use an array if there are multiple unique columns
+      onConflict: 'campaign_id', 
     });
 
   if (error) {
