@@ -14,8 +14,7 @@ export default function ClientDashboard({ dashboardData }: { dashboardData: any 
   const [activeTab, setActiveTab] = useState('account');
 
   const {metrics, topCampaigns, performanceMetrics, accountInfo, ageGenderMetrics, hourlyBreakdown } = dashboardData;
-  console.log(metrics)
-  console.log(performanceMetrics)
+
   return (
     <div className="p-2 space-y-8">
       <section className="rounded-lg p-3">

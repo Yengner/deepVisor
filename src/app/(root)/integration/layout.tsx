@@ -5,7 +5,7 @@ import TopBar from '@/components/TopBar';
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="flex flex-col flex-1">
+    <div className="flex flex-col h-screen">
       {/* TopBar with Selector */}
       <TopBar/>
       

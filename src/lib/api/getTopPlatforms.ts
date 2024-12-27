@@ -1,64 +1,84 @@
 import { createSupabaseClient } from "../utils/supabase/clients/server";
 
 interface AggregatedMetric {
-  id: string;
-  user_id: string;
-  platform: string;
-  spend: number;
-  leads: number;
-  ctr: number;
-  link_clicks: number;
-  impressions: number;
-  messages: number;
-  previous_performance_score: number; // Add previous performance score to the interface
+  platform_integration_id: string;
+  total_spend: number;
+  total_leads: number;
+  total_clicks: number;
+  total_ctr: number;
+  total_link_clicks: number;
+  total_impressions: number;
+  total_messages: number;
+  platform_name: string; // Retrieved from the joined table
 }
 
 export async function getTopPlatforms(userId: string) {
   const supabase = await createSupabaseClient();
 
-  const { data, error } = await supabase
-    .from('aggregated_metrics')
-    .select('*')
-    .eq('user_id', userId);
+  try {
+    const { data, error } = await supabase
+      .from('platform_aggregated_metrics')
+      .select(`
+        platform_integration_id,
+        total_spend,
+        total_leads,
+        total_messages,
+        total_clicks,
+        total_link_clicks,
+        total_ctr,
+        total_impressions,
+        platform_integrations (
+          user_id,
+          platform_name
+        )
+      `)
+      .eq('platform_integrations.user_id', userId);
 
-  if (error) {
-    console.error('Error fetching aggregated metrics:', error.message);
-    throw new Error('Failed to fetch aggregated metrics');
-  }
+    if (error) {
+      console.error('Error fetching aggregated metrics:', error.message);
+      throw new Error('Failed to fetch aggregated metrics');
+    }
 
-  if (!data || data.length === 0) {
-    throw new Error('No aggregated metrics found');
-  }
+    if (!data || data.length === 0) {
+      throw new Error('No aggregated metrics found');
+    }
 
-  const topPlatform = {
-    leads: getBestPlatform(data, 'leads'),
-    ctr: getBestPlatform(data, 'ctr'),
-    link_clicks: getBestPlatform(data, 'link_clicks'),
-    impressions: getBestPlatform(data, 'impressions'),
-    messages: getBestPlatform(data, 'messages'),
-  };
+    // Normalize data and handle missing values
+    const normalizedData: AggregatedMetric[] = data.map((item: any) => ({
+      platform_integration_id: item.platform_integration_id,
+      total_spend: item.total_spend || 0,
+      total_leads: item.total_leads || 0,
+      total_clicks: item.total_clicks || 0,
+      total_ctr: item.total_ctr || 0,
+      total_link_clicks: item.total_link_clicks || 0,
+      total_impressions: item.total_impressions || 0,
+      total_messages: item.total_messages || 0,
+      platform_name: item.platform_integrations?.platform_name || 'Unknown',
+    }));
 
-  // Normalize and calculate performance scores
-  const platformsWithScores = data.map((platform) => {
-    const currentScore = calculatePerformanceScore(platform, data);
-    const previousScore = platform.previous_performance_score;
 
-    return {
-      ...platform,
-      performanceScore: currentScore,
-      percentageChange:
-        previousScore && previousScore !== 0
-          ? ((currentScore - previousScore) / previousScore) * 100
-          : null, // Return null if previous score is invalid or 0
+    // Determine the best platforms by each metric
+    const topPlatform = {
+      leads: getBestPlatform(normalizedData, 'total_leads'),
+      ctr: getBestPlatform(normalizedData, 'total_ctr'),
+      link_clicks: getBestPlatform(normalizedData, 'total_link_clicks'),
+      impressions: getBestPlatform(normalizedData, 'total_impressions'),
+      messages: getBestPlatform(normalizedData, 'total_messages'),
     };
-  });
 
-  // Sort by performance score and get the top 5 platforms
-  const topPlatforms = platformsWithScores.sort((a, b) => b.performanceScore - a.performanceScore).slice(0, 5);
-  return { metrics: data, topPlatform, topPlatforms };
+    // Sort the platforms by total leads or another primary metric
+    const topPlatforms = normalizedData
+      .sort((a, b) => b.total_leads - a.total_leads)
+      .slice(0, 5);
+
+    return { metrics: normalizedData, topPlatform, topPlatforms };
+  } catch (error) {
+    console.error('Error in getTopPlatforms function:', error);
+    throw error;
+  }
 }
 
-// Check for best platform based on each metric in the supabse table
+// Determine the best platform based on a specific metric
 function getBestPlatform(data: AggregatedMetric[], metric: keyof AggregatedMetric) {
   return data.reduce((best, current) => {
     if (current[metric] > (best[metric] ?? -Infinity)) {
@@ -66,39 +86,4 @@ function getBestPlatform(data: AggregatedMetric[], metric: keyof AggregatedMetri
     }
     return best;
   }, {} as AggregatedMetric);
-}
-
-function calculatePerformanceScore(platform: AggregatedMetric, data: AggregatedMetric[]): number {
-  const weights = {
-    spend: 0.3,        // Weight for spend
-    leads: 0.5,        // Weight for leads
-    messages: 0.5,     // Weight for messages
-    link_clicks: 0.4,  // Weight for link clicks
-    ctr: 0.2,          // Weight for click-through rate
-    impressions: 0.1,  // Weight for impressions
-  };
-
-  // Get maximum values for each metric to normalize scores
-  const maxValues = {
-    spend: Math.max(...data.map((p) => p.spend)),
-    leads: Math.max(...data.map((p) => p.leads)),
-    messages: Math.max(...data.map((p) => p.messages)),
-    link_clicks: Math.max(...data.map((p) => p.link_clicks)),
-    ctr: Math.max(...data.map((p) => p.ctr)),
-    impressions: Math.max(...data.map((p) => p.impressions)),
-  };
-
-  // Calculate normalized score for each metric
-  const normalizedScore = (metric: keyof typeof weights) =>
-    maxValues[metric] > 0 ? (platform[metric] / maxValues[metric]) * 100 : 0;
-
-  // Aggregate normalized scores using weights
-  return (
-    normalizedScore('spend') * weights.spend +
-    normalizedScore('leads') * weights.leads +
-    normalizedScore('messages') * weights.messages +
-    normalizedScore('link_clicks') * weights.link_clicks +
-    normalizedScore('ctr') * weights.ctr +
-    normalizedScore('impressions') * weights.impressions
-  ) / Object.values(weights).reduce((sum, weight) => sum + weight, 0); // Normalize total score to 0–100
 }

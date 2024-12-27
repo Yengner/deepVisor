@@ -1,20 +1,51 @@
+import { createSupabaseClient } from "../utils/supabase/clients/server";
+
 interface PlatformOverview {
-    name: string;
-    totalSpend: number;
-    leads: number;
-    impressions: number;
-    clicks: number;
-  }
+  name: string;
+  totalSpend: number;
+  leads: number;
+  impressions: number;
+  clicks: number;
+  messages: number;
+  conversions: number;
+  ctr: number;
+  cpm: number;
+  cpc: number;
+}
+
+
+export async function fetchPlatformData(platformIntegrationId: string): Promise<PlatformOverview | null> {
+  const supabase = await createSupabaseClient();
+
   
-  export async function fetchPlatformData(platform: string): Promise<PlatformOverview> {
-    // Simulate fetching overview data for a platform
-    // Replace this with actual API calls to fetch platform-specific data
-    const mockData = {
-      facebook: { name: 'Facebook', totalSpend: 1500, leads: 200, impressions: 50000, clicks: 1000 },
-      tiktok: { name: 'TikTok', totalSpend: 1200, leads: 150, impressions: 30000, clicks: 800 },
-      instagram: { name: 'Instagram', totalSpend: 1800, leads: 250, impressions: 60000, clicks: 1200 },
+  try {
+    // Fetch platform data from `platform_aggregated_metrics`
+    const { data, error } = await supabase
+      .from('platform_aggregated_metrics')
+      .select('*')
+      .eq('platform_integration_id', platformIntegrationId)
+      .single();
+
+    if (error || !data) {
+      console.error('Error fetching platform data:', error);
+      return null;
+    }
+
+    // Return formatted platform overview
+    return {
+      name: platformIntegrationId, // Assuming the platform name is not stored in the metrics table
+      totalSpend: data.total_spend || 0,
+      leads: data.total_leads || 0,
+      messages: data.total_messages || 0,
+      clicks: data.total_clicks || 0,
+      conversions: data.total_conversions || 0,
+      impressions: data.total_impressions || 0,
+      ctr: data.total_ctr || 0,
+      cpm: data.total_cpm || 0,
+      cpc: data.total_cpc || 0,
     };
-  
-    return mockData[platform] || { name: platform, totalSpend: 0, leads: 0, impressions: 0, clicks: 0 };
+  } catch (err) {
+    console.error('Unexpected error fetching platform data:', err);
+    return null;
   }
-  
+}

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { createClient } from '@/lib/utils/supabase/clients/browser';
 
 const FacebookBusinessIntegration = () => {
   const [error, setError] = useState('');
@@ -34,26 +35,63 @@ const FacebookBusinessIntegration = () => {
 };
 
 interface MetaIntegrationProps {
+  platformName: string;
+  userId: string;
   isIntegrated: boolean;
 }
 
-const MetaIntegration: React.FC<MetaIntegrationProps> = ({ isIntegrated }) => {
+const MetaIntegration: React.FC<MetaIntegrationProps> = ({ platformName, userId, isIntegrated, }) => {
+  const supabase = createClient();
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+
+  const handleUnintegrate = async () => {
+    setStatus('loading');
+
+    try {
+      const { error } = await supabase
+        .from('platform_integrations')
+        .delete()
+        .eq('platform_name', platformName)
+        .eq('user_id', userId);
+
+      if (error) {
+        console.error(`Failed to unintegrate ${platformName}:`, error);
+        setStatus('error');
+        alert(`Failed to unintegrate ${platformName}: ${error.message}`);
+        return;
+      }
+
+      setStatus('success');
+      alert(`${platformName} has been successfully unInstalled.`);
+      window.location.reload(); // Refresh page to reflect changes
+    } catch (err) {
+      console.error(`Unexpected error unintegrating ${platformName}:`, err);
+      setStatus('error');
+      alert(`Unexpected error unintegrating ${platformName}.`);
+    }
+  };
 
   if (isIntegrated) {
     return (
-      <div className="text-emerald-600">
-        <p>Meta is already integrated!</p>
+      <div>
+        <div className="text-emerald-600 flex flex-col">
+          <p>Meta is already integrated!</p>
+          <button
+            onClick={handleUnintegrate}
+            disabled={status === 'loading'}
+            className={`bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 ${status === 'loading' ? 'opacity-50' : ''}`}
+          >
+            {status === 'loading' ? 'Unintegrating...' : 'Uninstall'}
+          </button>
+        </div>
       </div>
     );
   }
 
   return (
     <div>
-      <h3 className="text-xl font-semibold mb-4">Meta Integration</h3>
       <FacebookBusinessIntegration />
     </div>
   );
 };
-
 export default MetaIntegration;

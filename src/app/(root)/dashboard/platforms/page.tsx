@@ -20,9 +20,9 @@ export default async function DashboardPage() {
   const userId = '6d9a0842-3887-43a0-8909-16589f8eae2a';
 
   const platforms = await fetchIntegratedPlatforms(userId);
-  const platformDataPromises = platforms.map((p) => fetchPlatformData(p.platform));
-  const platformData = await Promise.all(platformDataPromises);
-  const { metrics, topPlatform, topPlatforms} = await getTopPlatforms(userId);
+  // const platformDataPromises = platforms.map((p) => fetchPlatformData(p.platform));
+  // const platformData = await Promise.all(platformDataPromises);
+  const { metrics, topPlatform, topPlatforms } = await getTopPlatforms(userId);
 
   const campaignsData = [
     {
@@ -114,6 +114,7 @@ export default async function DashboardPage() {
   return (
     <div className="space-y-8">
       {/* Dashboard Header */}
+
       {/* Integrated Platforms & Spend Breakdown */}
       <div className="grid grid-cols-1 lg:grid-cols-7 gap-6 ">
 
@@ -134,14 +135,14 @@ export default async function DashboardPage() {
         </div>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <TopPlatforms platforms={ topPlatforms } />
+        <TopPlatforms platforms={topPlatforms} />
       </div>
 
       {/* Top Campaigns and Featured Campaigns */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <TopCampaigns campaigns={topCampaigns} />
         <SpendBreakdownChart metrics={metrics} />
-        <LeadsComparisonChart metrics={metrics.map(({ platform, leads }) => ({ platform, leads }))} />
+        <LeadsComparisonChart metrics={metrics.map(({ platform_name, total_leads }) => ({ platform_name, total_leads }))} />
 
       </div>
 

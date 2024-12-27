@@ -18,13 +18,14 @@ export async function GET(request: Request) {
     const tokenUrl = `https://graph.facebook.com/v20.0/oauth/access_token?client_id=${appId}&redirect_uri=${redirectUri}&client_secret=${appSecret}&code=${code}`;
     const response = await fetch(tokenUrl);
 
+    const date = new Date().toLocaleString('en-US', { timeZone: 'America/New_York' });
+
     if (!response.ok) {
       const errorDetails = await response.json();
       throw new Error(errorDetails.error?.message || 'Failed to fetch access token');
     }
 
     const tokenData = await response.json();
-    console.log('Access token data:', tokenData);
 
     if (!tokenData.access_token) {
       throw new Error('Access token is missing in the response');
@@ -34,14 +35,14 @@ export async function GET(request: Request) {
     const integrationDetails = {
         access_token: tokenData.access_token,
         token_type: tokenData.token_type || null,
-        issued_at: new Date().toISOString(),
+        issued_at: date,
       };
 
     // Get the Supabase client
     const supabase = await createSupabaseClient();
 
     // Simulate getting user_id from session or authenticated context
-    const userId = '6d9a0842-3887-43a0-8909-16589f8eae2a'; // Replace with actual user logic
+    const userId = '6d9a0842-3887-43a0-8909-16589f8eae2a'; 
 
     // Upsert into the platform_integration table
     const upsertData = {
@@ -50,8 +51,8 @@ export async function GET(request: Request) {
       access_token: tokenData.access_token,
       is_integrated: true,
       integration_details: integrationDetails,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
+      created_at: date,
+      updated_at: date,
     };
 
     const { data, error } = await supabase
@@ -82,12 +83,13 @@ export async function GET(request: Request) {
     const adAccounts = adAccountsData.data.map((account: any) => ({
       user_id: userId,
       platform_integration_id: platformIntegrationId, // Assuming 1 integration per user for simplicity
-      platform_ad_account_id: account.id,
+      ad_account_id: account.id,
+      platform_name: 'meta',
       name: account.name,
       account_status: account.account_status,
       spend_amount: account.amount_spent,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
+      created_at: date,
+      updated_at: date,
     }));
 
     const { error: adAccountsError } = await supabase

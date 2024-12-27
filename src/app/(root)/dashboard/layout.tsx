@@ -14,7 +14,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
       <div className="flex flex-1 overflow-hidden">
         {/* Page Content */}
         <main
-          className="flex-1 overflow-y-auto p-6 bg-gradient-to-b from-[#f1e9f9] via-[#f8f8fa] to-[#e7edf7] custom-scrollbar"
+          className="flex-1 overflow-y-auto p-6 bg-[#f8f8fa] custom-scrollbar"
         >
           {children}
         </main>

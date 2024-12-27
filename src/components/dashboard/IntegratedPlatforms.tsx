@@ -14,7 +14,7 @@ const IntegratedPlatforms = ({ platforms }: IntegratedPlatformsProps) => {
       {platforms.map((platform) => (
         <div
           key={platform.platform}
-          className="flex flex-col justify-center p-4 border rounded shadow bg-white "
+          className="flex flex-col justify-center p-4 border rounded shadow-md bg-[white] "
         >
           <img
             src={`/${platform.platform}.png`} // Replace with appropriate icon paths
@@ -33,7 +33,7 @@ const IntegratedPlatforms = ({ platforms }: IntegratedPlatformsProps) => {
       {/* Quick Add Integration Card */}
       <div
         onClick={() => router.push('/integration')}
-        className="flex flex-col items-center justify-center p-4 border rounded shadow bg-white cursor-pointer hover:bg-gray-100 transition"
+        className="flex flex-col items-center justify-center p-4 border rounded shadow-md bg-white cursor-pointer hover:bg-gray-100 transition"
       >
         <div className="flex items-center justify-center h-12 w-12 bg-gray-200 rounded-full">
           <svg

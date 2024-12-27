@@ -3,7 +3,7 @@
 import ReactApexChart from 'react-apexcharts';
 
 interface SpendBreakdownChartProps {
-  metrics: { platform: string; spend: number }[];
+  metrics: { platform_name: string; total_spend: number }[];
 }
 
 const SpendBreakdownChart = ({ metrics }: SpendBreakdownChartProps) => {
@@ -14,7 +14,7 @@ const SpendBreakdownChart = ({ metrics }: SpendBreakdownChartProps) => {
         show: false, // Hide unnecessary toolbar
       },
     },
-    labels: metrics.map((m) => m.platform),
+    labels: metrics.map((m) => m.platform_name),
     legend: {
       position: 'bottom', // Move legend to the right for a cleaner look
       fontSize: '14px',
@@ -42,7 +42,7 @@ const SpendBreakdownChart = ({ metrics }: SpendBreakdownChartProps) => {
     },
   };
 
-  const chartSeries = metrics.map((m) => m.spend);
+  const chartSeries = metrics.map((m) => m.total_spend);
 
   return (
     <div className="bg-white shadow rounded-lg p-6">

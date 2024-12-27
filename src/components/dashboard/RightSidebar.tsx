@@ -10,7 +10,7 @@ const RightSidebar = () => {
     const router = useRouter();
 
     const platforms = [
-        { id: 'facebook', name: 'Facebook', image: '/facebook.png' },
+        { id: 'meta', name: 'Meta', image: '/meta.png' },
         { id: 'instagram', name: 'Instagram', image: '/instagram.png' },
         { id: 'tiktok', name: 'TikTok', image: '/tiktok.png' },
     ];
@@ -25,7 +25,7 @@ const RightSidebar = () => {
     const [platformDropdowns, setPlatformDropdowns] = useState<Record<string, boolean>>({});
     const [selectedPlatform, setSelectedPlatform] = useState<string | null>(null);
     const [adAccounts, setAdAccounts] = useState<
-        Array<{ ad_account_id: string; platform: string; name: string }>
+        Array<{ ad_account_id: string; platform_name: string; name: string }>
     >([]);
     const [isLoading, setIsLoading] = useState(false);
 

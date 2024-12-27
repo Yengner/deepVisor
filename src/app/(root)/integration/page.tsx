@@ -44,15 +44,8 @@ const IntegrationPage = async () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <header className="bg-emerald-600 text-white p-6 shadow-md">
-        <h1 className="text-3xl font-bold">Integrations</h1>
-        <p className="text-sm mt-2">
-          Connect your advertising platforms to manage and analyze your campaigns.
-        </p>
-      </header>
-      <main className="p-6 max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="bg-gray-100">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
           {platforms.map((platform) => (
             <div
               key={platform.id}
@@ -66,7 +59,7 @@ const IntegrationPage = async () => {
               <h2 className="text-xl font-semibold">{platform.name}</h2>
               <p className="text-sm text-gray-500 text-center">{platform.description}</p>
               {platform.id === 'meta' && (
-                <MetaIntegration isIntegrated={platform.isIntegrated} />
+                <MetaIntegration platformName={platform.name.toLowerCase()} userId={"6d9a0842-3887-43a0-8909-16589f8eae2a"}isIntegrated={platform.isIntegrated} />
               )}
               {/* Future components for other platforms */}
               {/* {platform.id === 'tiktok' && <TikTokIntegration isIntegrated={platform.isIntegrated} />} */}
@@ -74,7 +67,6 @@ const IntegrationPage = async () => {
             </div>
           ))}
         </div>
-      </main>
     </div>
   );
 };

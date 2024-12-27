@@ -38,7 +38,7 @@ Deno.serve(async () => {
       // Fetch all ad accounts for the platform
       const { data: adAccounts, error: adAccountError } = await supabase
         .from("ad_accounts")
-        .select("id, platform_ad_account_id")
+        .select("id, ad_account_id")
         .eq("platform_integration_id", platform.id);
 
       if (adAccountError || !adAccounts || adAccounts.length === 0) {
@@ -47,23 +47,24 @@ Deno.serve(async () => {
       }
 
       for (const account of adAccounts) {
-        console.log(`Processing ad account: ${account.platform_ad_account_id}`);
+        console.log(`Processing ad account: ${account.ad_account_id}`);
 
         try {
           const metrics = await fetchAggregatedMetrics(
             platform.platform_name,
-            account.platform_ad_account_id,
+            account.ad_account_id,
             platform.access_token
           );
 
           console.log("Metrics fetched:", metrics);
+          const date = new Date().toLocaleString('en-US', { timeZone: 'America/New_York' });
 
           // Update ad account with aggregated metrics
           const { error: updateError } = await supabase
             .from("ad_accounts")
             .update({
               aggregated_metrics: metrics,
-              last_synced: new Date().toISOString(),
+              last_synced: date,
             })
             .eq("id", account.id);
 
@@ -75,7 +76,7 @@ Deno.serve(async () => {
             successCount++;
           }
         } catch (fetchError) {
-          console.error(`Error fetching metrics for ad account: ${account.platform_ad_account_id}`, fetchError);
+          console.error(`Error fetching metrics for ad account: ${account.ad_account_id}`, fetchError);
           failureCount++;
         }
       }

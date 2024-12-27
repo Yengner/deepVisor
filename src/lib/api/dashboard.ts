@@ -14,10 +14,10 @@ export const fetchDashboardMetrics = async (platform: string, adAccountId: strin
   const userId = '6d9a0842-3887-43a0-8909-16589f8eae2a';
 
   const { data, error } = await supabase
-    .from('access_tokens')
+    .from('platform_integrations')
     .select('access_token')
     .eq('user_id', userId)
-    .eq('platform', platform)
+    .eq('platform_name', platform)
     .single();
 
   if (error || !data) {
