@@ -18,9 +18,6 @@ const Recommendations = ({ recommendations }: RecommendationsProps) => {
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold text-gray-800">AI Recommendations</h2>
         <button className="text-gray-400 hover:text-gray-600">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
-            <path d="M6 10a2 2 0 114 0 2 2 0 01-4 0zM10 10a2 2 0 104 0 2 2 0 00-4 0zM14 10a2 2 0 114 0 2 2 0 01-4 0z" />
-          </svg>
         </button>
       </div>
 

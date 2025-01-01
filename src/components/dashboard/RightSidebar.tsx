@@ -58,42 +58,41 @@ const RightSidebar = () => {
             <h2 className="text-xl font-bold text-gray-700 mb-6">Navigation</h2>
 
             {/* Overview Button */}
-            <div className="mb-6">
+            <div className="mb-8">
                 <button
                     onClick={() => handleNavigation('/dashboard')}
                     className={`relative block w-full px-4 py-3 rounded-md text-gray-700 font-semibold text-center ${isCurrentPage('/dashboard') ? 'bg-[#e7f6f2]' : ''
                         }`}
                 >
                     {isCurrentPage('/dashboard') && (
-                        <span className="absolute left-0 top-0 bottom-0 w-1 bg-[#68beaf] rounded"></span>
+                        <span className="absolute left-[-2px] top-0 bottom-0 w-1 bg-[#68beaf] rounded"></span>
                     )}
-                    Overview
+                    <span className='text-lg'>Overview</span>
                 </button>
             </div>
 
             {/* Platforms Section */}
-            <div className="mb-10 border-l-2 border-gray-200">
+            <div className="mb-10 border-l-2 pb-4 pt-1 border-gray-200 ">
                 <button
                     onClick={() => handleNavigation('/dashboard/platforms')}
                     className={`relative flex items-center w-full px-4 py-3 rounded-md text-gray-700 font-semibold ${isCurrentPage('/dashboard/platforms') ? 'bg-[#e7f6f2]' : ''}`}
-                    style={{ width: 'fit-content', minWidth: '200px' }} // Ensures the button is large enough
+                    style={{ width: 'fit-content' }} // Ensures the button is large enough
                 >
                     {isCurrentPage('/dashboard/platforms') && (
-                        <span className="absolute left-0 top-0 bottom-0 w-1 bg-[#68beaf] rounded"></span>
+                        <span className="absolute left-[-2px] top-0 bottom-0 w-1 bg-[#68beaf] rounded"></span>
                     )}
                     <span className="truncate">Platforms Overview</span>
                 </button>
 
-                <div className="ml-4 mt-3 space-y-3 border-l-2 border-gray-200 pl-2">
+                <div className="ml-4 mt-3 space-y-3 border-l-2 border-gray-200 pl-0 relative">
                     {platforms.map((platform) => (
                         <button
                             key={platform.platform_name}
                             onClick={() => handleNavigation(`/dashboard/platforms/${platform.platform_name}`)}
-                            className={`relative flex items-center w-full px-4 py-2 rounded-lg text-gray-700 font-semibold ${isCurrentSubPage(`/dashboard/platforms/${platform.platform_name}`) ? 'bg-[#e7f6f2]' : ''
-                                }`}
+                            className={`relative flex items-center w-full px-4 py-2 rounded-lg text-gray-700 font-semibold ${isCurrentSubPage(`/dashboard/platforms/${platform.platform_name}`) ? 'bg-[#e7f6f2]' : ''}`}
                         >
                             {isCurrentSubPage(`/dashboard/platforms/${platform.platform_name}`) && (
-                                <span className="absolute left-0 top-0 bottom-0 w-1 bg-[#68beaf] rounded"></span>
+                                <span className="absolute left-[-2px] top-0 bottom-0 w-1 bg-[#68beaf] rounded"></span>
                             )}
                             <img
                                 src={`/${platform.platform_name}.png`} // Replace with appropriate icon paths

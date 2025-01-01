@@ -33,16 +33,16 @@ export async function GET(request: Request) {
 
     // Extract additional token details
     const integrationDetails = {
-        access_token: tokenData.access_token,
-        token_type: tokenData.token_type || null,
-        issued_at: date,
-      };
+      access_token: tokenData.access_token,
+      token_type: tokenData.token_type || null,
+      issued_at: date,
+    };
 
     // Get the Supabase client
     const supabase = await createSupabaseClient();
 
     // Simulate getting user_id from session or authenticated context
-    const userId = '6d9a0842-3887-43a0-8909-16589f8eae2a'; 
+    const userId = '6d9a0842-3887-43a0-8909-16589f8eae2a';
 
     // Upsert into the platform_integration table
     const upsertData = {
@@ -56,10 +56,10 @@ export async function GET(request: Request) {
     };
 
     const { data, error } = await supabase
-        .from('platform_integrations')
-        .upsert(upsertData)
-        .select('id')
-        .single();
+      .from('platform_integrations')
+      .upsert(upsertData)
+      .select('id')
+      .single();
 
     if (error || !data) throw new Error('Failed to save platform integration');
 
@@ -82,7 +82,7 @@ export async function GET(request: Request) {
     // Save ad accounts in the database
     const adAccounts = adAccountsData.data.map((account: any) => ({
       user_id: userId,
-      platform_integration_id: platformIntegrationId, // Assuming 1 integration per user for simplicity
+      platform_integration_id: platformIntegrationId,
       ad_account_id: account.id,
       platform_name: 'meta',
       name: account.name,
@@ -93,14 +93,14 @@ export async function GET(request: Request) {
     }));
 
     const { error: adAccountsError } = await supabase
-        .from('ad_accounts')
-        .upsert(adAccounts);
+      .from('ad_accounts')
+      .upsert(adAccounts);
 
     if (adAccountsError) {
-        console.error('Supabase ad account upsert error:', adAccountsError);
-        throw new Error('Failed to save ad accounts to Supabase');
-      }
-      
+      console.error('Supabase ad account upsert error:', adAccountsError);
+      throw new Error('Failed to save ad accounts to Supabase');
+    }
+
     // Redirect to the success page with a query parameter for the ad accounts
     const adAccountsEncoded = encodeURIComponent(JSON.stringify(adAccountsData.data));
     return NextResponse.redirect(
@@ -109,6 +109,8 @@ export async function GET(request: Request) {
 
   } catch (error) {
     console.error('Error during Meta OAuth callback:', error);
-    return NextResponse.json({ error: 'Failed to handle Meta OAuth callback' }, { status: 500 });
+    return NextResponse.redirect(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/integration/meta/unsuccessful`
+    );
   }
 }
