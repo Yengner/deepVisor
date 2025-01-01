@@ -17,6 +17,7 @@ Deno.serve(async () => {
       .select(`
         ad_account_id,
         name,
+        industry_id,
         platform_integration_id,
         platform_integrations (
           access_token,
@@ -41,19 +42,34 @@ Deno.serve(async () => {
 
       try {
         // Fetch and upsert campaigns
-        const campaigns = await fetchCampaignMetricsByPlatform(adAccount.platform_integrations.platform_name, adAccount.ad_account_id, adAccount.platform_integrations.access_token);
-        if (campaigns.length > 0) {
+        const { maximumMetrics, additionalMetrics } = await fetchCampaignMetricsByPlatform(adAccount.platform_integrations.platform_name, adAccount.ad_account_id, adAccount.platform_integrations.access_token, adAccount.industry_id);
+
+        if (maximumMetrics && maximumMetrics.length > 0) {
+          const campaignsToUpsert = maximumMetrics.map((campaign) => (
+            {
+            ...campaign,
+            today_metrics: additionalMetrics['today_metrics']?.find((c) => c.campaign_id === campaign.campaign_id) || null,
+            yesterday_metrics: additionalMetrics['yesterday_metrics']?.find((c) => c.campaign_id === campaign.campaign_id) || null,
+            last_7d_metrics: additionalMetrics['last_7d_metrics']?.find((c) => c.campaign_id === campaign.campaign_id) || null,
+            last_30d_metrics: additionalMetrics['last_30d_metrics']?.find((c) => c.campaign_id === campaign.campaign_id) || null,
+            this_month_metrics: additionalMetrics['this_month_metrics']?.find((c) => c.campaign_id === campaign.campaign_id) || null,
+            last_month_metrics: additionalMetrics['last_month_metrics']?.find((c) => c.campaign_id === campaign.campaign_id) || null,
+          }));
+        
+          console.log(campaignsToUpsert)
           const { error: campaignsError } = await supabase
             .from("campaign_metrics")
-            .upsert(campaigns, { onConflict: ["campaign_id"] }); // Ensure campaign_id is unique
+            .upsert(campaignsToUpsert, { onConflict: ["campaign_id"] }); // Ensure campaign_id is unique
+        
           if (campaignsError) throw campaignsError;
-          console.log(`Upserted ${campaigns.length} campaigns for ad account: ${adAccount.name}`);
+        
+          console.log(`Upserted ${campaignsToUpsert.length} campaigns for ad account: ${adAccount.name}`);
         }
-
-        for (const campaign of campaigns) {
+        
+        for (const campaign of maximumMetrics) {
           // Fetch and upsert ad sets
           console.log(`Fetching ad sets for campaign: ${campaign.name}, platform: ${adAccount.platform_integrations.platform_name}, campaign_id: ${campaign.campaign_id}, access_token: ${adAccount.platform_integrations.access_token}`);
-          const adSets = await fetchAdSetMetricsByPlatform(adAccount.platform_integrations.platform_name, campaign.campaign_id, adAccount.platform_integrations.access_token);
+          const adSets = await fetchAdSetMetricsByPlatform(adAccount.platform_integrations.platform_name, campaign.campaign_id, adAccount.platform_integrations.access_token, adAccount.industry_id);
           if (adSets.length > 0) {
             const { error: adSetsError } = await supabase
               .from("adset_metrics")
@@ -64,7 +80,7 @@ Deno.serve(async () => {
 
           for (const adSet of adSets) {
             // Fetch and upsert ads
-            const ads = await fetchAdMetricsByPlatform(adAccount.platform_integrations.platform_name, adSet.adset_id, adAccount.platform_integrations.access_token);
+            const ads = await fetchAdMetricsByPlatform(adAccount.platform_integrations.platform_name, adSet.adset_id, adAccount.platform_integrations.access_token, adAccount.industry_id);
             if (ads.length > 0) {
               const { error: adsError } = await supabase
                 .from("ad_metrics")

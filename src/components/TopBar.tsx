@@ -2,7 +2,6 @@
 
 import { useGlobalState } from '@/lib/store/globalState';
 import { usePathname, useRouter } from 'next/navigation';
-import PlatformAdAccountSelector from './Platform&AdAccountSelector';
 
 const TopBar = () => {
   const { toggleSidebar } = useGlobalState();
@@ -31,7 +30,7 @@ const TopBar = () => {
 
 
   return (
-    <div className="flex justify-between items-center px-10 py-4 bg-[#5c6bc0] shadow-lg h-auto">
+    <div className="flex justify-between items-center px-10 py-4 bg-[#238879] shadow-lg h-auto">
       {/* Left Section: Burger Menu and Logo */}
       <div className="flex items-center gap-8">
         {/* Burger Menu */}

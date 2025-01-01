@@ -20,7 +20,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
         </main>
 
         {/* Right Sidebar */}
-        <div className="w-60 h-full">
+        <div className="max-w-52 h-full">
           <RightSidebar />
         </div>
       </div>

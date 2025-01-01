@@ -10,56 +10,21 @@ import Recommendations from '@/components/dashboard/Recommendations';
 import SpendBreakdownChart from '@/components/dashboard/SpendBreakdownChart';
 import LeadsComparisonChart from '@/components/dashboard/LeadsComparisonChart';
 import MetricsTable from '@/components/dashboard/MetricsTable';
-import PlatformCampaigns from '@/components/dashboard/FeaturedCampaigns';
+import FeaturedCampaigns from '@/components/dashboard/FeaturedCampaigns';
 import TopPlatforms from '@/components/dashboard/TopPlatforms';
 import TopPlatformCard from '@/components/dashboard/TopPlatform';
 import CampaignCreation from '@/components/dashboard/CampaignCreation';
 import { getTopPlatforms } from '@/lib/api/getTopPlatforms';
+import { getTopCampaignsForPlatforms } from '@/lib/api/platforms/fetchFeaturedCampaigns';
 
 export default async function DashboardPage() {
   const userId = '6d9a0842-3887-43a0-8909-16589f8eae2a';
 
   const platforms = await fetchIntegratedPlatforms(userId);
+  const featuredPlatformsCampaigns = await getTopCampaignsForPlatforms(userId)
   // const platformDataPromises = platforms.map((p) => fetchPlatformData(p.platform));
   // const platformData = await Promise.all(platformDataPromises);
   const { metrics, topPlatform, topPlatforms } = await getTopPlatforms(userId);
-
-  const campaignsData = [
-    {
-      id: 'google',
-      name: 'Google',
-      campaigns: [
-        { title: 'AdWords Campaign A', status: 'Sent', conversion: '40%(1.2k)' },
-        { title: 'AdWords Campaign B', status: 'In Queue', conversion: '25%(800)' },
-        { title: 'AdWords Campaign C', status: 'Sent', conversion: '50%(2.4k)' },
-        { title: 'AdWords Campaign D', status: 'In Draft', conversion: '0.01%(1)' },
-        { title: 'AdWords Campaign E', status: 'Sent', conversion: '30%(900)' },
-      ],
-    },
-    {
-      id: 'facebook',
-      name: 'Facebook',
-      campaigns: [
-        { title: 'iPhone Giveaway', status: 'Sent', conversion: '37%(247)' },
-        { title: 'MacBook Giveaway', status: 'Sent', conversion: '18%(6.4k)' },
-        { title: 'Headset Giveaway', status: 'In Queue', conversion: '0%(0)' },
-        { title: 'AdSense', status: 'In Draft', conversion: '0.01%(1)' },
-        { title: 'Affiliation Program', status: 'Sent', conversion: '12%(2.6k)' },
-      ],
-    },
-    {
-      id: 'instagram',
-      name: 'Instagram',
-      campaigns: [
-        { title: 'Campaign A', status: 'Sent', conversion: '50%(3k)' },
-        { title: 'Campaign B', status: 'Sent', conversion: '20%(800)' },
-        { title: 'Campaign C', status: 'In Queue', conversion: '15%(400)' },
-        { title: 'Campaign D', status: 'Sent', conversion: '40%(1k)' },
-        { title: 'Campaign E', status: 'In Draft', conversion: '0%(0)' },
-      ],
-    },
-  ];
-
 
   const recommendationsData = [
     {
@@ -128,7 +93,7 @@ export default async function DashboardPage() {
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="lg:col-span-1">
-          <PlatformCampaigns platforms={campaignsData} />
+          <FeaturedCampaigns data={featuredPlatformsCampaigns} />
         </div>
         <div className='lg:col-span-1'>
           <Recommendations recommendations={recommendationsData} />
@@ -141,7 +106,7 @@ export default async function DashboardPage() {
       {/* Top Campaigns and Featured Campaigns */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <TopCampaigns campaigns={topCampaigns} />
-        <SpendBreakdownChart metrics={metrics} />
+        <PerformanceTrends data={trendsData} />
         <LeadsComparisonChart metrics={metrics.map(({ platform_name, total_leads }) => ({ platform_name, total_leads }))} />
 
       </div>
@@ -150,9 +115,8 @@ export default async function DashboardPage() {
 
       {/* Top Accounts and Leads Comparison */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <PerformanceTrends data={trendsData} />
+        <SpendBreakdownChart metrics={metrics} />
         <CampaignCreation />
-
       </div>
     </div>
   );

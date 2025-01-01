@@ -8,6 +8,9 @@ export default {
   ],
   theme: {
     extend: {
+      animation: {
+        'bounce-up': 'bounce-up 0.5s ease-in-out',
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",

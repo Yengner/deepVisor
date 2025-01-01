@@ -1,160 +1,117 @@
-'use client';
+'use client'
 
-import { useState } from 'react';
+
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ChevronDownIcon } from '@radix-ui/react-icons';
-import { ClipLoader } from 'react-spinners';
-import { fetchAdAccounts } from '@/lib/api/adAccounts';
+import { fetchIntegratedPlatforms } from '@/lib/api/fetchIntegratedPlatforms';
+import { createClient } from '@/lib/utils/supabase/clients/browser';
 
 const RightSidebar = () => {
+    const userId = '6d9a0842-3887-43a0-8909-16589f8eae2a';
     const router = useRouter();
+    const supabase = createClient();
 
-    const platforms = [
-        { id: 'meta', name: 'Meta', image: '/meta.png' },
-        { id: 'instagram', name: 'Instagram', image: '/instagram.png' },
-        { id: 'tiktok', name: 'TikTok', image: '/tiktok.png' },
-    ];
+    const [platforms, setPlatforms] = useState<{ platform_name: string; }[]>([]);
+    const [currentPage, setCurrentPage] = useState<string>('/dashboard'); // Track the current page
+    const [loading, setLoading] = useState(true);
+    const [openWebsites, setOpenWebsites] = useState(false);
+
+    useEffect(() => {
+        // setting current page based on the current URL
+        setCurrentPage(window.location.pathname);
+
+        const fetchPlatforms = async () => {
+            setLoading(true);
+            const { data, error } = await supabase
+                .from('platform_integrations')
+                .select('platform_name')
+                .eq('user_id', userId);
+
+            if (error) {
+                console.error('Error fetching platforms:', error.message);
+            } else {
+                setPlatforms(data || []);
+            }
+            setLoading(false);
+        };
+
+        fetchPlatforms();
+    }, [userId, supabase]);
 
     const websites = [
         { id: 'site1', name: 'My Website' },
         { id: 'site2', name: 'Another Site' },
     ];
 
-    const [openPlatforms, setOpenPlatforms] = useState(true);
-    const [openWebsites, setOpenWebsites] = useState(false);
-    const [platformDropdowns, setPlatformDropdowns] = useState<Record<string, boolean>>({});
-    const [selectedPlatform, setSelectedPlatform] = useState<string | null>(null);
-    const [adAccounts, setAdAccounts] = useState<
-        Array<{ ad_account_id: string; platform_name: string; name: string }>
-    >([]);
-    const [isLoading, setIsLoading] = useState(false);
-
-    const handlePlatformClick = async (platform: string) => {
-        setSelectedPlatform(platform);
-
-        if (!platformDropdowns[platform]) {
-            setIsLoading(true);
-            try {
-                const result = await fetchAdAccounts(platform);
-                setAdAccounts(result.adAccounts);
-            } catch (error) {
-                console.error('Failed to fetch ad accounts:', error);
-            } finally {
-                setIsLoading(false);
-            }
-        }
-
-        setPlatformDropdowns((prev) => ({
-            ...prev,
-            [platform]: !prev[platform],
-        }));
-    };
-
     const handleNavigation = (path: string) => {
+        setCurrentPage(path);
         router.push(path);
     };
+    
+    // Adjust logic for buttons:
+    const isCurrentPage = (path: string) => currentPage === path;
+    const isCurrentSubPage = (path: string) => currentPage.startsWith(path);
 
     return (
-        <div className=" bg-gradient-to-b from-[#f1e9f9] via-[#f8f8fa] to-[#e7edf7] shadow-md h-screen flex flex-col p-4 border-l border-gray-300">
-            <h2 className="text-xl font-bold text-gray-900 mb-6">Navigation</h2>
+        <div className="bg-white shadow-md h-screen flex flex-col p-4 border-l border-[#c5ddda]">
+            <h2 className="text-xl font-bold text-gray-700 mb-6">Navigation</h2>
 
             {/* Overview Button */}
             <div className="mb-6">
                 <button
                     onClick={() => handleNavigation('/dashboard')}
-                    className="block w-full px-4 py-3 rounded-lg bg-gradient-to-r from-white to-blue-50 text-gray-900 font-semibold text-center hover:bg-[#4b5bb1] shadow transition"
+                    className={`relative block w-full px-4 py-3 rounded-md text-gray-700 font-semibold text-center ${isCurrentPage('/dashboard') ? 'bg-[#e7f6f2]' : ''
+                        }`}
                 >
+                    {isCurrentPage('/dashboard') && (
+                        <span className="absolute left-0 top-0 bottom-0 w-1 bg-[#68beaf] rounded"></span>
+                    )}
                     Overview
                 </button>
             </div>
+
             {/* Platforms Section */}
-            <div className="mb-8">
+            <div className="mb-10 border-l-2 border-gray-200">
                 <button
-                    onClick={() => setOpenPlatforms(!openPlatforms)}
-                    className="flex items-center justify-between w-full px-4 py-3 rounded-lg bg-[#e7edf7] text-[#5c6bc0] font-semibold hover:bg-[#d6def7] shadow transition"
+                    onClick={() => handleNavigation('/dashboard/platforms')}
+                    className={`relative flex items-center w-full px-4 py-3 rounded-md text-gray-700 font-semibold ${isCurrentPage('/dashboard/platforms') ? 'bg-[#e7f6f2]' : ''}`}
+                    style={{ width: 'fit-content', minWidth: '200px' }} // Ensures the button is large enough
                 >
-                    Platforms
-                    <ChevronDownIcon
-                        className={`w-5 h-5 text-[#5c6bc0] transition-transform ${openPlatforms ? 'rotate-180' : 'rotate-0'
-                            }`}
-                    />
+                    {isCurrentPage('/dashboard/platforms') && (
+                        <span className="absolute left-0 top-0 bottom-0 w-1 bg-[#68beaf] rounded"></span>
+                    )}
+                    <span className="truncate">Platforms Overview</span>
                 </button>
-                {openPlatforms && (
-                    <div className="ml-4 mt-3 space-y-3">
+
+                <div className="ml-4 mt-3 space-y-3 border-l-2 border-gray-200 pl-2">
+                    {platforms.map((platform) => (
                         <button
-                            onClick={() => handleNavigation('/dashboard/platforms')}
-                            className="block w-full text-sm px-4 py-2 rounded-lg bg-gradient-to-r from-white to-blue-50 text-gray-900 font-semibold hover:bg-gray-100 shadow"
+                            key={platform.platform_name}
+                            onClick={() => handleNavigation(`/dashboard/platforms/${platform.platform_name}`)}
+                            className={`relative flex items-center w-full px-4 py-2 rounded-lg text-gray-700 font-semibold ${isCurrentSubPage(`/dashboard/platforms/${platform.platform_name}`) ? 'bg-[#e7f6f2]' : ''
+                                }`}
                         >
-                            Platforms Overview
+                            {isCurrentSubPage(`/dashboard/platforms/${platform.platform_name}`) && (
+                                <span className="absolute left-0 top-0 bottom-0 w-1 bg-[#68beaf] rounded"></span>
+                            )}
+                            <img
+                                src={`/${platform.platform_name}.png`} // Replace with appropriate icon paths
+                                alt={`${platform.platform_name} logo`}
+                                className="w-6 h-6 object-contain mr-3"
+                            />
+                            {platform.platform_name[0].toLocaleUpperCase() + platform.platform_name.slice(1)}
                         </button>
-
-                        {platforms.map((platform) => (
-                            <div key={platform.id} className="mb-3">
-                                <button
-                                    onClick={() => handlePlatformClick(platform.id)}
-                                    className="flex items-center justify-between w-full px-4 py-2 rounded-lg bg-white text-gray-800 font-semibold hover:bg-gray-100 shadow"
-                                >
-                                    <div className="flex items-center gap-3">
-                                        <img
-                                            src={platform.image}
-                                            alt={`${platform.name} logo`}
-                                            className="w-6 h-6 object-contain"
-                                        />
-                                        {platform.name}
-                                    </div>
-                                    <ChevronDownIcon
-                                        className={`w-5 h-5 text-gray-500 transition-transform ${platformDropdowns[platform.id] ? 'rotate-180' : 'rotate-0'
-                                            }`}
-                                    />
-                                </button>
-
-                                {platformDropdowns[platform.id] && (
-                                    <div className="ml-6 mt-2 space-y-2">
-                                        <button
-                                            onClick={() =>
-                                                handleNavigation(`/dashboard/platforms/${platform.id}`)
-                                            }
-                                            className="block w-full text-left px-4 py-2 text-sm font-semibold rounded-lg bg-gradient-to-r from-white to-blue-50 text-gray-900 hover:bg-[#e0e6ef] shadow-sm"
-                                        >
-                                            {platform.name} Overview
-                                        </button>
-
-                                        {isLoading ? (
-                                            <div className="flex items-center justify-center h-full">
-                                                <ClipLoader color="#5c6bc0" size={20} />
-                                            </div>
-                                        ) : adAccounts.length > 0 ? (
-                                            adAccounts.map((account) => (
-                                                <button
-                                                    key={account.ad_account_id}
-                                                    onClick={() =>
-                                                        handleNavigation(
-                                                            `/dashboard/platforms/${platform.id}/${account.ad_account_id}`
-                                                        )
-                                                    }
-                                                    className="block w-full text-left px-4 py-2 text-sm rounded-lg truncate bg-gradient-to-r from-purple-100 via-blue-50 to-blue-100 text-gray-900 hover:bg-[#eef1f5] shadow-sm"
-                                                >
-                                                    {account.name || account.ad_account_id}
-                                                </button>
-                                            ))
-                                        ) : (
-                                            <p className="text-gray-500 text-sm italic">
-                                                No ad accounts found for {platform.name}.
-                                            </p>
-                                        )}
-                                    </div>
-                                )}
-                            </div>
-                        ))}
-                    </div>
-                )}
+                    ))}
+                </div>
             </div>
 
             {/* Websites Section */}
             <div>
                 <button
                     onClick={() => setOpenWebsites(!openWebsites)}
-                    className="flex items-center justify-between w-full px-4 py-3 rounded-lg bg-[#e7edf7] text-[#5c6bc0] font-semibold hover:bg-[#d6def7] shadow transition"
+                    className={`relative flex items-center justify-between w-full px-4 py-3 rounded-lg font-semibold text-gray-700 ${currentPage.startsWith('/dashboard/websites') ? 'bg-[#e7f6f2]' : ''
+                        }`}
                 >
                     Websites
                     <ChevronDownIcon
@@ -168,8 +125,12 @@ const RightSidebar = () => {
                             <button
                                 key={website.id}
                                 onClick={() => handleNavigation(`/dashboard/websites/${website.id}`)}
-                                className="block w-full px-4 py-2 rounded-lg bg-white text-gray-900 font-medium hover:bg-gray-100 shadow"
+                                className={`relative block w-full px-4 py-2 rounded-lg bg-white text-gray-900 font-medium hover:bg-gray-100 shadow ${currentPage === `/dashboard/websites/${website.id}` ? 'bg-[#e7f6f2]' : ''
+                                    }`}
                             >
+                                {currentPage === `/dashboard/websites/${website.id}` && (
+                                    <span className="absolute left-0 top-0 bottom-0 w-1 bg-[#68beaf] rounded"></span>
+                                )}
                                 {website.name}
                             </button>
                         ))}

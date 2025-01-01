@@ -9,6 +9,7 @@ interface AggregatedMetric {
   total_link_clicks: number;
   total_impressions: number;
   total_messages: number;
+  total_conversions: number;
   platform_name: string; // Retrieved from the joined table
 }
 
@@ -27,6 +28,7 @@ export async function getTopPlatforms(userId: string) {
         total_link_clicks,
         total_ctr,
         total_impressions,
+        total_conversions,
         platform_integrations (
           user_id,
           platform_name
@@ -53,6 +55,7 @@ export async function getTopPlatforms(userId: string) {
       total_link_clicks: item.total_link_clicks || 0,
       total_impressions: item.total_impressions || 0,
       total_messages: item.total_messages || 0,
+      total_conversions: item.total_conversions || 0,
       platform_name: item.platform_integrations?.platform_name || 'Unknown',
     }));
 
@@ -68,7 +71,7 @@ export async function getTopPlatforms(userId: string) {
 
     // Sort the platforms by total leads or another primary metric
     const topPlatforms = normalizedData
-      .sort((a, b) => b.total_leads - a.total_leads)
+      .sort((a, b) => b.total_conversions - a.total_conversions)
       .slice(0, 5);
 
     return { metrics: normalizedData, topPlatform, topPlatforms };

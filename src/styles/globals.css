@@ -82,4 +82,32 @@ body {
   .animate-fade-in-up {
     animation: fade-in-up 0.6s ease-out forwards;
   }
+
+  
+  .animate-bounce-up {
+    animation: bounce-up 0.5s ease-in-out infinite;
+  }
+
+    @keyframes text-glow {
+      0% {
+          background-position: 0% 50%;
+      }
+      50% {
+          background-position: 100% 50%;
+      }
+      100% {
+          background-position: 50% 0%;
+      }
+      
+  }
+
+  .animate-text-glow {
+      background: linear-gradient(to right, #b2b1b1, #171717, #b2b1b1);
+      background-size: 150% 100%; /* Adjusted for a tighter wave effect */
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      animation: text-glow 3s linear infinite; /* Slower and smoother transition */
+  }
+
 }
