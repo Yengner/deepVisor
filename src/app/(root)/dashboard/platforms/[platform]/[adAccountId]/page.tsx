@@ -3,12 +3,8 @@
 import ClientDashboard from '@/components/ClientDashboard';
 import { fetchDashboardMetrics } from '@/lib/api/dashboard';
 
-export default async function DashboardPage({
-  params,
-}: {
-  params: { platform?: string; adAccountId?: string };
-}) {
-  const { platform, adAccountId } = await Promise.resolve(params || {});
+export default async function DashboardPage({ params }: {params: { platform: string; adAccountId: string }; }) {
+  const { platform, adAccountId } = await params;
 
   if (!platform || !adAccountId) {
     return <p className="text-center mt-6">Please select a platform and ad account to view data.</p>;
@@ -16,7 +12,7 @@ export default async function DashboardPage({
 
   try {
     const dashboardData = await fetchDashboardMetrics(platform, adAccountId);
-    
+
     return <ClientDashboard dashboardData={dashboardData} />;
   } catch (error) {
     console.error('Error fetching dashboard data:', error);
