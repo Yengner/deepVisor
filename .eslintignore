@@ -1,7 +1,0 @@
-# Ignore Supabase Edge Functions
-supabase/functions/**
-
-# Ignore other folders or files as needed
-node_modules/
-build/
-.next/

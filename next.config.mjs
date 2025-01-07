@@ -11,5 +11,5 @@ export default {
     };
     return config;
   },
-  output: 'standalone', // Useful for deploying to containers
+  output: 'standalone', 
 };

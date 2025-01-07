@@ -36,6 +36,7 @@
     ".next/types/**/*.ts"
 , "src/app/(root)/integration/meta/unsuccessful"  ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "supabase/functions/**"
   ]
 }
