@@ -1,5 +1,4 @@
 
-//AccountInfo.ts
 export interface AccountInfo {
   balance: number;
   todaySpend: number;
@@ -7,7 +6,7 @@ export interface AccountInfo {
   currency: string;
   spendCap: number;
   lifetimeSpend: number;
-  accountStatus: number;
+  accountStatus: string;
   totalCampaigns: number;
   insights?: {
     clicks: number;
@@ -15,6 +14,29 @@ export interface AccountInfo {
     postEngagement: number;
   };
 };
+
+export interface InsightAction {
+  action_type: string;
+  value: string | number;
+}
+
+export interface InsightEntry {
+  clicks?: string;
+  spend?: string;
+  balance?: string;
+  name?: string;
+  currency?: string;
+  spend_cap?: string;
+  amount_spent?: string;
+  account_status?: string;
+  actions?: InsightAction[];
+  date_start?: string;
+  date_stop?: string;
+}
+
+export interface FacebookInsightsResponse {
+  data: InsightEntry[]; // Reflects the actual structure of the API response
+}
 
 //TopCampaigns.ts
 export interface CampaignMetric {

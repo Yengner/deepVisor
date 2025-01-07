@@ -7,7 +7,8 @@ Deno.serve(async () => {
     Deno.env.get("SUPABASE_URL")!,
     Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
   );
-
+//SUPABASE_URL
+//SUPABASE_SERVICE_ROLE_KEY
   try {
     console.log("Starting sync_ad_data edge function");
 

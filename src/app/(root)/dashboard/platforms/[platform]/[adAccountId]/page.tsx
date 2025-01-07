@@ -16,6 +16,7 @@ export default async function DashboardPage({
 
   try {
     const dashboardData = await fetchDashboardMetrics(platform, adAccountId);
+    
     return <ClientDashboard dashboardData={dashboardData} />;
   } catch (error) {
     console.error('Error fetching dashboard data:', error);

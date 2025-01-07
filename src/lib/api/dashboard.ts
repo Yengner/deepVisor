@@ -4,7 +4,7 @@ import { fetchCampaignMetrics } from '@/lib/api/platforms/meta/topCampaigns';
 import { fetchAgeGenderCountryMetrics } from './platforms/meta/demographics';
 import { fetchPerformanceMetrics } from './platforms/meta/performanceMetrics';
 import { createSupabaseClient } from '@/lib/utils/supabase/clients/server';
-import { fetchHourlyBreakdown } from './platforms/meta/hourlyBreakdown';
+// import { fetchHourlyBreakdown } from './platforms/meta/hourlyBreakdown';
 
 export const fetchDashboardMetrics = async (platform: string, adAccountId: string) => {
   const supabase = await createSupabaseClient();
@@ -28,13 +28,13 @@ export const fetchDashboardMetrics = async (platform: string, adAccountId: strin
 
 
   // Fetch all data in parallel
-  const [metrics, accountInfo, topCampaigns, ageGenderMetrics, performanceMetrics, hourlyBreakdown] = await Promise.all([
+  const [metrics, accountInfo, topCampaigns, ageGenderMetrics, performanceMetrics] = await Promise.all([
     fetchMetrics(adAccountId, accessToken),
     fetchAccountInfo(adAccountId, accessToken),
     fetchCampaignMetrics(adAccountId, accessToken),
     fetchAgeGenderCountryMetrics(adAccountId, accessToken),
     fetchPerformanceMetrics(adAccountId, accessToken),
-    fetchHourlyBreakdown(adAccountId, accessToken),
+    // fetchHourlyBreakdown(adAccountId, accessToken),
   ]);
 
   // Combine results into one object
@@ -44,7 +44,7 @@ export const fetchDashboardMetrics = async (platform: string, adAccountId: strin
     accountInfo,
     ageGenderMetrics,
     performanceMetrics,
-    hourlyBreakdown
+    // hourlyBreakdown
   };
 };
 

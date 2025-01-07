@@ -1,6 +1,13 @@
 import { createSupabaseClient } from '@/lib/utils/supabase/clients/server';
 import { NextResponse } from 'next/server';
 
+interface AdAccount {
+  id: string;
+  name: string;
+  account_status: number;
+  amount_spent?: string;
+}
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const code = searchParams.get('code');
@@ -77,10 +84,10 @@ export async function GET(request: Request) {
       throw new Error(errorDetails.error?.message || 'Failed to fetch ad accounts');
     }
 
-    const adAccountsData = await adAccountsResponse.json();
+    const adAccountsData: { data: AdAccount[] } = await adAccountsResponse.json();
 
     // Save ad accounts in the database
-    const adAccounts = adAccountsData.data.map((account: any) => ({
+    const adAccounts = adAccountsData.data.map((account) => ({
       user_id: userId,
       platform_integration_id: platformIntegrationId,
       ad_account_id: account.id,

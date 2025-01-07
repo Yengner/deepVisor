@@ -42,17 +42,17 @@ export const fetchPerformanceMetrics = async (
     });
 
     return {
-      cost: trendData.reduce((sum: number, item: any) => sum + item.cost, 0),
-      impressions: trendData.reduce((sum: number, item: any) => sum + item.impressions, 0),
-      clicks: trendData.reduce((sum: number, item: any) => sum + item.clicks, 0),
-      leads: trendData.reduce((sum: number, item: any) => sum + item.leads, 0),
+      cost: trendData.reduce((sum: number, item: TrendDataEntry) => sum + item.cost, 0),
+      impressions: trendData.reduce((sum: number, item: TrendDataEntry) => sum + item.impressions, 0),
+      clicks: trendData.reduce((sum: number, item: TrendDataEntry) => sum + item.clicks, 0),
+      leads: trendData.reduce((sum: number, item: TrendDataEntry) => sum + item.leads, 0),
       messagingConversationsStarted: trendData.reduce(
-        (sum: number, item: any) => sum + item.messagingConversationsStarted,
+        (sum: number, item: TrendDataEntry) => sum + item.messagingConversationsStarted,
         0
       ),
-      reach: trendData.reduce((sum: number, item: any) => sum + item.reach, 0),
-      ctr: trendData.reduce((sum: number, item: any) => sum + item.ctr, 0) / trendData.length || 0,
-      cpc: trendData.reduce((sum: number, item: any) => sum + item.cpc, 0) / trendData.length || 0,
+      reach: trendData.reduce((sum: number, item: TrendDataEntry) => sum + item.reach, 0),
+      ctr: trendData.reduce((sum: number, item: TrendDataEntry) => sum + item.ctr, 0) / trendData.length || 0,
+      cpc: trendData.reduce((sum: number, item: TrendDataEntry) => sum + item.cpc, 0) / trendData.length || 0,
       trendData,
 
     };

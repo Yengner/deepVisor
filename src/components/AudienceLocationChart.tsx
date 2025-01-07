@@ -303,7 +303,7 @@ const AudienceLocationChart: React.FC<AudienceLocationChartProps> = ({ data = []
       shared: true,
       intersect: false,
       x: {
-        // @ts-ignore - Ignore TypeScript error for value type mismatch
+        // @ts-expect-error - Ignore TypeScript error for value type mismatch
         formatter: (value: string) =>
           `${countryFullNames[value] || value}`,
       },

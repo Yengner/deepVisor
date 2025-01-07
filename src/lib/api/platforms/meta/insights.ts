@@ -1,8 +1,30 @@
+interface FacebookAction {
+  action_type: string;
+  value: string;
+}
+
+interface FacebookInsightEntry {
+  impressions: string;
+  clicks: string;
+  spend: string;
+  actions?: FacebookAction[];
+  reach: string;
+  ctr: string;
+  cpc: string;
+  cpm: string;
+  date_start: string;
+  date_stop: string;
+}
+
+interface FacebookInsightsResponse {
+  data: FacebookInsightEntry[];
+}
+
+
 export const fetchFacebookInsights = async (
   adAccountId: string,
   accessToken: string
-) => {
-
+): Promise<FacebookInsightsResponse> => {
   const API_BASE_URL = process.env.FACEBOOK_GRAPH_API_BASE_URL;
 
   if (!API_BASE_URL) {
@@ -25,18 +47,18 @@ export const fetchFacebookInsights = async (
     );
   }
 
-  const data = await response.json();
+  const data: FacebookInsightsResponse = await response.json();
   return data;
 };
 
-export const processFacebookInsights = (data: any) => {
-  return data.data.map((entry: any) => {
-    const leads = entry.actions?.find((action: any) => action.action_type === 'lead')?.value || 0;
-    const linkClicks = entry.actions?.find((action: any) => action.action_type === 'link_click')?.value || 0;
-    const postEngagement = entry.actions?.find((action: any) => action.action_type === 'post_engagement')?.value || 0;
+export const processFacebookInsights = (data: FacebookInsightsResponse) => {
+  return data.data.map((entry) => {
+    const leads = entry.actions?.find((action) => action.action_type === 'lead')?.value || "0";
+    const linkClicks = entry.actions?.find((action) => action.action_type === 'link_click')?.value || "0";
+    const postEngagement = entry.actions?.find((action) => action.action_type === 'post_engagement')?.value || "0";
     const messagingConversationsStarted = entry.actions?.find(
-      (action: any) => action.action_type === 'onsite_conversion.total_messaging_connection'
-    )?.value || 0;
+      (action) => action.action_type === 'onsite_conversion.total_messaging_connection'
+    )?.value || "0";
 
     return {
       impressions: parseInt(entry.impressions, 10),

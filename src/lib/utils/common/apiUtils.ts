@@ -1,10 +1,9 @@
 // Fetch data with Authorization header.
-
-export const fetchWithValidation = async (
+export const fetchWithValidation = async <T>(
     url: string,
     accessToken: string,
     options: RequestInit = {}
-): Promise<any> => {
+): Promise<T> => {
     try {
         const response = await fetch(url, {
             ...options,
@@ -24,21 +23,20 @@ export const fetchWithValidation = async (
             );
         }
 
-        return await response.json();
+        return (await response.json()) as T;
     } catch (error) {
         console.error(`FetchWithAuth Error: Failed to fetch from ${url}`, error);
         throw error;
     }
 };
 
-
 //Retry logic for fetching data.
 
-export const fetchWithRetry = async (
-    fetchFn: () => Promise<any>,
+export const fetchWithRetry = async <T>(
+    fetchFn: () => Promise<T>,
     retries: number = 3,
     delay: number = 1000
-): Promise<any> => {
+): Promise<T> => {
     let attempts = 0;
 
     while (attempts < retries) {
@@ -48,10 +46,12 @@ export const fetchWithRetry = async (
             attempts++;
             if (attempts >= retries) {
                 console.error('FetchWithRetry Error: Exceeded max retries', error);
-                throw error;
+                throw error; // Ensure we throw an error when retries are exhausted
             }
             console.warn(`FetchWithRetry: Attempt ${attempts} failed. Retrying in ${delay}ms...`);
             await new Promise((resolve) => setTimeout(resolve, delay));
         }
     }
+
+    throw new Error('FetchWithRetry Error: Unexpected code path'); // Fallback (shouldn't be reached)
 };

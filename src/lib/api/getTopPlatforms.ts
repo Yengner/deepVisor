@@ -10,7 +10,7 @@ interface AggregatedMetric {
   total_impressions: number;
   total_messages: number;
   total_conversions: number;
-  platform_name: string; // Retrieved from the joined table
+  platform_name: string;
 }
 
 export async function getTopPlatforms(userId: string) {
@@ -29,7 +29,7 @@ export async function getTopPlatforms(userId: string) {
         total_ctr,
         total_impressions,
         total_conversions,
-        platform_integrations (
+        platform_integrations!inner (
           user_id,
           platform_name
         )
@@ -45,21 +45,22 @@ export async function getTopPlatforms(userId: string) {
       throw new Error('No aggregated metrics found');
     }
 
-    // Normalize data and handle missing values
-    const normalizedData: AggregatedMetric[] = data.map((item: any) => ({
-      platform_integration_id: item.platform_integration_id,
-      total_spend: item.total_spend || 0,
-      total_leads: item.total_leads || 0,
-      total_clicks: item.total_clicks || 0,
-      total_ctr: item.total_ctr || 0,
-      total_link_clicks: item.total_link_clicks || 0,
-      total_impressions: item.total_impressions || 0,
-      total_messages: item.total_messages || 0,
-      total_conversions: item.total_conversions || 0,
-      platform_name: item.platform_integrations?.platform_name || 'Unknown',
-    }));
-
-
+    // normalize the data
+    const normalizedData: AggregatedMetric[] = data.map((item) => {
+      const integration = item.platform_integrations as { platform_name?: string };
+      return {
+        platform_integration_id: item.platform_integration_id,
+        total_spend: item.total_spend || 0,
+        total_leads: item.total_leads || 0,
+        total_clicks: item.total_clicks || 0,
+        total_ctr: item.total_ctr || 0,
+        total_link_clicks: item.total_link_clicks || 0,
+        total_impressions: item.total_impressions || 0,
+        total_messages: item.total_messages || 0,
+        total_conversions: item.total_conversions || 0,
+        platform_name: integration.platform_name || 'Unknown',
+      };
+    });
     // Determine the best platforms by each metric
     const topPlatform = {
       leads: getBestPlatform(normalizedData, 'total_leads'),

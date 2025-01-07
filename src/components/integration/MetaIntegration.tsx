@@ -16,20 +16,20 @@ const FacebookBusinessIntegration = () => {
 
       // Redirect to Facebook OAuth login
       window.location.href = loginUrl; // Navigate directly to the login URL
-    } catch (err) {
+    } catch {
       setError('An error occurred during login.');
     }
   };
 
   return (
-    <div>
+    <div className="flex flex-col items-center ">
       <button
         onClick={handleLogin}
-        className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+        className="text-[#4fa798] hover:text-[#34a08c]"
       >
         Integrate Facebook Business
       </button>
-      {error && <p className="text-red-600 mt-2">{error}</p>}
+      {error && <p className="text-red-500 text-sm">{error}</p>}
     </div>
   );
 };
@@ -71,27 +71,27 @@ const MetaIntegration: React.FC<MetaIntegrationProps> = ({ platformName, userId,
     }
   };
 
-  if (isIntegrated) {
-    return (
-      <div>
-        <div className="text-emerald-600 flex flex-col">
-          <p>Meta is already integrated!</p>
+  return (
+    <div className="flex flex-col items-center">
+      {isIntegrated ? (
+        <div className="text-center">
+          <p className="text-emerald-600 font-medium">
+            {platformName.charAt(0).toUpperCase() + platformName.slice(1)} is already integrated!
+          </p>
           <button
             onClick={handleUnintegrate}
             disabled={status === 'loading'}
-            className={`bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 ${status === 'loading' ? 'opacity-50' : ''}`}
+            className={`text-red-500 hover:text-red-700 focus:ring-red-300  ${status === 'loading' ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
           >
             {status === 'loading' ? 'Unintegrating...' : 'Uninstall'}
           </button>
         </div>
-      </div>
-    );
-  }
-
-  return (
-    <div>
-      <FacebookBusinessIntegration />
+      ) : (
+        <FacebookBusinessIntegration />
+      )}
     </div>
   );
 };
+
 export default MetaIntegration;

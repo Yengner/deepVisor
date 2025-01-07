@@ -8,29 +8,31 @@ const TopBar = () => {
   const router = useRouter();
   const pathname = usePathname(); // Get the current route
 
+  // Updated navigation items with a "comingSoon" flag
   const navigationItems = [
-    { label: 'Dashboard', path: '/dashboard' },
-    { label: 'Campaigns', path: '/campaigns' },
-    { label: 'Integration', path: '/integration' },
-    { label: 'Analytics', path: '/analytics' },
+    { label: 'Dashboard', path: '/dashboard/platforms', comingSoon: false },
+    { label: 'Integration', path: '/integration', comingSoon: false },
+    { label: 'Campaigns', path: '/campaigns', comingSoon: true },
+    { label: 'Analytics', path: '/analytics', comingSoon: true },
     // Add future tabs here
   ];
 
-  const handleNavigation = (path: string) => {
-    router.push(path);
+  const handleNavigation = (path: string, comingSoon: boolean) => {
+    if (!comingSoon) {
+      router.push(path);
+    }
   };
 
   const getPageTitle = () => {
-    if (pathname.startsWith('/dashboard')) return 'Dashboard';
-    if (pathname.startsWith('/campaigns')) return 'Campaigns';
+    if (pathname.startsWith('/dashboard/platforms')) return 'Dashboard';
     if (pathname.startsWith('/integration')) return 'Integration';
+    if (pathname.startsWith('/campaigns')) return 'Campaigns';
     if (pathname.startsWith('/analytics')) return 'Analytics';
     return 'DeepVisor';
   };
 
-
   return (
-    <div className="flex justify-between items-center px-10 py-4 bg-[#238879] shadow-lg h-auto">
+    <div className="flex justify-between items-center px-10 py-4 bg-gradient-to-r from-teal-500 to-blue-500 shadow-lg h-auto">
       {/* Left Section: Burger Menu and Logo */}
       <div className="flex items-center gap-8">
         {/* Burger Menu */}
@@ -59,18 +61,27 @@ const TopBar = () => {
       </div>
 
       {/* Navigation */}
-      <div className="flex items-center gap-8">
+      <div className="flex items-center gap-4">
         {navigationItems.map((item) => (
-          <button
-            key={item.path}
-            onClick={() => handleNavigation(item.path)}
-            className="text-lg text-[#fbfbe9] font-bold hover:text-gray-200 transition"
-          >
-            {item.label}
-          </button>
+          <div key={item.path} className="relative group">
+            <button
+              onClick={() => handleNavigation(item.path, item.comingSoon)}
+              className={`text-lg font-bold px-4 py-2 rounded transition ${
+                item.comingSoon
+                  ? 'text-gray-200 cursor-not-allowed'
+                  : 'text-[#fbfbe9] hover:text-gray-200'
+              }`}
+            >
+              {item.label}
+            </button>
+            {item.comingSoon && (
+              <div className="coming-soon-overlay">
+                <span>Coming Soon</span>
+              </div>
+            )}
+          </div>
         ))}
       </div>
-
     </div>
   );
 };

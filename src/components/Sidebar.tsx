@@ -16,7 +16,7 @@ const Sidebar = () => {
     email: 'test@gmail.com',
   };
 
-  const handleNavigate = (path:any) => {
+  const handleNavigate = (path: string) => {
     router.push(path);
     setSidebarOpen(false);
   };

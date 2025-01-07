@@ -1,74 +1,38 @@
-import MetaIntegration from '@/components/integration/MetaIntegration';
 import { createSupabaseClient } from '@/lib/utils/supabase/clients/server';
+import PlatformList from '@/components/integration/PlatformList';
 import React from 'react';
-
-
 
 const IntegrationPage = async () => {
   const supabase = await createSupabaseClient();
+  const userId = '6d9a0842-3887-43a0-8909-16589f8eae2a'; // Replace with actual user ID logic
+  // Fetch platforms data
+  const { data: platforms, error: platformError } = await supabase
+    .from('platform')
+    .select('id, platform_name, description, full_description, strengths, weaknesses, image_url');
 
-  // Simulated data for platforms (can fetch from a database or API)
-  const { data: platformIntegrations, error } = await supabase
+  if (platformError) {
+    console.error('Error fetching platforms:', platformError.message);
+    return <div>Failed to load platforms</div>;
+  }
+
+  // Fetch platform integrations for the user
+  const { data: platformIntegrations, error: integrationError } = await supabase
     .from('platform_integrations')
-    .select('id, platform_name, is_integrated')
-    .eq('user_id', '6d9a0842-3887-43a0-8909-16589f8eae2a'); // Replace with actual user ID logic
+    .select('platform_name, is_integrated')
+    .eq('user_id', userId); // Replace with actual user ID logic
 
-  if (error) {
-    console.error('Error fetching platform integrations:', error);
+  if (integrationError) {
+    console.error('Error fetching platform integrations:', integrationError.message);
     return <div>Failed to load integrations</div>;
   }
 
-  const platforms = [
-    {
-      id: 'meta',
-      name: 'Meta',
-      description: 'Manage your Facebook and Instagram ad accounts.',
-      imageUrl: '/meta.png',
-      isIntegrated: platformIntegrations?.find((p) => p.platform_name === 'meta')?.is_integrated || false,
-    },
-    {
-      id: 'tiktok',
-      name: 'TikTok',
-      description: 'Run and analyze your TikTok ad campaigns.',
-      imageUrl: '/tiktok.png',
-      isIntegrated: platformIntegrations?.find((p) => p.platform_name === 'tiktok')?.is_integrated || false,
-    },
-    {
-      id: 'google',
-      name: 'Google',
-      description: 'Integrate your Google Ads accounts for insights.',
-      imageUrl: '/google.png',
-      isIntegrated: platformIntegrations?.find((p) => p.platform_name === 'google')?.is_integrated || false,
-    },
-    // Add more platforms as needed
-  ];
+  // Map platforms and merge integration status
+  const platformsWithIntegration = platforms.map((platform) => ({
+    ...platform,
+    isIntegrated: platformIntegrations?.find((integration) => integration.platform_name === platform.id)?.is_integrated || false,
+  }));
 
-  return (
-    <div className="bg-gray-100">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
-          {platforms.map((platform) => (
-            <div
-              key={platform.id}
-              className="bg-white shadow-md rounded-lg p-4 flex flex-col items-center space-y-4"
-            >
-              <img
-                src={platform.imageUrl}
-                alt={platform.name}
-                className="w-16 h-16 object-contain"
-              />
-              <h2 className="text-xl font-semibold">{platform.name}</h2>
-              <p className="text-sm text-gray-500 text-center">{platform.description}</p>
-              {platform.id === 'meta' && (
-                <MetaIntegration platformName={platform.name.toLowerCase()} userId={"6d9a0842-3887-43a0-8909-16589f8eae2a"}isIntegrated={platform.isIntegrated} />
-              )}
-              {/* Future components for other platforms */}
-              {/* {platform.id === 'tiktok' && <TikTokIntegration isIntegrated={platform.isIntegrated} />} */}
-              {/* {platform.id === 'google' && <GoogleIntegration isIntegrated={platform.isIntegrated} />} */}
-            </div>
-          ))}
-        </div>
-    </div>
-  );
+  return <PlatformList platforms={platformsWithIntegration} userId={userId} />;
 };
 
 export default IntegrationPage;

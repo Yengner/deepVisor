@@ -1,11 +1,29 @@
 import { fetchWithValidation } from "@/lib/utils/common/apiUtils";
 
+interface AgeGenderEntry {
+  age: string;
+  gender: string;
+  impressions: number;
+}
+
+interface CountryEntry {
+  date_start: string;
+  date_stop: string;
+  spend: string;
+  country: string;
+  impressions: number;
+}
+
+interface FacebookInsightsResponse<T> {
+  data: T[];
+}
+
 export const fetchAgeGenderCountryMetrics = async (
   adAccountId: string,
   accessToken: string
 ): Promise<{
-  ageGenderData: { age: string; gender: string; impressions: number }[];
-  countryData: { date_start: string; date_stop: string; spend: string; country: string; impressions: number }[];
+  ageGenderData: AgeGenderEntry[];
+  countryData: CountryEntry[];
 }> => {
 
   const API_BASE_URL = process.env.FACEBOOK_GRAPH_API_BASE_URL;
@@ -19,13 +37,11 @@ export const fetchAgeGenderCountryMetrics = async (
     country: `${API_BASE_URL}/${adAccountId}/insights?breakdowns=country&date_preset=maximum`,
   };
 
-  // Fetch both metrics in parallel
   const [ageGenderDatas, countryDatas] = await Promise.all([
-    fetchWithValidation(urls.ageGender, accessToken),
-    fetchWithValidation(urls.country, accessToken),
+    fetchWithValidation<FacebookInsightsResponse<AgeGenderEntry>>(urls.ageGender, accessToken),
+    fetchWithValidation<FacebookInsightsResponse<CountryEntry>>(urls.country, accessToken),
   ]);
 
-  // Validate API data structure
   if (!ageGenderDatas.data || !Array.isArray(ageGenderDatas.data)) {
     throw new Error("Invalid age and gender data format");
   }
@@ -33,20 +49,18 @@ export const fetchAgeGenderCountryMetrics = async (
     throw new Error("Invalid country data format");
   }
 
-  // Transform age and gender data
-  const ageGenderData = ageGenderDatas.data.map((entry: any) => ({
+  const ageGenderData = ageGenderDatas.data.map((entry) => ({
     age: entry.age || "unknown",
     gender: entry.gender || "unknown",
-    impressions: parseInt(entry.impressions || "0", 10),
+    impressions: entry.impressions || 0
   }));
 
-  // Transform country data
-  const countryData = countryDatas.data.map((entry: any) => ({
+  const countryData = countryDatas.data.map((entry) => ({
     date_start: entry.date_start,
     date_stop: entry.date_stop,
     spend: entry.spend || "0",
     country: entry.country || "unknown",
-    impressions: parseInt(entry.impressions || "0", 10), // Adjust field as needed (impressions/reach)
+    impressions: entry.impressions || 0
   }));
 
   return { ageGenderData, countryData };

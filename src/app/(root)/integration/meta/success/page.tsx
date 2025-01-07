@@ -4,10 +4,21 @@ import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { createClient } from '@/lib/utils/supabase/clients/browser';
 
+interface AdAccount {
+    id: string;
+    name: string;
+    account_status: number;
+}
+
+interface Industry {
+    id: number;
+    name: string;
+}
+
 const MetaIntegrationSuccess = () => {
     const [stage, setStage] = useState<'loading' | 'displayAccounts' | 'verifying' | 'success'>('loading');
-    const [adAccounts, setAdAccounts] = useState<any[]>([]);
-    const [industries, setIndustries] = useState<{ id: number; name: string }[]>([]);
+    const [adAccounts, setAdAccounts] = useState<AdAccount[]>([]);
+    const [industries, setIndustries] = useState<Industry[]>([]);
     const [selectedIndustries, setSelectedIndustries] = useState<Record<string, number>>({});
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -19,8 +30,8 @@ const MetaIntegrationSuccess = () => {
                 const { data, error } = await supabase.from('industry').select('id, name');
                 if (error) throw error;
                 setIndustries(data || []);
-            } catch (error: any) {
-                console.error('Error fetching industries:', error.message);
+            } catch (error) {
+                console.error('Error fetching industries:',(error as Error).message);
             }
         };
 

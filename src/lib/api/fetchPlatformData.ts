@@ -17,13 +17,13 @@ interface PlatformOverview {
 export async function fetchPlatformData(platformIntegrationId: string): Promise<PlatformOverview | null> {
   const supabase = await createSupabaseClient();
 
-  
+
   try {
     // Fetch platform data from `platform_aggregated_metrics`
     const { data, error } = await supabase
       .from('platform_aggregated_metrics')
       .select('*')
-      .eq('platform_integration_id', platformIntegrationId)
+      .eq('platform_integration_id.', platformIntegrationId)
       .single();
 
     if (error || !data) {

@@ -1,6 +1,6 @@
-import { fetchMetaAggregatedMetrics } from "/Users/yb/Desktop/deepvisor/supabase/functions/utils/platforms/meta.ts";
+import { fetchMetaAdAccountMetrics } from "/Users/yb/Desktop/deepvisor/supabase/functions/sync_ad_account_metrics/platforms/meta.ts";
 // Import future platform-specific metrics functions here
-import { fetchTikTokAggregatedMetrics } from "/Users/yb/Desktop/deepvisor/supabase/functions/utils/platforms/tiktok.ts";
+import { fetchTikTokAggregatedMetrics } from "/Users/yb/Desktop/deepvisor/supabase/functions/sync_ad_account_metrics/platforms/tiktok.ts";
 // import { fetchGoogleAggregatedMetrics } from "./platforms/google";
 
 /**
@@ -10,14 +10,10 @@ import { fetchTikTokAggregatedMetrics } from "/Users/yb/Desktop/deepvisor/supaba
  * @param accessToken - The access token for the platform
  * @returns Aggregated metrics as a record
  */
-export const fetchAggregatedMetrics = async (
-  platform: string,
-  adAccountId: string,
-  accessToken: string
-): Promise<Record<string, any>> => {
+export const fetchAggregatedMetrics = async (platform: string, adAccountId: string, accessToken: string ): Promise<Record<string, any>> => {
   switch (platform) {
     case "meta":
-      return await fetchMetaAggregatedMetrics(adAccountId, accessToken);
+      return await fetchMetaAdAccountMetrics(adAccountId, accessToken);
 
     // Future cases for other platforms
     case "tiktok":

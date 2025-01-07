@@ -8,12 +8,25 @@ import TopCampaigns from '@/components/TopCampaigns';
 import DemographicsChart from '@/components/DemographicsChart';
 import AudienceLocationChart from '@/components/AudienceLocationChart';
 import { MdAttachMoney, MdMouse, MdPersonAdd, MdShowChart, MdTrendingUp, MdVisibility } from 'react-icons/md';
-import HourlyMetricsChart from './HourlyMetricsChart';
+// import HourlyMetricsChart from './HourlyMetricsChart';
 
+// interface DashboardData {
+//   metrics: number,
+//   topCampaigns: number,
+//   accountInfo: number,
+//   ageGenderMetrics: number,
+//   performanceMetrics: number,
+//   hourlyBreakdown: number
+// }
+
+// Using `any` for now to avoid TypeScript issues while data structures are finalized
+/* eslint-disable */
 export default function ClientDashboard({ dashboardData }: { dashboardData: any }) {
+  
+  const {metrics, topCampaigns, performanceMetrics, accountInfo, ageGenderMetrics } = dashboardData;
   const [activeTab, setActiveTab] = useState('account');
+  /* eslint-enable */
 
-  const {metrics, topCampaigns, performanceMetrics, accountInfo, ageGenderMetrics, hourlyBreakdown } = dashboardData;
 
   return (
     <div className="p-2 space-y-8">

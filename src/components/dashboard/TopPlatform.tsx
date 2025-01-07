@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 
 interface AggregatedMetric {
   platform_integration_id: string;
@@ -37,11 +38,13 @@ const TopPlatformCard = ({ topPlatforms }: TopPlatformCardProps) => {
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 flex items-center justify-center bg-purple-200 rounded-full">
-            <img
-              src={`/${topPlatform.platform_name.toLowerCase()}.png`} // Ensure proper casing for platform names
-              alt={`${topPlatform.platform_name} logo`}
-              className="w-6 h-6"
-            />
+            <div className="relative w-6 h-6">
+              <Image
+                src={`/${topPlatform.platform_name.toLowerCase()}.png`} // Ensure proper casing for platform names
+                alt={`${topPlatform.platform_name} logo`}
+                layout="fill" // Ensures it fills the container
+              />
+            </div>
           </div>
           <div>
             <h2 className="text-lg font-bold text-gray-800">

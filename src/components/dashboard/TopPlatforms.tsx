@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from "react";
+// import { useState } from "react";
+import Image from 'next/image';
 
 interface AggregatedMetric {
   platform_integration_id: string;
@@ -19,7 +20,7 @@ interface TopPlatformsProps {
 }
 
 const TopPlatforms = ({ platforms }: TopPlatformsProps) => {
-  const [showTooltip, setShowTooltip] = useState(false);
+  // const [showTooltip, setShowTooltip] = useState(false);
 
   return (
     <div className="bg-white shadow-lg rounded-lg p-6 col-span-2">
@@ -46,11 +47,13 @@ const TopPlatforms = ({ platforms }: TopPlatformsProps) => {
             <tr key={platform.platform_integration_id}>
               {/* Platform Name */}
               <td className="border-b py-3 flex items-center gap-2">
-                <img
-                  src={`/${platform.platform_name.toLowerCase()}.png`} // Ensure proper casing for platform names
-                  alt={`${platform.platform_name} logo`}
-                  className="h-8 w-8 rounded-full"
-                />
+                <div className="relative h-8 w-8 rounded-full overflow-hidden">
+                  <Image
+                    src={`/${platform.platform_name.toLowerCase()}.png`} 
+                    alt={`${platform.platform_name} logo`}
+                    layout="fill" 
+                  />
+                </div>
                 <span className="font-medium text-gray-700 capitalize">
                   {platform.platform_name}
                 </span>

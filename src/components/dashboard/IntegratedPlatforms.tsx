@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 interface IntegratedPlatformsProps {
   platforms: { platform: string; isIntegrated: boolean }[];
@@ -16,9 +17,11 @@ const IntegratedPlatforms = ({ platforms }: IntegratedPlatformsProps) => {
           key={platform.platform}
           className="flex flex-col justify-center p-4 border rounded shadow-md bg-[white] "
         >
-          <img
-            src={`/${platform.platform}.png`} // Replace with appropriate icon paths
+          <Image
+            src={`/${platform.platform}.png`} // Replace with appropriate image paths
             alt={`${platform.platform} logo`}
+            width={48} // Specify width explicitly
+            height={48} // Specify height explicitly
             className="h-12 w-12 mx-auto"
           />
           <p className="mt-2 text-sm font-semibold capitalize text-center">

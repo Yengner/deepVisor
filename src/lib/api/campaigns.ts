@@ -1,6 +1,6 @@
 'use server';
 
-import { FacebookAdsApi, AdAccount, Campaign, AdSet, Ad } from 'facebook-nodejs-business-sdk';
+import { FacebookAdsApi, AdAccount, Campaign, AdSet} from 'facebook-nodejs-business-sdk';
 
 
 export const fetchCampaignsIds = async (adAccountId: string, accessToken: string) => {
