@@ -37,7 +37,7 @@
 , "src/app/(root)/integration/meta/unsuccessful"  ],
   "exclude": [
     "node_modules",
-    "supabase/functions/**"
+    "supabase/functions/**",
     "src/app/lib/utils/supabase/**"
   ]
 }
