@@ -51,7 +51,9 @@ const TopPlatforms = ({ platforms }: TopPlatformsProps) => {
                   <Image
                     src={`/${platform.platform_name.toLowerCase()}.png`} 
                     alt={`${platform.platform_name} logo`}
-                    layout="fill" 
+                    className="fill"
+                    width={32}
+                    height={32}
                   />
                 </div>
                 <span className="font-medium text-gray-700 capitalize">

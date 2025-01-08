@@ -2,19 +2,47 @@
 
 import { useGlobalState } from '@/lib/store/globalState';
 import { useRouter } from 'next/navigation';
-import { LuLogOut, LuUser } from 'react-icons/lu';
+import { LuUser } from 'react-icons/lu';
 import { MdTrendingDown } from 'react-icons/md';
 import { useMockNotifications } from '@/hooks/useMockNotifcations'; // Mock notifications
+import LogoutButton from './LogoutButton';
+import { createClient } from '@/lib/utils/supabase/clients/browser';
+import { useEffect, useState } from 'react';
+
+interface User {
+  firstName: string;
+  email: string;
+}
 
 const Sidebar = () => {
   const { sidebarOpen, setSidebarOpen } = useGlobalState();
   const { notifications } = useMockNotifications(); // Fetch fake notifications
   const router = useRouter();
+  const supabase = createClient();
+  
+  const [user, setUser] = useState<User | null>(null); // State for user info
+  const [loading, setLoading] = useState<boolean>(true); // State for loading user info
 
-  const user = {
-    firstName: 'Yengner',
-    email: 'test@gmail.com',
-  };
+  // Fetch user info on component mount
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      setLoading(true);
+      const { data, error } = await supabase.auth.getUser();
+
+      if (error) {
+        console.error('Error fetching user info:', error);
+        setUser(null);
+      } else {
+        setUser({
+          firstName: data.user.user_metadata?.first_name || 'User',
+          email: data.user.email || 'No email provided',
+        });
+      }
+      setLoading(false);
+    };
+
+    fetchUserInfo();
+  }, [supabase]);
 
   const handleNavigate = (path: string) => {
     router.push(path);
@@ -23,9 +51,8 @@ const Sidebar = () => {
 
   return (
     <div
-      className={`flex flex-col fixed top-0 left-0 h-full w-64 bg-white dark:bg-gray-800 shadow-lg transform transition-transform ${
-        sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-      } z-50`}
+      className={`flex flex-col fixed top-0 left-0 h-full w-64 bg-white dark:bg-gray-800 shadow-lg transform transition-transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        } z-50`}
     >
       {/* Close Button */}
       <button
@@ -48,12 +75,12 @@ const Sidebar = () => {
       <div className="p-4 text-center border-b border-gray-200 dark:border-gray-700">
         <div className="flex items-center justify-center">
           <div className="w-12 h-12 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xl font-bold">
-            {user.firstName[0]}
+            {user?.firstName[0]}
           </div>
         </div>
         <div className="mt-2 text-gray-800 dark:text-gray-200">
-          <p className="text-lg font-semibold">{user.firstName}</p>
-          <p className="text-sm truncate">{user.email}</p>
+          <p className="text-lg font-semibold">{user?.firstName}</p>
+          <p className="text-sm truncate">{user?.email}</p>
         </div>
       </div>
 
@@ -87,13 +114,7 @@ const Sidebar = () => {
           <LuUser />
           Settings
         </button>
-        <button
-          onClick={() => alert('Logging out...')}
-          className="w-full mt-4 flex items-center gap-2 text-red-600 hover:bg-red-100 dark:hover:bg-red-700 p-2 rounded-md transition"
-        >
-          <LuLogOut />
-          Logout
-        </button>
+        <LogoutButton />
       </div>
     </div>
   );

@@ -40,9 +40,11 @@ const TopPlatformCard = ({ topPlatforms }: TopPlatformCardProps) => {
           <div className="w-10 h-10 flex items-center justify-center bg-purple-200 rounded-full">
             <div className="relative w-6 h-6">
               <Image
-                src={`/${topPlatform.platform_name.toLowerCase()}.png`} // Ensure proper casing for platform names
+                src={`/${topPlatform.platform_name.toLowerCase()}.png`}
                 alt={`${topPlatform.platform_name} logo`}
-                layout="fill" // Ensures it fills the container
+                className="fill" 
+                width={32}
+                height={32}
               />
             </div>
           </div>

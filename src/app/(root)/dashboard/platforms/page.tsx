@@ -9,11 +9,13 @@ import { getTopCampaignsForPlatforms } from '@/lib/api/platforms/fetchFeaturedCa
 import { fetchRecommendations } from '@/lib/api/openai.ts/recommendations';
 import ConversionsBreakdownChart from '@/components/dashboard/TopPlatformsChart';
 import QuickActions from '@/components/dashboard/QuickActions';
+import { getLoggedInUser } from '@/lib/actions/user.actions';
 
 
 export default async function DashboardPage() {
-  const userId = '6d9a0842-3887-43a0-8909-16589f8eae2a';
-
+  
+  const loggedIn = await getLoggedInUser();
+  const userId = loggedIn.id;
   const platforms = await fetchIntegratedPlatforms(userId);
   const featuredPlatformsCampaigns = await getTopCampaignsForPlatforms(userId)
   const { metrics, topPlatform, topPlatforms } = await getTopPlatforms(userId);

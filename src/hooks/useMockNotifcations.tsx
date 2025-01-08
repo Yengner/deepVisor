@@ -34,21 +34,6 @@ export const useMockNotifications = () => {
         message: 'Campaign C has exceeded its target reach!',
         campaignId: 'campaignC',
       },
-      {
-        id: 5,
-        message: 'Campaign C has exceeded its target reach!',
-        campaignId: 'campaignC',
-      },
-      {
-        id: 6,
-        message: 'Campaign C has exceeded its target reach!',
-        campaignId: 'campaignC',
-      },
-      {
-        id: 7,
-        message: 'Campaign C has exceeded its target reach!',
-        campaignId: 'campaignC',
-      },
     ];
 
     // Simulate a delay like a real API call

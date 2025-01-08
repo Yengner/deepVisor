@@ -47,7 +47,7 @@ const PlatformList: React.FC<PlatformListProps> = ({ platforms, userId }) => {
                                 {platform.id === 'meta' && (
                                     <MetaIntegration
                                         platformName={platform.platform_name.toLowerCase()}
-                                        userId="6d9a0842-3887-43a0-8909-16589f8eae2a"
+                                        userId={userId}
                                         isIntegrated={platform.isIntegrated}
                                     />
                                 )}

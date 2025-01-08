@@ -22,57 +22,57 @@ import { MdAttachMoney, MdMouse, MdPersonAdd, MdShowChart, MdTrendingUp, MdVisib
 // Using `any` for now to avoid TypeScript issues while data structures are finalized
 /* eslint-disable */
 export default function ClientDashboard({ dashboardData }: { dashboardData: any }) {
-  
-  const {metrics, topCampaigns, performanceMetrics, accountInfo, ageGenderMetrics } = dashboardData;
+
+  const { metrics, topCampaigns, performanceMetrics, accountInfo, ageGenderMetrics } = dashboardData;
   const [activeTab, setActiveTab] = useState('account');
   /* eslint-enable */
 
 
   return (
-    <div className="p-2 space-y-8">
+    <div className="space-y-8 p-4">
       <section className="rounded-lg p-3">
-        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-2">
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-5">
           <MetricCard
             title="Spend"
             value={`$${Number(metrics?.spend || 0).toLocaleString()}`}
             tooltip="Total ad spend for the selected period."
-            icon={<MdAttachMoney className="text-[#b6985c]" />}
-            backgroundClass="bg-[#fbfbe9] dark:bg-gray-900"
+            icon={<MdAttachMoney className="text-teal-600" />}
+            backgroundClass="bg-white dark:bg-gray-900"
           />
           <MetricCard
             title="Leads"
             value={Number(metrics?.leads || 0).toLocaleString()}
             tooltip="Number of leads generated through your ads."
-            icon={<MdPersonAdd className="text-[#b6985c]" />}
-            backgroundClass="bg-[#fbfbe9] dark:bg-gray-900"
+            icon={<MdPersonAdd className="text-teal-600" />}
+            backgroundClass="bg-white dark:bg-gray-900"
           />
           <MetricCard
             title="Clicks"
             value={Number(metrics?.clicks || 0).toLocaleString()}
             tooltip="Total number of ad clicks."
-            icon={<MdMouse className="text-[#b6985c]" />}
-            backgroundClass="bg-[#fbfbe9] dark:bg-gray-900"
+            icon={<MdMouse className="text-teal-600" />}
+            backgroundClass="bg-white dark:bg-gray-900"
           />
           <MetricCard
             title="CTR"
             value={`${metrics?.ctr || 0}%`}
             tooltip="Click Through Rate (CTR): Percentage of users who clicked your ad after viewing it."
-            icon={<MdShowChart className="text-[#b6985c]" />}
-            backgroundClass="bg-[#fbfbe9] dark:bg-gray-900"
+            icon={<MdShowChart className="text-teal-600" />}
+            backgroundClass="bg-white dark:bg-gray-900"
           />
           <MetricCard
             title="CPC"
             value={`$${metrics?.cpc || 0}`}
             tooltip="Cost Per Click (CPC): Average cost for each click."
-            icon={<MdTrendingUp className="text-[#b6985c]" />}
-            backgroundClass="bg-[#fbfbe9] dark:bg-gray-900"
+            icon={<MdTrendingUp className="text-teal-600" />}
+            backgroundClass="bg-white dark:bg-gray-900"
           />
           <MetricCard
             title="Impression"
             value={Number(metrics?.impressions || 0).toLocaleString()}
             tooltip="Total number of times your ad was displayed."
-            icon={<MdVisibility className="text-[#b6985c]" />}
-            backgroundClass="bg-[#fbfbe9] dark:bg-gray-900"
+            icon={<MdVisibility className="text-teal-600" />}
+            backgroundClass="bg-white dark:bg-gray-900"
           />
         </div>
       </section>
@@ -81,21 +81,20 @@ export default function ClientDashboard({ dashboardData }: { dashboardData: any 
       <section className='grid grid-cols-1 md:grid-cols-3 gap-6'>
 
         {/* Left: Top Campaigns */}
-        <div>
+        <div className='shadow-md rounded-md bg-white dark:bg-gray-900'>
           <TopCampaigns campaignsData={topCampaigns} />
           {/* <HourlyMetricsChart hourlyData={hourlyBreakdown} /> */}
-
         </div>
 
         {/* Right: Account Info/Performance Metrics */}
         <div className="md:col-span-2 space-y-4">
-          <div className="bg-[#566a3d] dark:bg-gray-800 shadow rounded-lg">
+          <div className="bg-white shadow-md rounded-lg">
             {/* Tabs */}
             <div className="flex border-b border-[#a9b18f]">
               <button
                 className={`flex-1 text-center py-2 font-medium ${activeTab === 'account'
-                  ? 'text-[#ededd2] border-b-2 border-[#ededd2]'
-                  : 'text-[#a9b18f]'
+                  ? 'text-gray-900 dark:text-gray-300 border-b-2 border-gray-700'
+                  : 'text-gray-700 dark:text-gray-300'
                   }`}
                 onClick={() => setActiveTab('account')}
               >
@@ -103,8 +102,8 @@ export default function ClientDashboard({ dashboardData }: { dashboardData: any 
               </button>
               <button
                 className={`flex-1 text-center py-2 font-medium ${activeTab === 'performance'
-                  ? 'text-[#ededd2] border-b-2 border-[#ededd2]'
-                  : 'text-[#a9b18f]'
+                  ? 'text-gray-900 border-b-2 border-gray-700'
+                  : 'text-gray-700 dark:text-gray-300'
                   }`}
                 onClick={() => setActiveTab('performance')}
               >
@@ -113,8 +112,8 @@ export default function ClientDashboard({ dashboardData }: { dashboardData: any 
             </div>
             {/* Tab Content */}
             <div className="p-6 h-fit">
-              {activeTab === 'account' &&  <AccountInfo accountInfo={accountInfo} />}
-              {activeTab === 'performance'  && <PerformanceMetricsGraph graphInsights={performanceMetrics} />}
+              {activeTab === 'account' && <AccountInfo accountInfo={accountInfo} />}
+              {activeTab === 'performance' && <PerformanceMetricsGraph graphInsights={performanceMetrics} />}
             </div>
           </div>
 

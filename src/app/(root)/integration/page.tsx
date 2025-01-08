@@ -1,11 +1,14 @@
 import { createSupabaseClient } from '@/lib/utils/supabase/clients/server';
 import PlatformList from '@/components/integration/PlatformList';
 import React from 'react';
+import { getLoggedInUser } from '@/lib/actions/user.actions';
 
 const IntegrationPage = async () => {
   const supabase = await createSupabaseClient();
-  const userId = '6d9a0842-3887-43a0-8909-16589f8eae2a'; // Replace with actual user ID logic
-  // Fetch platforms data
+  
+  const loggedIn = await getLoggedInUser();
+  const userId = loggedIn.id;
+
   const { data: platforms, error: platformError } = await supabase
     .from('platform')
     .select('id, platform_name, description, full_description, strengths, weaknesses, image_url');

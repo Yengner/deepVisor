@@ -7,7 +7,7 @@ const HomePage = () => {
   const router = useRouter();
 
   const handleSignUp = () => {
-    router.push('/signup');
+    router.push('/sign-up');
   };
 
   const handleLogin = () => {

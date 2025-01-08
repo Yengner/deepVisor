@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { google } from 'googleapis';
 import { createSupabaseClient } from '@/lib/utils/supabase/clients/server';
+import { getLoggedInUser } from '@/lib/actions/user.actions';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -29,8 +30,9 @@ export async function GET(request: Request) {
     const supabase = await createSupabaseClient();
 
     // Simulate getting user_id from session or authenticated context
-    const userId = '6d9a0842-3887-43a0-8909-16589f8eae2a'; // Replace with actual logic
-
+    const loggedIn = await getLoggedInUser();
+    const userId = loggedIn.id;
+    
     const expiresAt = tokens.expiry_date
     ? new Date(tokens.expiry_date).toISOString() // ISO datetime format
     : null;    // Ensure the necessary fields for Supabase

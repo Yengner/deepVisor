@@ -1,4 +1,5 @@
 import PlatformPages from "@/components/platforms/PlatformPage";
+import { getLoggedInUser } from "@/lib/actions/user.actions";
 import { getAdAccountsData } from "@/lib/api/getAdAccountsData";
 import { getTopCampaignsForAdAccounts } from "@/lib/api/getCampaignsForAdAccount";
 import { getPlatformData } from "@/lib/api/getPlatformData";
@@ -13,8 +14,9 @@ export default async function PlatformPage({
     const resolvedParams = await params;
     const { platform } = resolvedParams;
 
-    const userId = '6d9a0842-3887-43a0-8909-16589f8eae2a';
-
+    const loggedIn = await getLoggedInUser();
+    const userId = loggedIn.id;
+    
     // Fetch data for the platform
     const adAccountsData = await getAdAccountsData(platform, userId);
     const adAccountsLength = adAccountsData.length;

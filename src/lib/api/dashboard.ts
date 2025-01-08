@@ -4,15 +4,16 @@ import { fetchCampaignMetrics } from '@/lib/api/platforms/meta/topCampaigns';
 import { fetchAgeGenderCountryMetrics } from './platforms/meta/demographics';
 import { fetchPerformanceMetrics } from './platforms/meta/performanceMetrics';
 import { createSupabaseClient } from '@/lib/utils/supabase/clients/server';
-// import { fetchHourlyBreakdown } from './platforms/meta/hourlyBreakdown';
+import { getLoggedInUser } from '../actions/user.actions';
 
 export const fetchDashboardMetrics = async (platform: string, adAccountId: string) => {
   const supabase = await createSupabaseClient();
 
-
   // Replace this with actual user ID logic (e.g., session or JWT)
-  const userId = '6d9a0842-3887-43a0-8909-16589f8eae2a';
-
+  const loggedIn = await getLoggedInUser();
+  const userId = loggedIn.id;
+  
+  // Step 1: Fetch the access token
   const { data, error } = await supabase
     .from('platform_integrations')
     .select('access_token')
@@ -20,31 +21,36 @@ export const fetchDashboardMetrics = async (platform: string, adAccountId: strin
     .eq('platform_name', platform)
     .single();
 
-  if (error || !data) {
-    throw new Error('Access token not found for the user and platform');
+  if (error || !data || !data.access_token) {
+    console.error('Access token not found for the user and platform:', error || 'No data');
+    return { error: 'Access token not found for the user and platform.' };
   }
 
   const accessToken = data.access_token;
 
-
-  // Fetch all data in parallel
-  const [metrics, accountInfo, topCampaigns, ageGenderMetrics, performanceMetrics] = await Promise.all([
+  // Step 2: Fetch all other data in parallel
+  const [metrics, accountInfo, topCampaigns, ageGenderMetrics, performanceMetrics] = await Promise.allSettled([
     fetchMetrics(adAccountId, accessToken),
     fetchAccountInfo(adAccountId, accessToken),
     fetchCampaignMetrics(adAccountId, accessToken),
     fetchAgeGenderCountryMetrics(adAccountId, accessToken),
     fetchPerformanceMetrics(adAccountId, accessToken),
-    // fetchHourlyBreakdown(adAccountId, accessToken),
   ]);
 
-  // Combine results into one object
+  // Step 3: Handle each fetch result
+  const handleResult = (result: PromiseSettledResult<any>, label: string) => {
+    if (result.status === 'rejected') {
+      console.error(`${label} failed:`, result.reason);
+      return null; // Or a fallback value if applicable
+    }
+    return result.value;
+  };
+
   return {
-    metrics,
-    topCampaigns,
-    accountInfo,
-    ageGenderMetrics,
-    performanceMetrics,
-    // hourlyBreakdown
+    metrics: handleResult(metrics, 'Metrics'),
+    accountInfo: handleResult(accountInfo, 'Account Info'),
+    topCampaigns: handleResult(topCampaigns, 'Top Campaigns'),
+    ageGenderMetrics: handleResult(ageGenderMetrics, 'Age/Gender Metrics'),
+    performanceMetrics: handleResult(performanceMetrics, 'Performance Metrics'),
   };
 };
-

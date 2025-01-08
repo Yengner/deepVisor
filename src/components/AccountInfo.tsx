@@ -28,12 +28,27 @@ interface AccountInfoProps {
     todaySpend?: number;
     lifetimeSpend?: number;
     spendCap: number;
-    accountStatus?: number;
+    accountStatus: number;
     totalCampaigns?: number;
     insights?: InsightsProps;
   };
 }
 
+const getStatusLabel = (status: number): string => {
+  console.log('IN GET STATUS', status);
+  switch (status) {
+      case 1:
+          return 'Active';
+      case 2:
+          return 'Disabled';
+      case 3:
+          return 'Pending Review';
+      case 4:
+          return 'Inactive';
+      default:
+          return 'Unknown';
+  }
+};
 // interface ActiveShapeProps {
 //   cx: number;
 //   cy: number;
@@ -55,6 +70,7 @@ const AccountInfo = ({ accountInfo }: AccountInfoProps) => {
   if (!accountInfo) {
     return <p>No data available for the selected metrics.</p>;
   }
+  console.log(accountInfo.accountStatus);
 
   // const renderActiveShape = (props: any) => {
   //   const RADIAN = Math.PI / 180;
@@ -172,36 +188,44 @@ const AccountInfo = ({ accountInfo }: AccountInfoProps) => {
 
   return (
     <section className="p-6">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1">
         {/* Left Column: Account Details */}
         <div className="space-y-4">
           {/* Ad Account Name */}
           <div>
-            <p className="text-m text-[#ededd2]">Ad Account Name</p>
-            <p className="text-3xl font-semibold text-[#fbfbe9]">{accountInfo.name || 'N/A'}</p>
+            <p className="text-m text-gray-900 dark:text-gray-300">Ad Account Name</p>
+            <p className="text-3xl font-semibold text-gray-900 dark:text-gray-300">{accountInfo.name || 'N/A'}</p>
           </div>
 
           {/* Account Status */}
           <div>
-            <p className="text-m text-[#fbfbe9]">Account Status</p>
+            <p className="text-m text-gray-700 dark:text-gray-300">Account Status</p>
             <span
-              className={`inline-block px-3 py-1 rounded-full w-full text-center text-xl font-semibold ${accountInfo.accountStatus === 1 ? 'bg-[#6ed11c] text-[#fbfbe9]' : 'bg-red-500 text-[#fbfbe9]'}`}>
-              {accountInfo.accountStatus === 1 ? 'Active' : 'Inactive'}
+              className={`inline-block px-3 py-1 rounded-full text-center text-xl font-semibold ${accountInfo.accountStatus === 1
+                ? 'bg-green-100 text-green-600'
+                : accountInfo.accountStatus === 2
+                  ? 'bg-red-100 text-red-600'
+                  : accountInfo.accountStatus === 3
+                    ? 'bg-yellow-100 text-yellow-600'
+                    : 'bg-gray-100 text-gray-600'
+                }`}
+            >
+              {getStatusLabel(accountInfo.accountStatus)}
             </span>
           </div>
 
           {/* Today's Spend */}
           <div>
-            <p className="text-m text-[#ededd2]">Today&apos;s Spend</p>
-            <p className="text-xl font-semibold text-[#fbfbe9]">
+            <p className="text-m text-gray-900 dark:text-gray-300">Today&apos;s Spend</p>
+            <p className="text-xl font-semibold text-gray-900 dark:text-gray-300">
               ${accountInfo.todaySpend?.toFixed(2) || '0.00'} {accountInfo.currency || 'USD'}
             </p>
           </div>
 
           {/* Lifetime Spend */}
           <div>
-            <p className="text-m text-[#ededd2]">Lifetime Spend</p>
-            <p className="text-xl font-semibold text-[#fbfbe9]">
+            <p className="text-m text-gray-900 dark:text-gray-300">Lifetime Spend</p>
+            <p className="text-xl font-semibold text-gray-900 dark:text-gray-300">
               ${accountInfo.lifetimeSpend?.toLocaleString() || '0.00'} {accountInfo.currency || 'USD'}
             </p>
             <ProgressBar value={accountInfo.lifetimeSpend || 0} max={accountInfo.spendCap || 1000} />
@@ -209,16 +233,16 @@ const AccountInfo = ({ accountInfo }: AccountInfoProps) => {
 
           {/* Available Balance */}
           <div>
-            <p className="text-m text-[#ededd2]">Available Balance</p>
-            <p className="text-xl font-semibold text-[#fbfbe9]">
+            <p className="text-m text-gray-900 dark:text-gray-300">Available Balance</p>
+            <p className="text-xl font-semibold text-gray-900 dark:text-gray-300">
               ${accountInfo.balance?.toFixed(2) || '0.00'} {accountInfo.currency || 'USD'}
             </p>
           </div>
 
           {/* Total Campaigns */}
           <div>
-            <p className="text-m text-[#ededd2]">Total Campaigns</p>
-            <p className="text-xl font-semibold text-[#fbfbe9]">{accountInfo.totalCampaigns || '0'}</p>
+            <p className="text-m text-gray-900 dark:text-gray-300">Total Campaigns</p>
+            <p className="text-xl font-semibold text-gray-900 dark:text-gray-300">{accountInfo.totalCampaigns || '0'}</p>
           </div>
         </div>
 
@@ -227,7 +251,7 @@ const AccountInfo = ({ accountInfo }: AccountInfoProps) => {
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               {/* Inner Ring */}
-              {/* <Pie
+        {/* <Pie
                 data={dataOuter}
                 dataKey="value"
                 cx="50%"
@@ -240,12 +264,12 @@ const AccountInfo = ({ accountInfo }: AccountInfoProps) => {
                 onMouseEnter={(_, index) => setActiveIndex2(index)}
                 paddingAngle={3}
               > */}
-                {/* {dataOuter.map((entry, index) => (
+        {/* {dataOuter.map((entry, index) => (
                   <Cell key={`outer-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie> */}
-              {/* Inner Ring */}
-              {/* <Pie
+        {/* Inner Ring */}
+        {/* <Pie
                 data={dataInner}
                 dataKey="value"
                 cx="50%"
@@ -263,7 +287,7 @@ const AccountInfo = ({ accountInfo }: AccountInfoProps) => {
                   <Cell key={`inner-${index}`} fill={COLORS[(index + 2) % COLORS.length]} />
                 ))}
               </Pie> */}
-            {/* </PieChart>
+        {/* </PieChart>
           </ResponsiveContainer>
         </div> */}
 

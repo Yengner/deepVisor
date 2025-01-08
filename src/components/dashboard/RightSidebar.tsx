@@ -7,9 +7,9 @@ import { ChevronDownIcon } from '@radix-ui/react-icons';
 // import { fetchIntegratedPlatforms } from '@/lib/api/fetchIntegratedPlatforms';
 import { createClient } from '@/lib/utils/supabase/clients/browser';
 import Image from 'next/image';
+import { getLoggedInUser } from '@/lib/actions/user.actions';
 
 const RightSidebar = () => {
-    const userId = '6d9a0842-3887-43a0-8909-16589f8eae2a';
     const router = useRouter();
     const supabase = createClient();
 
@@ -20,9 +20,14 @@ const RightSidebar = () => {
 
     useEffect(() => {
         // setting current page based on the current URL
+
         setCurrentPage(window.location.pathname);
 
         const fetchPlatforms = async () => {
+            const { data: userData } = await supabase.auth.getUser();
+            const userId = userData?.user?.id
+
+
             setLoading(true);
             const { data, error } = await supabase
                 .from('platform_integrations')
@@ -38,7 +43,7 @@ const RightSidebar = () => {
         };
 
         fetchPlatforms();
-    }, [userId, supabase]);
+    }, [supabase]);
 
     const websites = [
         { id: 'site1', name: 'My Website', comingSoon: true },

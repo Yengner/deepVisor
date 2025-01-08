@@ -26,7 +26,7 @@ const TopCampaigns = ({ campaignsData }: TopCampaignsProps) => {
   const campaigns = campaignsData.top3ByLeads || [];
 
   return (
-    <div className="bg-[#e1e6cb]">
+    <div className="shadow-md rounded-lg bg-white dark:bg-gray-900 p-4">
       <h2 className="text-xl text-center font-bold text-[#3e4e38]">Top 3 Campaigns by Leads</h2>
       {campaigns.length === 0 ? (
         <p className="text-sm text-gray-700">No campaigns available.</p>
