@@ -38,5 +38,6 @@
   "exclude": [
     "node_modules",
     "supabase/functions/**"
+    "src/app/lib/utils/supabase/**"
   ]
 }

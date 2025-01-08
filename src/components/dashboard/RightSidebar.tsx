@@ -7,7 +7,6 @@ import { ChevronDownIcon } from '@radix-ui/react-icons';
 // import { fetchIntegratedPlatforms } from '@/lib/api/fetchIntegratedPlatforms';
 import { createClient } from '@/lib/utils/supabase/clients/browser';
 import Image from 'next/image';
-import { getLoggedInUser } from '@/lib/actions/user.actions';
 
 const RightSidebar = () => {
     const router = useRouter();

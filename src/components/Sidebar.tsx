@@ -19,14 +19,12 @@ const Sidebar = () => {
   const { notifications } = useMockNotifications(); // Fetch fake notifications
   const router = useRouter();
   const supabase = createClient();
-  
-  const [user, setUser] = useState<User | null>(null); // State for user info
-  const [loading, setLoading] = useState<boolean>(true); // State for loading user info
+
+  const [user, setUser] = useState<User | null>(null);
 
   // Fetch user info on component mount
   useEffect(() => {
     const fetchUserInfo = async () => {
-      setLoading(true);
       const { data, error } = await supabase.auth.getUser();
 
       if (error) {
@@ -38,7 +36,6 @@ const Sidebar = () => {
           email: data.user.email || 'No email provided',
         });
       }
-      setLoading(false);
     };
 
     fetchUserInfo();

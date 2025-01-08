@@ -7,6 +7,7 @@ interface Notification {
   campaignId: string;
 }
 
+// REMOVE THIS AND THE HOOK FOLDER WHEN READY TO DEPLOY!!!!!!!!!!!!
 export const useMockNotifications = () => {
   // Specify the state type as an array of Notification
   const [notifications, setNotifications] = useState<Notification[]>([]);

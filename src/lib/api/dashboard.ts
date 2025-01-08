@@ -12,7 +12,7 @@ export const fetchDashboardMetrics = async (platform: string, adAccountId: strin
   // Replace this with actual user ID logic (e.g., session or JWT)
   const loggedIn = await getLoggedInUser();
   const userId = loggedIn.id;
-  
+
   // Step 1: Fetch the access token
   const { data, error } = await supabase
     .from('platform_integrations')
@@ -38,19 +38,12 @@ export const fetchDashboardMetrics = async (platform: string, adAccountId: strin
   ]);
 
   // Step 3: Handle each fetch result
-  const handleResult = (result: PromiseSettledResult<any>, label: string) => {
-    if (result.status === 'rejected') {
-      console.error(`${label} failed:`, result.reason);
-      return null; // Or a fallback value if applicable
-    }
-    return result.value;
-  };
 
   return {
-    metrics: handleResult(metrics, 'Metrics'),
-    accountInfo: handleResult(accountInfo, 'Account Info'),
-    topCampaigns: handleResult(topCampaigns, 'Top Campaigns'),
-    ageGenderMetrics: handleResult(ageGenderMetrics, 'Age/Gender Metrics'),
-    performanceMetrics: handleResult(performanceMetrics, 'Performance Metrics'),
+    metrics: metrics,
+    accountInfo: accountInfo,
+    topCampaigns: topCampaigns,
+    ageGenderMetrics: ageGenderMetrics,
+    performanceMetrics: performanceMetrics,
   };
 };
