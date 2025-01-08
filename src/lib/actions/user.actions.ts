@@ -2,6 +2,7 @@
 
 import { createSupabaseClient } from '@/lib/utils/supabase/clients/server';
 import { getErrorMessage, parseStringify } from '../utils/utils';
+import { redirect } from 'next/navigation';
 
 
 export async function handleLogin(email: string, password: string) {
@@ -88,22 +89,17 @@ export async function handleSignOut() {
 // }
 
 export async function getLoggedInUser() {
-    try {
-        const supabase = await createSupabaseClient();
+    const supabase = await createSupabaseClient();
+    const { data, error } = await supabase.auth.getUser();
 
-        const { data, error } = await supabase.auth.getUser();
-        // Handle any errors that comes through
-        if (error || !data?.user) {
-            throw error || new Error('No active user found.');
-        }
-
-        const user = await getUserInfo({ userId: data.user.id });
-
-        return parseStringify(user);
-    } catch (error) {
-        return { errorMessage: getErrorMessage(error) }; // Handle any errors
+    if (error || !data?.user) {
+        console.warn('No active user found. Redirecting to /login.');
+        redirect('/login'); 
     }
-};
+
+    const user = await getUserInfo({ userId: data.user.id });
+    return user;
+}
 
 export async function getUserInfo({ userId }: getUserInfoProps) {
 

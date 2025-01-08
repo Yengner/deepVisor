@@ -18,8 +18,8 @@ const LogoutButton = () => {
         toast.error(errorMessage)
         
     } else {
-        router.push('/login'); // Redirect after logout
-        toast.success("Signed Out!")
+      router.push('/login'); // Redirect after logout
+      toast.success("Signed Out!")
     }
 
     setLoading(false);

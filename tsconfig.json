@@ -33,11 +33,11 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts"
-, "src/app/(root)/integration/meta/unsuccessful"  ],
+    ".next/types/**/*.ts", 
+    "src/app/(root)/integration/meta/unsuccessful"
+],
   "exclude": [
     "node_modules",
-    "supabase/functions/**",
-    "src/lib/utils/supabase/**"
+    "supabase/functions/**"
   ]
 }
