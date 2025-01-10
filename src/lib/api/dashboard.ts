@@ -4,16 +4,15 @@ import { fetchCampaignMetrics } from '@/lib/api/platforms/meta/topCampaigns';
 import { fetchAgeGenderCountryMetrics } from './platforms/meta/demographics';
 import { fetchPerformanceMetrics } from './platforms/meta/performanceMetrics';
 import { createSupabaseClient } from '@/lib/utils/supabase/clients/server';
-import { getLoggedInUser } from '../actions/user.actions';
+// import { fetchHourlyBreakdown } from './platforms/meta/hourlyBreakdown';
 
 export const fetchDashboardMetrics = async (platform: string, adAccountId: string) => {
   const supabase = await createSupabaseClient();
 
-  // Replace this with actual user ID logic (e.g., session or JWT)
-  const loggedIn = await getLoggedInUser();
-  const userId = loggedIn.id;
 
-  // Step 1: Fetch the access token
+  // Replace this with actual user ID logic (e.g., session or JWT)
+  const userId = '6d9a0842-3887-43a0-8909-16589f8eae2a';
+
   const { data, error } = await supabase
     .from('platform_integrations')
     .select('access_token')
@@ -21,29 +20,30 @@ export const fetchDashboardMetrics = async (platform: string, adAccountId: strin
     .eq('platform_name', platform)
     .single();
 
-  if (error || !data || !data.access_token) {
-    console.error('Access token not found for the user and platform:', error || 'No data');
-    return { error: 'Access token not found for the user and platform.' };
+  if (error || !data) {
+    throw new Error('Access token not found for the user and platform');
   }
 
   const accessToken = data.access_token;
 
-  // Step 2: Fetch all other data in parallel
-  const [metrics, accountInfo, topCampaigns, ageGenderMetrics, performanceMetrics] = await Promise.allSettled([
+
+  // Fetch all data in parallel
+  const [metrics, accountInfo, topCampaigns, ageGenderMetrics, performanceMetrics] = await Promise.all([
     fetchMetrics(adAccountId, accessToken),
     fetchAccountInfo(adAccountId, accessToken),
     fetchCampaignMetrics(adAccountId, accessToken),
     fetchAgeGenderCountryMetrics(adAccountId, accessToken),
     fetchPerformanceMetrics(adAccountId, accessToken),
+    // fetchHourlyBreakdown(adAccountId, accessToken),
   ]);
 
-  // Step 3: Handle each fetch result
-
+  // Combine results into one object
   return {
-    metrics: metrics,
-    accountInfo: accountInfo,
-    topCampaigns: topCampaigns,
-    ageGenderMetrics: ageGenderMetrics,
-    performanceMetrics: performanceMetrics,
+    metrics,
+    topCampaigns,
+    accountInfo,
+    ageGenderMetrics,
+    performanceMetrics,
+    // hourlyBreakdown
   };
 };

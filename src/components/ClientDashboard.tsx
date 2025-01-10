@@ -27,7 +27,7 @@ export default function ClientDashboard({ dashboardData }: { dashboardData: any 
   const [activeTab, setActiveTab] = useState('account');
   /* eslint-enable */
 
-
+  console.log(metrics);
   return (
     <div className="space-y-8 p-4">
       <section className="rounded-lg p-3">

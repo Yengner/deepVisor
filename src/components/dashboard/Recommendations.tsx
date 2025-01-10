@@ -40,9 +40,9 @@ const Recommendations = ({ recommendations }: RecommendationsProps) => {
 
             {/* Recommendation Content */}
             <div className="flex-1">
-              <p className="text-[12px] text-gray-700">
-                {rec.message.length > 150
-                  ? `${rec.message.substring(0, 150)}...` // Truncate long messages
+              <p className="text-[13px] text-gray-700 leading-6">
+                {rec.message.length > 250
+                  ? `${rec.message.substring(0, 250)}...` // Truncate long messages
                   : rec.message}
               </p>
 

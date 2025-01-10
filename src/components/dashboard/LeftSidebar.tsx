@@ -8,7 +8,7 @@ import { ChevronDownIcon } from '@radix-ui/react-icons';
 import { createClient } from '@/lib/utils/supabase/clients/browser';
 import Image from 'next/image';
 
-const RightSidebar = () => {
+const LeftSidebar = () => {
     const router = useRouter();
     const supabase = createClient();
 
@@ -71,7 +71,7 @@ const RightSidebar = () => {
                 </div>
             ) : (
                 <>
-                    {/* Overview Button */}
+                    {/* Overview Button
                     <div className="mb-8 border-l-2 border-gray-200 group relative">
                         <button
                             onClick={() => handleNavigation('/dashboard', true)}
@@ -84,19 +84,18 @@ const RightSidebar = () => {
                             <span className='text-lg'>Overview</span>
                         </button>
                         <div className="coming-soon-overlay">Coming Soon</div>
-                    </div>
+                    </div> */}
 
                     {/* Platforms Section */}
                     <div className="mb-10 border-l-2 pb-4 pt-1 border-gray-200 ">
                         <button
                             onClick={() => handleNavigation('/dashboard/platforms', false)}
-                            className={`relative flex items-center w-full px-4 py-3 rounded-md text-gray-700 font-semibold ${isCurrentPage('/dashboard/platforms') ? 'bg-[#e7f6f2]' : ''}`}
-                            style={{ width: 'fit-content' }}
-                        >
+                            className={`relative flex justify-center w-full px-4 py-3 rounded-md text-gray-700 font-semibold ${isCurrentPage('/dashboard/platforms') ? 'bg-[#e7f6f2]' : ''}`}
+                            >
                             {isCurrentPage('/dashboard/platforms') && (
                                 <span className="absolute left-[-2px] top-0 bottom-0 w-1 bg-[#68beaf] rounded"></span>
                             )}
-                            <span className="truncate text-[16px]">Platforms Overview</span>
+                            <span className="text-xl">Overview</span>
                         </button>
 
                         <div className="ml-4 mt-3 space-y-3 border-l-2 border-gray-200 pl-0 relative">
@@ -104,7 +103,7 @@ const RightSidebar = () => {
                                 <button
                                     key={platform.platform_name}
                                     onClick={() => handleNavigation(`/dashboard/platforms/${platform.platform_name}`, false)}
-                                    className={`relative flex items-center w-full px-4 py-2 rounded-lg text-gray-700 text-sm font-semibold ${isCurrentSubPage(`/dashboard/platforms/${platform.platform_name}`) ? 'bg-[#e7f6f2]' : ''}`}
+                                    className={`relative flex items-center w-full px-4 py-2 rounded-lg text-gray-700 text-lg font-semibold ${isCurrentSubPage(`/dashboard/platforms/${platform.platform_name}`) ? 'bg-[#e7f6f2]' : ''}`}
                                 >
                                     {isCurrentSubPage(`/dashboard/platforms/${platform.platform_name}`) && (
                                         <span className="absolute left-[-2px] top-0 bottom-0 w-1 bg-[#68beaf] rounded"></span>
@@ -159,4 +158,4 @@ const RightSidebar = () => {
     );
 };
 
-export default RightSidebar;
+export default LeftSidebar;

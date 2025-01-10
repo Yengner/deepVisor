@@ -11,9 +11,10 @@ const TopBar = () => {
   // Updated navigation items with a "comingSoon" flag
   const navigationItems = [
     { label: 'Dashboard', path: '/dashboard/platforms', comingSoon: false },
-    { label: 'Integration', path: '/integration', comingSoon: false },
+    { label: 'Reports', path: '/reports', comingSoon: true },
     { label: 'Campaigns', path: '/campaigns', comingSoon: true },
     { label: 'Analytics', path: '/analytics', comingSoon: true },
+    { label: 'Integration', path: '/integration', comingSoon: false },
     // Add future tabs here
   ];
 
@@ -25,9 +26,10 @@ const TopBar = () => {
 
   const getPageTitle = () => {
     if (pathname.startsWith('/dashboard/platforms')) return 'Dashboard';
-    if (pathname.startsWith('/integration')) return 'Integration';
+    if (pathname.startsWith('/reports')) return 'Reports';
     if (pathname.startsWith('/campaigns')) return 'Campaigns';
     if (pathname.startsWith('/analytics')) return 'Analytics';
+    if (pathname.startsWith('/integration')) return 'Integration';
     return 'DeepVisor';
   };
 
@@ -61,7 +63,7 @@ const TopBar = () => {
       </div>
 
       {/* Navigation */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center ">
         {navigationItems.map((item) => (
           <div key={item.path} className="relative group">
             <button

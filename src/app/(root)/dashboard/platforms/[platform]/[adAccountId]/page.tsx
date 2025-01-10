@@ -17,7 +17,6 @@ export default async function AdAccountPage({
     const { platform, adAccountId } = resolvedParams;
 
     const dashboardData = await fetchDashboardMetrics(platform, adAccountId);
-
     return <ClientDashboard dashboardData={dashboardData} />;
   } catch (error) {
     console.error('Error resolving params or fetching dashboard data:', error);

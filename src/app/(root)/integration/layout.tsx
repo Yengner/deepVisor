@@ -2,7 +2,7 @@
 
 import { ReactNode } from 'react';
 import TopBar from '@/components/TopBar';
-import RightSidebar from '@/components/dashboard/RightSidebar';
+import LeftSidebar from '@/components/dashboard/LeftSidebar';
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
   return (
@@ -12,17 +12,17 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
 
       {/* Main Content Area */}
       <div className="flex flex-1 overflow-hidden">
-        {/* Page Content */}
-        <main
-          className="flex-1 overflow-y-auto p-6 bg-[#f8f8fa] custom-scrollbar"
-        >
-          {children}
-        </main>
 
         {/* Right Sidebar */}
         <div className="max-w-52 h-full">
-          <RightSidebar />
+          <LeftSidebar />
         </div>
+
+        {/* Page Content */}
+        <main className="flex-1 overflow-y-auto p-6 bg-[#f8f8fa] custom-scrollbar">
+          {children}
+        </main>
+
       </div>
     </div>
   );

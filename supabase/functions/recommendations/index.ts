@@ -80,7 +80,7 @@ Deno.serve(async () => {
       });
 
       const prompt = `
-        You are an AI marketing assistant. Based on the campaign metrics below, provide exactly 5 concise recommendations. Between 2-3 of the 5 should include a value-type insight. Each recommendation should be actionable, relevant, and formatted as either "text" or "metric" recommendations. Ensure that each recommendation includes an "icon" field that represents the platform or context of the recommendation. Use the following format for the response:
+        You are an AI marketing assistant. Based on the campaign metrics below, provide exactly 4 concise recommendations. Between 2-3 of the 4 should include a value-type insight. Each recommendation should be actionable, relevant, and formatted as either "text" or "metric" recommendations. Ensure that each recommendation includes an "icon" field that represents the platform or context of the recommendation. Use the following format for the response:
         
         [
           {
