@@ -5,11 +5,11 @@ import Testimonials from "@/components/public/Testimonials";
 import Pricing from "@/components/public/Pricing/Pricing";
 import CTA from "@/components/public/CTA";
 import Container from "@/components/public/Container";
-import Logos from "@/components/public/Logos";
 import Benefits from "@/components/public/Benefits/Benefits";
 import Section from "@/components/public/Section";
 import FAQ from "@/components/public/FAQ";
 import Stats from "@/components/public/Stats";
+import Logos from "@/components/public/Logos";
 
 const HomePage: React.FC = () => {
   return (

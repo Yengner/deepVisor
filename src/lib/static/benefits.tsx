@@ -1,72 +1,72 @@
 import { IBenefit } from "@/types/public/types";
-import { FiBarChart2, FiBriefcase, FiDollarSign, FiLock, FiPieChart, FiShield, FiTarget, FiTrendingUp, FiUser } from "react-icons/fi";
+import { FiBarChart2, FiBriefcase, FiCpu, FiDollarSign, FiEye, FiLayers, FiLock, FiPieChart, FiShield, FiTarget, FiTrendingUp, FiUser } from "react-icons/fi";
 
 
 export const benefits: IBenefit[] = [
     {
-        title: "Smart Budgeting",
-        description: "Take the guesswork out of managing your money. Our AI-powered budgeting tool adapts to your lifestyle and helps you stay on track.",
+        title: "Smart Campaigns",
+        description: "Optimize your marketing efforts with data-driven strategies designed to maximize engagement and ROI.",
         bullets: [
             {
-                title: "Intelligent Categorization",
-                description: "Automatically sorts your transactions for crystal-clear insights.",
+                title: "Data-Driven Insights",
+                description: "Access detailed analytics to track performance and fine-tune campaigns in real-time.",
                 icon: <FiBarChart2 size={26} />
             },
             {
-                title: "Customizable Goals",
-                description: "Set and track financial objectives that matter to you.",
+                title: "Targeted Advertising",
+                description: "Reach the right audience with precision-targeting tools tailored to your business goals.",
                 icon: <FiTarget size={26} />
             },
             {
-                title: "Predictive Analysis",
-                description: "Get ahead of your finances with spending forecasts and alerts.",
+                title: "Predictive Trends",
+                description: "Leverage AI to identify upcoming trends and adapt your strategies proactively.",
                 icon: <FiTrendingUp size={26} />
             }
         ],
-        imageSrc: "/images/mockup-1.webp"
+        imageSrc: "/images/paper.png"
     },
     {
-        title: "Seamless Investing",
-        description: "Start building wealth today, no financial degree required. Finwise makes investing accessible and straightforward.",
+        title: "Unified Marketing Data",
+        description: "Streamline your marketing efforts with a centralized dashboard for all your platforms.",
         bullets: [
             {
-                title: "Micro-Investing",
-                description: "Begin with as little as $1 and watch your money grow.",
-                icon: <FiDollarSign size={26} />
+                title: "Cross-Platform Insights",
+                description: "Integrate and analyze data from platforms like Meta, Google, TikTok, and LinkedIn.",
+                icon: <FiBarChart2 size={26} />
             },
             {
-                title: "Expert Portfolios",
-                description: "Choose from investment strategies tailored to your risk tolerance.",
-                icon: <FiBriefcase size={26} />
+                title: "Actionable Metrics",
+                description: "Track KPIs like engagement, reach, and conversions in one place.",
+                icon: <FiTrendingUp size={26} />
             },
             {
-                title: "Real-Time Performance",
-                description: "Track your investments with easy-to-understand metrics and visuals.",
+                title: "Data Transparency",
+                description: "See exactly where your marketing budget is going and how it performs.",
+                icon: <FiEye size={26} />
+            }
+        ],
+        imageSrc: "/images/marketing-dashboard.png"
+    },
+    {
+        title: "Growth-Driven Tools",
+        description: "Empowering businesses of all sizes to achieve smarter marketing outcomes.",
+        bullets: [
+            {
+                title: "AI-Powered Recommendations",
+                description: "Get insights and suggestions to optimize your campaigns in real time.",
+                icon: <FiCpu size={26} />
+            },
+            {
+                title: "Scalable for All Businesses",
+                description: "From startups to enterprises, our tools adapt to your marketing needs.",
+                icon: <FiLayers size={26} />
+            },
+            {
+                title: "Data-Driven Decisions",
+                description: "Leverage detailed analytics to make informed marketing choices.",
                 icon: <FiPieChart size={26} />
             }
         ],
-        imageSrc: "/images/mockup-2.webp"
-    },
-    {
-        title: "Bank-Grade Security",
-        description: "Your financial data deserves the best protection. Rest easy knowing Finwise employs cutting-edge security measures.",
-        bullets: [
-            {
-                title: "Military-Grade Encryption",
-                description: "Your information is safeguarded with the highest level of encryption.",
-                icon: <FiLock size={26} />
-            },
-            {
-                title: "Biometric Authentication",
-                description: "Access your account securely with fingerprint or facial recognition.",
-                icon: <FiUser size={26} />
-            },
-            {
-                title: "Real-Time Fraud Detection",
-                description: "Our system constantly monitors for suspicious activity to keep your money safe.",
-                icon: <FiShield size={26} />
-            }
-        ],
-        imageSrc: "/images/mockup-1.webp"
-    },
+        imageSrc: "/images/growth-image.png"
+    }
 ]

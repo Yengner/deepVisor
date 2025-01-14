@@ -1,5 +1,5 @@
 export const ctaDetails = {
-    heading: 'Join Over 1 Million Users To Transform Your Finances',
-    subheading: 'Your journey to financial freedom starts here. Download Finwise today and take the first step towards a brighter financial future!',
-    freeEstimateUrl: '#',
-}
+    heading: 'Take Control of Your Marketing Like Never Before',
+    subheading: 'Empower your business with actionable insights and optimized campaigns. Either manage your marketing solo or let our agency deliver results for you!',
+    freeEstimateUrl: '#pricing',
+};

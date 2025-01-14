@@ -1,5 +1,4 @@
 import { createClient } from "../utils/supabase/clients/browser";
-import { createSupabaseClient } from "../utils/supabase/clients/server";
 
 export async function demoLogin() {
     const supabase = createClient();

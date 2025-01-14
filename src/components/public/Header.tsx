@@ -35,12 +35,12 @@ const Header: React.FC = () => {
     return (
         <header className="bg-transparent fixed top-0 left-0 right-0 md:absolute z-50 mx-auto w-full">
             <Container className="!px-0">
-                <nav className="shadow-md md:shadow-none bg-white md:bg-transparent mx-auto flex items-center justify-between py-2 px-5 md:py-10">
+                <nav className="shadow-md md:shadow-none bg-white md:bg-transparent mx-auto flex items-center justify-between px-5 md:py-10">
                     {/* Logo */}
                     <div className="flex items-center">
                         <Link href="/" className="flex items-center gap-2">
-                            <FaChartPie className="text-foreground min-w-fit w-16 h-7" />
-                            <span className="manrope text-xl font-semibold text-foreground cursor-pointer w-48">
+                            <FaChartPie className="text-foreground min-w-fit w-12 h-7" />
+                            <span className="manrope text-2xl font-semibold text-foreground cursor-pointer w-48">
                                 {siteDetails.siteName}
                             </span>
                         </Link>
@@ -57,28 +57,43 @@ const Header: React.FC = () => {
                                 </li>
                             ))}
                         </ul>
-                        <Link href="#cta" className="text-black bg-primary hover:bg-primary-accent px-8 py-3 rounded-full transition-colors">
-                            Download
-                        </Link>
                     </div>
 
                     {/* Right Section */}
                     <div className="hidden md:flex items-center space-x-4">
-                        <button
-                            onClick={handleDemoLogin}
-                            className="text-black hover:text-primary-accent px-2 py-2 rounded-full transition-colors flex items-center gap-2">
-                            <FiPlayCircle className="w-5 h-5" />
-                            Demo
-                        </button>
-                        <Link href="/signup" className="text-black hover:text-primary-accent transition-colors flex items-center gap-2">
-                            <FaUserPlus className="w-5 h-5" />
-                            Sign Up
-                        </Link>
-                        <Link href="/login" className="text-black hover:text-primary-accent transition-colors flex items-center gap-2">
-                            <FaSignInAlt className="w-5 h-5" />
-                            Login
-                        </Link>
+                        <div className="group disabled-button">
+                            <div className="coming-soon-overlay">Coming Soon</div>
+                            <button
+                                onClick={handleDemoLogin}
+                                className="text-black hover:text-primary-accent px-2 py-2 rounded-full transition-colors flex items-center gap-2"
+                                disabled
+                            >
+                                <FiPlayCircle className="w-5 h-5" />
+                                Demo
+                            </button>
+                        </div>
+                        <div className="group disabled-button">
+                            <div className="coming-soon-overlay">Coming Soon</div>
+                            <Link
+                                href="/signup"
+                                className="text-black hover:text-primary-accent transition-colors flex items-center gap-2"
+                            >
+                                <FaUserPlus className="w-5 h-5" />
+                                Sign Up
+                            </Link>
+                        </div>
+                        <div className="group disabled-button">
+                            <div className="coming-soon-overlay truncate">Coming Soon</div>
+                            <Link
+                                href="/login"
+                                className="text-black hover:text-primary-accent transition-colors flex items-center gap-2"
+                            >
+                                <FaSignInAlt className="w-5 h-5" />
+                                Login
+                            </Link>
+                        </div>
                     </div>
+
 
                     {/* Mobile Menu Button */}
                     <div className="md:hidden flex items-center">

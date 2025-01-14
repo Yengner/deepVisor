@@ -1,10 +1,5 @@
+import { ctaDetails } from "@/lib/static/cta"
 import FreeEstimateButton from "./FreeEstimateButton"
-
-export const ctaDetails = {
-  heading: 'Join Over 1 Million Users To Transform Your Finances',
-  subheading: 'Your journey to financial freedom starts here. Download Finwise today and take the first step towards a brighter financial future!',
-  freeEstimateUrl: '#'
-}
 
 const CTA: React.FC = () => {
     return (
@@ -21,7 +16,7 @@ const CTA: React.FC = () => {
                         <p className="mx-auto max-w-xl md:px-5">{ctaDetails.subheading}</p>
 
                         <div className="mt-4 flex flex-col sm:flex-row items-center sm:gap-4">
-                        <FreeEstimateButton />
+                            <FreeEstimateButton />
                         </div>
                     </div>
                 </div>

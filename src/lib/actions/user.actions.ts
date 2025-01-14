@@ -57,7 +57,6 @@ export async function handleSignUp(
     }
 }
 
-// Helper function for handling sign-out
 export async function handleSignOut() {
 
     try {
@@ -94,7 +93,7 @@ export async function getLoggedInUser() {
 
     if (error || !data?.user) {
         console.warn('No active user found. Redirecting to /login.');
-        redirect('/login'); 
+        redirect('/login');
     }
 
     const user = await getUserInfo({ userId: data.user.id });
@@ -135,3 +134,51 @@ export async function getUserInfo({ userId }: getUserInfoProps) {
 //     }
 
 // }
+
+export async function handleFreeEstimate(data: {
+    name: string;
+    company?: string;
+    email: string;
+    phone: string;
+    budget: string;
+    projectDetails: string;
+    timeline: string;
+    preferredContact: string;
+    isFreeOption: boolean;
+    estimatedIncome?: string;
+    termsAgreed: boolean;
+}) {
+    try {
+        const supabase = await createSupabaseClient();
+        const { data: insertedData, error } = await supabase
+            .from('free_estimates')
+            .insert([
+                {
+                    name: data.name,
+                    company: data.company || null,
+                    email: data.email,
+                    phone: data.phone,
+                    budget: data.budget,
+                    project_details: data.projectDetails,
+                    timeline: data.timeline,
+                    preferred_contact: data.preferredContact,
+                    is_free_option: data.isFreeOption,
+                    estimated_income: data.isFreeOption ? data.estimatedIncome || null : null,
+                    terms_agreed: data.termsAgreed,
+                },
+            ]);
+
+        if (error) throw error;
+
+        return { success: true, data: insertedData };
+    } catch (error) {
+        // Narrowing down 'error' to handle it safely
+        if (error instanceof Error) {
+            console.error('Supabase Insert Error:', error.message);
+            return { success: false, error: error.message };
+        } else {
+            console.error('Unknown error:', error);
+            return { success: false, error: 'An unknown error occurred.' };
+        }
+    }
+}
