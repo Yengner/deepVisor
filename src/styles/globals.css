@@ -198,3 +198,21 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 0.875rem;
   text-align: center;
 }
+
+.text-sectiontitle {
+  font-size: 14px;
+  line-height: 22px;
+}
+
+@media (min-width: 1280px) {
+  .xl\:text-sectiontitle3 {
+      font-size: 44px;
+      line-height: 55px;
+  }
+}
+@media (min-width: 1280px) {
+  .xl\:text-itemtitle {
+      font-size: 26px;
+      line-height: 32px;
+  }
+}

@@ -51,7 +51,7 @@ const Header: React.FC = () => {
                         <ul className="flex space-x-5">
                             {menuItems.map(item => (
                                 <li key={item.text}>
-                                    <Link href={item.url} className="text-foreground hover:text-foreground-accent transition-colors">
+                                    <Link href={item.url} className="text-foreground hover:text-primary-accent transition-colors">
                                         {item.text}
                                     </Link>
                                 </li>

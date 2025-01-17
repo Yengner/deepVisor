@@ -12,7 +12,7 @@ const PricingColumn: React.FC<Props> = ({ tier, highlight }: Props) => {
 
     const handleButtonClick = () => {
         if (price === "Contact Us") {
-            window.location.href = "/free-estimate";
+            window.location.href = "/contact-us";
         } else {
             window.location.href = `/payment?plan=${name.toLowerCase().replace(/\s+/g, "-")}`;
         }

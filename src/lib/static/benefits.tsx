@@ -1,5 +1,5 @@
 import { IBenefit } from "@/types/public/types";
-import { FiBarChart2, FiBriefcase, FiCpu, FiDollarSign, FiEye, FiLayers, FiLock, FiPieChart, FiShield, FiTarget, FiTrendingUp, FiUser } from "react-icons/fi";
+import { FiBarChart2, FiCpu, FiEye, FiLayers, FiPieChart, FiTarget, FiTrendingUp } from "react-icons/fi";
 
 
 export const benefits: IBenefit[] = [

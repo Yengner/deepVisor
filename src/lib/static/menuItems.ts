@@ -2,19 +2,27 @@ import { IMenuItem } from "@/types/public/types.d";
 
 export const menuItems: IMenuItem[] = [
     {
-        text: "Features",
-        url: "#features"
+        text: "Home",
+        url: "/"
     },
     {
-        text: "Pricing",
-        url: "#pricing"
+        text: "About Us",
+        url: "/about-us"
     },
     {
-        text: "Testimonials",
-        url: "#testimonials"
+        text: "Services",
+        url: "/services"
     },
     {
-        text: "About",
-        url: "#about"
-    }
+        text: "How It Works",
+        url: "/how-it-works"
+    },
+    {
+        text: "Invest In Us",
+        url: "/investor-relations"
+    },
+    {
+        text: "Contact Us",
+        url: "/contact-us"
+    },
 ];

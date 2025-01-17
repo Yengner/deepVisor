@@ -1,6 +1,5 @@
 import { IStats } from "@/types/public/types";
 import { BsBarChartFill, BsFillStarFill } from "react-icons/bs";
-import { PiGlobeFill } from "react-icons/pi";
 import { HiOutlineBuildingOffice2 } from "react-icons/hi2";
 
 export const stats: IStats[] = [

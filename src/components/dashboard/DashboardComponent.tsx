@@ -3,8 +3,8 @@ import Recommendations from '@/components/dashboard/Recommendations';
 import FeaturedCampaigns from '@/components/dashboard/FeaturedCampaigns';
 import TopPlatforms from '@/components/dashboard/TopPlatforms';
 import TopPlatformCard from '@/components/dashboard/TopPlatform';
-import ConversionsBreakdownChart from '@/components/dashboard/TopPlatformsChart';
-import QuickActions from '@/components/dashboard/QuickActions';
+import QuickActions from './CampaignCreation';
+import ConversionsBreakdownChart from './PerformanceTrends';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const DashboardComponent = ({platforms, featuredPlatformsCampaigns, Topmetrics, recommendations}: any) => {
