@@ -1,92 +1,122 @@
-'use client';
+// 'use client';
 
-import { useEffect, useState } from 'react';
-import CreateCampaign from '@/components/FbComponenets/CreateAdCampaign';
-import { createClient } from '@/lib/utils/supabase/clients/browser';
-import { getLoggedInUser } from '@/lib/actions/user.actions';
+// import React, { useState } from 'react';
+// import CampaignTable from '@/components/CampaignTable';
+// import { useGlobalState } from '@/lib/store/globalState';
+// import AdGroupTable from '@/components/AdGroupTable';
+// import AdTable from '@/components/AdTable';
+// import { useAdSetInsights, useCampaignInsights, useCampaignsIds } from '@/hooks/useCampaigns';
 
-const Campaigns = () => {
-  const [accessToken, setAccessToken] = useState<string | null>(null);
-  const [adAccountId, setAdAccountId] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+// const CampaignsPage = () => {
+//   const { selectedPlatform, selectedAdAccount } = useGlobalState();
+//   const [activeTab, setActiveTab] = useState<'campaigns' | 'adGroups' | 'ads'>('campaigns');
+//   const [selectedCampaigns, setSelectedCampaigns] = useState<string[]>([]);
+//   const [selectedAdGroups, setSelectedAdGroups] = useState<string[]>([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const supabase = createClient(); // Use the browser client since this will be client-side
+//   const { data: campaigns, isLoading: campaignsLoading } = useCampaignsIds(
+//     selectedPlatform,
+//     selectedAdAccount
+//   );
 
-      try {
-        const user = await getLoggedInUser(); 
-        const userId = user?.id;
+//   const { data: campaignInsights, isLoading: campaignInsightsLoading } = useCampaignInsights(
+//     selectedPlatform,
+//     selectedAdAccount
+//   );
 
-        if (!userId) {
-          throw new Error("No user is logged in.");
-        }
-        console.log("User ID:", userId);
+//   const { data: adsetsInsights, isLoading: adsetsInsightsLoading } = useAdSetInsights(
+//     selectedPlatform,
+//     selectedAdAccount
+//   );
 
-        // Query Supabase for the access token from the "access_token" table
-        const { data: accessTokenData, error: accessTokenError } = await supabase
-          .from("access_tokens") 
-          .select("access_token")
-          .eq("platform", 'facebook')
-          .eq("user_id", userId)
-          .single();
+//   const handleTabClick = (tab: 'campaigns' | 'adGroups' | 'ads') => setActiveTab(tab);
 
-        if (accessTokenError || !accessTokenData) {
-          throw new Error("Failed to retrieve the access token.");
-        }
+//   const isLoading =
+//     campaignsLoading || campaignInsightsLoading || adsetsInsightsLoading;
 
-        const { data: adAccountData, error: adAccountError } = await supabase
-          .from("ad_accounts") 
-          .select("ad_account_id")
-          .eq("user_id", userId)
-          .single();
+//   if (!selectedPlatform || !selectedAdAccount) {
+//     return <p>Please select a platform and ad account to view campaigns.</p>;
+//   }
 
-          if (adAccountError || !adAccountData) {
-            throw new Error("Failed to retrieve the ad account ID.");
-          }
-        const accessToken = accessTokenData.access_token;
-        console.log("Access Token from Supabase:", accessToken);
+//   if (isLoading) {
+//     return (
+//       <div className="flex justify-center items-center h-screen">
+//         <div className="text-blue-500 text-xl">Loading data, please wait...</div>
+//       </div>
+//     );
+//   }
 
-        // Query Supabase for the ad account ID from the "ad_accounts" table
+//   return (
+//     <div className="p-6 space-y-8">
+//       {/* Tabs Header */}
+//       <div className="flex space-x-4 border-b border-gray-300 dark:border-gray-700 mb-4">
+//         <button
+//           className={`px-4 py-2 ${activeTab === 'campaigns'
+//             ? 'text-blue-500 border-b-2 border-blue-500'
+//             : 'text-gray-600 dark:text-gray-400'
+//             }`}
+//           onClick={() => handleTabClick('campaigns')}
+//         >
+//           Campaigns
+//         </button>
+//         <button
+//           className={`px-4 py-2 ${activeTab === 'adGroups'
+//             ? 'text-blue-500 border-b-2 border-blue-500'
+//             : 'text-gray-600 dark:text-gray-400'
+//             }`}
+//           onClick={() => handleTabClick('adGroups')}
+//         >
+//           Ad Groups
+//         </button>
+//         <button
+//           className={`px-4 py-2 ${activeTab === 'ads'
+//             ? 'text-blue-500 border-b-2 border-blue-500'
+//             : 'text-gray-600 dark:text-gray-400'
+//             }`}
+//           onClick={() => handleTabClick('ads')}
+//         >
+//           Ads
+//         </button>
+//       </div>
+
+//       {/* Tabs Content */}
+//       {activeTab === 'campaigns' && (
+//         <CampaignTable
+//           platform={selectedPlatform}
+//           adAccountId={selectedAdAccount}
+//           campaigns={campaigns || []}
+//           insights={campaignInsights || []}
+//           selectedCampaigns={selectedCampaigns}
+//           onSelect={setSelectedCampaigns}
+//         />
+//       )}
+//       {activeTab === 'adGroups' && (
+//         <AdGroupTable
+//           platform={selectedPlatform}
+//           adAccountId={selectedAdAccount}
+//           selectedCampaigns={selectedCampaigns}
+//           onSelect={(selectedIds) => setSelectedAdGroups(selectedIds)}
+//         />
+//       )}
+//       {activeTab === 'ads' && (
+//         <AdTable
+//           platform={selectedPlatform}
+//           adAccountId={selectedAdAccount}
+//           selectedAdGroups={selectedAdGroups}
+//         />
+//       )}
+//     </div>
+//   );
+// };
+
+// export default CampaignsPage;
 
 
-        const adAccountId = adAccountData.ad_account_id;
-        console.log("Ad Account ID from Supabase:", adAccountId);
-        
-        setAccessToken(accessToken);
-        setAdAccountId(adAccountId);
-      } catch (err: unknown) {
-        if (err instanceof Error) {
-          setError(err.message);
-        }
-      } finally {
-        setLoading(false); 
-      }
-    };
+import React from 'react'
 
-    fetchData();
-  }, []); 
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div style={{ color: 'red' }}>{error}</div>;
-  }
-
+const campaigns = () => {
   return (
-    <div>
-      <h1>Facebook Campaigns</h1>
+    <div>campaigns</div>
+  )
+}
 
-      {accessToken && adAccountId ? (
-        <CreateCampaign accessToken={accessToken} adAccountId={adAccountId} />
-      ) : (
-        <p>Access token or Ad Account ID is missing.</p>
-      )}
-    </div>
-  );
-};
-
-export default Campaigns;
+export default campaigns

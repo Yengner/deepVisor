@@ -1,34 +1,9 @@
-import { getLoggedInUser } from "@/lib/actions/user.actions";
-import Marketing from "@/components/Dashboard/Marketing";
-import { getFbAdAccount, getFbAdAccounts } from "@/lib/actions/facebook/facebook.actions";
+import React from 'react'
 
-const Dashboard = async({ searchParams: { id }}:SearchParamProps) => {
-  // const currentPage = Number(page as string) || 1;
-  const loggedIn = await getLoggedInUser();
-  const userId = loggedIn.id;
-  const fBAdAccounts = await getFbAdAccounts({ userId });
-  
-  if(!fBAdAccounts) return;
-
-  const fBAdAccountsData = fBAdAccounts?.data;
-  const adAccountId = (id as string) || fBAdAccountsData[0]?.adAccountId;
-
-  const account = await getFbAdAccount({ adAccountId, userId });
-
-  const safeAccount = {
-    ...account,
-    accountInfo: account.accountInfo || [], // Fallback to empty array if `null`
-  };
-  
-  const adAccountCampaigns = account.campaigns
+const oliver = () => {
   return (
-    <Marketing 
-    campaignInsights={adAccountCampaigns} 
-    accounts={fBAdAccountsData} 
-    currentAccount={safeAccount} 
-    userId={userId}
-    />
-  );
-};
+    <div>oliver</div>
+  )
+}
 
-export default Dashboard;
+export default oliver

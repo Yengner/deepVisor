@@ -1,25 +1,30 @@
-import "@/css/satoshi.css";
-import "@/css/style.css";
-import React from "react";
-import DefaultLayout from "@/components/Layouts/DefaultLayout";
-import { Toaster } from "react-hot-toast";
+'use client'
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { Toaster } from 'react-hot-toast'; // Import Toaster for toast notifications
+import Sidebar from '@/components/Sidebar';
+import '../../styles/globals.css';
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const queryClient = new QueryClient();
 
   return (
-    <html lang="en">
-      <body suppressHydrationWarning={true}>
-        <div className="min-h-dvh dark:bg-boxdark-2 dark:text-bodydark">
-
-              <DefaultLayout>{children}</DefaultLayout>
-              
-          <Toaster />
-        </div>
-      </body>
-    </html>
+    <QueryClientProvider client={queryClient}>
+      <Toaster
+        position="bottom-right"
+        toastOptions={{
+          style: {
+            background: '#333',
+            color: '#fff',
+          },
+        }}
+      />
+      <div className="h-screen">
+        <Sidebar />
+        {children}
+      </div>
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   );
 }

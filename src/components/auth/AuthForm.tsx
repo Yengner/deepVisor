@@ -20,7 +20,7 @@ export default function AuthForm({ type }: AuthFormProps) {
     const [lastName, setLastName] = useState("");
     const [businessName, setBusinessName] = useState("");
     const [phoneNo, setPhoneNo] = useState("");
-    const [loading, setLoading] = useState(false); // Manage loading state
+    const [loading, setLoading] = useState(false);
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
@@ -30,7 +30,7 @@ export default function AuthForm({ type }: AuthFormProps) {
                 const { errorMessage } = await handleLogin(email, password);
                 if (errorMessage) {
                     toast.error(errorMessage);
-            } else {
+                } else {
                     toast.success("Logged In!");
                     window.location.reload();
                 }
@@ -40,11 +40,12 @@ export default function AuthForm({ type }: AuthFormProps) {
                 if (errorMessage) {
                     toast.error(errorMessage);
                 } else {
-                    toast.success("Signed In!");
+                    toast.success("Signed Up!");
                     router.push('/integration');
                 }
             }
         } catch (error) {
+            console.error("Error during submission:", error);
             toast.error("An error occurred. Please try again.");
         } finally {
             setLoading(false); // End loading
@@ -53,7 +54,7 @@ export default function AuthForm({ type }: AuthFormProps) {
 
 
     return (
-        <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+        <div className="rounded-sm  bg-white shadow-default dark:border-strokedark dark:bg-boxdark w-full">
             <div className="flex flex-wrap items-center">
                 <div className="hidden w-full xl:block xl:w-1/2">
                     <div className="px-26 py-17.5 text-center">
