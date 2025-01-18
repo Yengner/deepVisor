@@ -5,6 +5,7 @@ import Header from "@/components/public/Header";
 import Footer from "@/components/public/Footer";
 import Script from "next/script";
 
+
 export const metadata: Metadata = {
   title: "DeepVisor - Empower Your Business with Advanced Ad Insights",
   description: "Helping businesses grow with advanced ad tools and insights.",

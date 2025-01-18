@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 const manrope = Manrope({ subsets: ['latin'] });
 const sourceSans = Source_Sans_3({ subsets: ['latin'] });
 
-// Root layout for the public pages
+
 export default function RootLayout({
   children,
 }: {
