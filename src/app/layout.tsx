@@ -21,6 +21,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${manrope.className} ${sourceSans.className} antialiasedbg-gray-200 relative h-screen`}>
+        <noscript>
+          <iframe
+            src="https://www.googletagmanager.com/ns.html?id=GTM-KPR97KV2"
+            height="0"
+            width="0"
+            style={{ display: "none", visibility: "hidden" }}
+          ></iframe>
+        </noscript>
         {siteDetails.googleAnalyticsId && <GoogleAnalytics gaId={siteDetails.googleAnalyticsId} />}
         {children}
       </body>

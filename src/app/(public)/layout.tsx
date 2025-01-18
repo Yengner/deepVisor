@@ -1,13 +1,19 @@
 import type { Metadata } from "next";
 import "../../styles/globals.css";
+import { Source_Sans_3, Manrope } from "next/font/google";
 import Header from "@/components/public/Header";
 import Footer from "@/components/public/Footer";
-import Head from "next/head";
+import Script from "next/script";
+
 
 export const metadata: Metadata = {
   title: "DeepVisor - Empower Your Business with Advanced Ad Insights",
   description: "Helping businesses grow with advanced ad tools and insights.",
 };
+
+const manrope = Manrope({ subsets: ['latin'] });
+const sourceSans = Source_Sans_3({ subsets: ['latin'] });
+
 
 export default function RootLayout({
   children,
@@ -15,40 +21,41 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
-      <Head>
-        {/* Meta Pixel Code */}
-        <script
+    <html lang="en">
+      <body className={`${manrope.className} ${sourceSans.className} antialiasedbg-gray-200 relative h-screen`}>
+        {/* Google Tag Manager (noscript) */}
+        <noscript>
+          <iframe
+            src="https://www.googletagmanager.com/ns.html?id=GTM-KPR97KV2"
+            height="0"
+            width="0"
+            style={{ display: "none", visibility: "hidden" }}
+          ></iframe>
+        </noscript>
+        {/* End Google Tag Manager (noscript) */}
+
+        {/* Google Tag Manager Script */}
+        <Script
+          id="gtm-script"
+          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
-              !function(f,b,e,v,n,t,s)
-              {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-              n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-              if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-              n.queue=[];t=b.createElement(e);t.async=!0;
-              t.src=v;s=b.getElementsByTagName(e)[0];
-              s.parentNode.insertBefore(t,s)}(window, document,'script',
-              'https://connect.facebook.net/en_US/fbevents.js');
-              fbq('init', '${1418481032127813}');
-              fbq('track', 'PageView');
-            `,
+            (function(w,d,s,l,i){
+              w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});
+              var f=d.getElementsByTagName(s)[0],
+                  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
+              j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
+              f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer','GTM-KPR97KV2');
+          `,
           }}
         />
-        <noscript>
-          <img
-            height="1"
-            width="1"
-            style={{ display: "none" }}
-            src={`https://www.facebook.com/tr?id=${1418481032127813}&ev=PageView&noscript=1`}
-          />
-        </noscript>
-        {/* End Meta Pixel Code */}
-      </Head>
-      <Header />
-      <main>
-        {children}
-      </main>
-      <Footer />
-    </>
+        {/* End Google Tag Manager Script */}
+
+        <Header />
+        <main>{children}</main>
+        <Footer />
+      </body>
+    </html>
   );
 }
