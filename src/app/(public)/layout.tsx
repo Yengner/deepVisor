@@ -52,6 +52,26 @@ export default function RootLayout({
         />
         {/* End Google Tag Manager Script */}
 
+        {/* Google Analytics gtag.js */}
+        <Script
+          id="google-analytics-script"
+          src="https://www.googletagmanager.com/gtag/js?id=G-GHTP28EVC0"
+          strategy="afterInteractive"
+        />
+        <Script
+          id="google-analytics-config"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-GHTP28EVC0');
+          `,
+          }}
+        />
+        {/* End Google Analytics gtag.js */}
+
         <Header />
         <main>{children}</main>
         <Footer />
