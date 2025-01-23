@@ -14,7 +14,7 @@ interface RecommendationsProps {
 
 const Recommendations = ({ recommendations }: RecommendationsProps) => {
   return (
-    <div className="bg-white shadow-lg rounded-lg p-6 h-[412px]">
+    <div className="p-6 h-fit">
       {/* Header */}
       <div className="flex flex-col space-y-1 mb-4">
         <h2 className="text-xl font-semibold text-gray-800">AI Recommendations</h2>

@@ -9,6 +9,10 @@ const nextConfig = {
       },
     ],
   },
+  webpack: (config) => {
+    config.cache = false;
+    return config;
+  },
   output: 'standalone', // Ensures the app is built as a standalone Node.js server
 };
 

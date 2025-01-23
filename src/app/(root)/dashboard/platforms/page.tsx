@@ -10,18 +10,16 @@ export default async function DashboardPage() {
 
   const loggedIn = await getLoggedInUser();
   const userId = loggedIn?.id;
-  const platforms = await fetchIntegratedPlatforms(userId);
-  const featuredPlatformsCampaigns = await getTopCampaignsForPlatforms(userId)
+  
+  const featuredPlatformsCampaigns = await getTopCampaignsForPlatforms(userId) // Getting the top campaigns for the top platforms
   // const { metrics, topPlatform, topPlatforms } = await getTopPlatforms(userId);
-  const metrics = await getTopPlatforms(userId);
-
-  const recommendations = await fetchRecommendations(userId);
+  const metrics = await getTopPlatforms(userId); // Getting the top platform(s) metrics
+  const recommendations = await fetchRecommendations(userId); // Getting Chatgpt generated recommendations
 
   return (
-    <DashboardComponent 
-    platforms={platforms} 
-    featuredPlatformsCampaigns={featuredPlatformsCampaigns} 
-    Topmetrics={metrics} 
-    recommendations={recommendations} />
+    <DashboardComponent
+      featuredPlatformsCampaigns={featuredPlatformsCampaigns}
+      Topmetrics={metrics}
+      recommendations={recommendations} />
   );
 }

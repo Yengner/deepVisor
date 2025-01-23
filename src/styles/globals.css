@@ -7,7 +7,6 @@
   --foreground: #171717;
   --primary: #3e7eff;
   --secondary: #70818f;
-
   --primary-accent: #699aff;
   --foreground-accent: #454545;
   --hero-background: #F3F3F5;
@@ -20,54 +19,7 @@
   }
 }
 
-html {
-  @apply scroll-smooth;
-}
-
-body {
-  @apply text-lg;
-  
-  color: var(--foreground);
-  background: var(--background);
-  font-family: "Source Sans 3", sans-serif;
-  font-optical-sizing: auto;
-  font-style: normal;
-}
-
 @layer utilities {
-  /* Utility classes for hiding scrollbars */
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
-  }
-
-  .no-scrollbar {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
-  }
-
-  /* Custom scrollbars for improved UX */
-  .custom-scrollbar {
-    scrollbar-color: #68beaf transparent; /* For Firefox */
-    scrollbar-width: thin; /* For Firefox */
-  }
-
-  .custom-scrollbar::-webkit-scrollbar {
-    width: 8px; /* Adjust width as needed */
-  }
-
-  .custom-scrollbar::-webkit-scrollbar-thumb {
-    background-color: #68beaf; /* Scrollbar color */
-    border-radius: 8px;
-  }
-
-  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background-color: #68beaf; /* Hover color */
-  }
-
-  .custom-scrollbar::-webkit-scrollbar-track {
-    background: transparent; /* Track color */
-  }
-
   /* Smooth drop-in animation */
   @keyframes drop-in {
     0% {
@@ -91,7 +43,6 @@ body {
       transform: translateY(0);
     }
   }
-
   /* Add Tailwind utility for fade-in-up animation */
   .animate-fade-in-up {
     animation: fade-in-up 0.6s ease-out forwards;

@@ -1,7 +1,5 @@
-'use client';
-
 import { ReactNode } from 'react';
-import TopBar from '@/components/TopBar';
+import TopBar from '@/components/layout/topBar/TopBar';
 import LeftSidebar from '@/components/dashboard/LeftSidebar';
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {

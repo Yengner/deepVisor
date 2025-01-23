@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+const defaultTheme = require('tailwindcss/defaultTheme');
 
 export default {
   content: [
@@ -12,14 +13,16 @@ export default {
         'bounce-up': 'bounce-up 0.5s ease-in-out',
       },
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
-        primary: "var(--primary)",
-        secondary: "var(--secondary)",
-
-        "primary-accent": "var(--primary-accent)",
-        "foreground-accent": "var(--foreground-accent)",
-        "hero-background": "var(--hero-background)",
+        background: '#ffffff',
+        foreground: '#171717',
+        primary: '#3e7eff',
+        secondary: '#70818f',
+        'primary-accent': '#699aff',
+        'foreground-accent': '#454545',
+        'hero-background': '#F3F3F5',
+      },
+      fontFamily: {
+        manrope: ['Manrope', ...defaultTheme.fontFamily.sans],
       },
     },
   },

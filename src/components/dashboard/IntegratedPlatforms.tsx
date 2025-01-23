@@ -18,10 +18,10 @@ const IntegratedPlatforms = ({ platforms }: IntegratedPlatformsProps) => {
           className="flex flex-col justify-center p-4 border rounded shadow-md bg-[white] "
         >
           <Image
-            src={`/${platform.platform}.png`} // Replace with appropriate image paths
+            src={`/images/platforms/logo/${platform.platform}.png`}
             alt={`${platform.platform} logo`}
-            width={48} // Specify width explicitly
-            height={48} // Specify height explicitly
+            width={48}
+            height={48}
             className="h-12 w-12 mx-auto"
           />
           <p className="mt-2 text-sm font-semibold capitalize text-center">

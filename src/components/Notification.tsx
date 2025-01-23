@@ -14,7 +14,7 @@ interface User {
   email: string;
 }
 
-const Sidebar = () => {
+const Notification = () => {
   const { sidebarOpen, setSidebarOpen } = useGlobalState();
   const { notifications } = useMockNotifications(); // Fetch fake notifications
   const router = useRouter();
@@ -117,4 +117,4 @@ const Sidebar = () => {
   );
 };
 
-export default Sidebar;
+export default Notification;
