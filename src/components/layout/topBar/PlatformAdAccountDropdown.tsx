@@ -19,7 +19,6 @@ interface PlatformAdAccountDropdownProps {
 export default async function PlatformAdAccountDropdown({ loggedInUser }: PlatformAdAccountDropdownProps) {
   const supabase = await createSupabaseClient();
 
-  console.log(loggedInUser);
   const userId = loggedInUser?.id;
 
   const { data: platforms, error: platformError } = await supabase

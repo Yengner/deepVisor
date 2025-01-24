@@ -65,7 +65,6 @@ const Header: React.FC = () => {
                             <button
                                 onClick={handleDemoLogin}
                                 className="text-black hover:text-primary-accent px-2 py-2 rounded-full transition-colors flex items-center gap-2 cursor-pointer"
-                                disabled
                             >
                                 <FiPlayCircle className="w-5 h-5" />
                                 Demo

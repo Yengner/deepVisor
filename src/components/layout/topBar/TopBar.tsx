@@ -32,7 +32,7 @@ export default async function Topbar() {
         />
         <button className="text-gray-600 hover:text-blue-500">
           <img
-            src="/images/profile-pic.png" // Replace with your profile image
+            src="/user-02.png" // Replace with your profile image
             alt="Profile"
             className="w-8 h-8 rounded-full"
           />
