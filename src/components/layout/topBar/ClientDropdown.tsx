@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import Breadcrumb from "./BreadCrumb";
 import { usePathname, useRouter } from "next/navigation";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 
@@ -12,16 +11,28 @@ type Platform = {
     platform_name: string;
 };
 
+interface LoggedInUser {
+    id: string;
+    first_name: string;
+    last_name: string;
+    business_name: string;
+    phone_number: string;
+    email: string;
+    created_at: string;
+    updated_at: string;
+}
+
 type AdAccount = {
     id: string;
     name: string;
     platform_integration_id: string;
     ad_account_id: string;
 };
+
 interface DropdownProps {
     platforms: Platform[];
     adAccounts: AdAccount[];
-    userInfo: any;
+    userInfo: LoggedInUser;
 }
 
 const ClientDropdown = ({ userInfo, platforms, adAccounts }: DropdownProps) => {
@@ -141,7 +152,7 @@ const ClientDropdown = ({ userInfo, platforms, adAccounts }: DropdownProps) => {
                                         <span className="sr-only">{platform.platform_name}</span> {/* Accessible text */}
                                     </li>
                                 ))}
-                                
+
                                 {/* Integrate Button */}
                                 <li
                                     onClick={() => router.push('/integration')}
@@ -189,30 +200,50 @@ const ClientDropdown = ({ userInfo, platforms, adAccounts }: DropdownProps) => {
                     <div className="grid grid-cols-4 flex-grow overflow-auto">
                         {/* Business + Ad Accounts */}
                         <div className="col-span-1 border-r">
-                            <h3 className="text-sm text-center font-semibold text-gray-500 pt-3 pb-2 mb-3 border-b">Analytics Accounts</h3>
+                            <h3 className="text-sm text-center font-semibold text-gray-500 pt-3 pb-2 mb-3 border-b">
+                                Analytics Accounts
+                            </h3>
                             <ul className="space-y-2">
                                 {selectedPlatform && (
                                     <li
                                         key={selectedPlatform.id}
-                                        className={`flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-gray-100 ${selectedPlatform}`}
+                                        className={`flex flex-col px-4 py-3 cursor-pointer hover:bg-gray-100`}
                                     >
-                                        <div>
-                                            <span className="block font-semibold text-gray-700">{userInfo?.business_name || "Business Name"}</span>
-                                            <span className="text-sm text-gray-500">{selectedPlatform.platform_name.charAt(0).toUpperCase() +
-                                                selectedPlatform.platform_name.slice(1)}</span>
+                                        <div className="flex items-center justify-between">
+                                            {/* Business Name and Platform */}
+                                            <div>
+                                                <span className="block font-semibold text-gray-700">
+                                                    {userInfo?.business_name || "Business Name"}
+                                                </span>
+                                                <span className="text-sm text-gray-500">
+                                                    {selectedPlatform.platform_name.charAt(0).toUpperCase() +
+                                                        selectedPlatform.platform_name.slice(1)}
+                                                </span>
+                                            </div>
+                                            {/* Right Arrow Icon */}
+                                            <div>
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    className="w-4 h-4 text-gray-500"
+                                                    fill="none"
+                                                    viewBox="0 0 24 24"
+                                                    stroke="currentColor"
+                                                    strokeWidth={2}
+                                                >
+                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                                                </svg>
+                                            </div>
                                         </div>
-                                        {/* Right Arrow Icon */}
-                                        <div>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                className="w-4 h-4 text-gray-500"
-                                                fill="none"
-                                                viewBox="0 0 24 24"
-                                                stroke="currentColor"
-                                                strokeWidth={2}
+                                        {/* View Platform Button */}
+                                        <div className="mt-2 text-right">
+                                            <Link
+                                                href={`/dashboard/platforms/${selectedPlatform.platform_name.toLowerCase()}`}
+                                                passHref
                                             >
-                                                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                                            </svg>
+                                                <button className="text-xs font-medium text-blue-600 hover:underline">
+                                                    View Platform
+                                                </button>
+                                            </Link>
                                         </div>
                                     </li>
                                 )}

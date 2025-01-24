@@ -2,8 +2,9 @@ import Recommendations from '@/components/dashboard/Recommendations';
 import FeaturedCampaigns from '@/components/dashboard/FeaturedCampaigns';
 import TopPlatforms from '@/components/dashboard/TopPlatforms';
 import TopPlatformCard from '@/components/dashboard/TopPlatform';
-import QuickActions from './CampaignCreation';
+// import QuickActions from './CampaignCreation';
 import StackedBarChart from './StackedBarChart';
+import Suggestion from './Suggestion';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const DashboardComponent = ({ featuredPlatformsCampaigns, Topmetrics, recommendations }: any) => {
@@ -30,7 +31,7 @@ const DashboardComponent = ({ featuredPlatformsCampaigns, Topmetrics, recommenda
             {/* Recently Accessed Section */}
             <div className='pt-6'>
                 <h2 className="text-lg font-semibold text-gray-800 mb-4">Recently Accessed</h2>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                         <p className="font-medium text-gray-700">Explore</p>
                         <p className="text-sm text-gray-500">Yesterday</p>
@@ -43,23 +44,15 @@ const DashboardComponent = ({ featuredPlatformsCampaigns, Topmetrics, recommenda
                         <p className="font-medium text-gray-700">Reports Snapshot</p>
                         <p className="text-sm text-gray-500">Yesterday</p>
                     </div>
+                    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                        <p className="font-medium text-gray-700">Reports Snapshot</p>
+                        <p className="text-sm text-gray-500">Yesterday</p>
+                    </div>
                 </div>
             </div>
 
-            {/* Recommendations and Featured Campaigns */}
-            <div className='pt-6'>
-                <h2 className="text-lg font-semibold text-gray-800 mb-4 underline underline-offset-8 [text-decoration-style:dotted]">
-                    Suggested For You
-                </h2>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div className="bg-white rounded-lg shadow-sm border border-gray-200 px-6 py-6">
-                        <h1> place holder </h1>
-                    </div>
-                    <div className="bg-white rounded-lg shadow-sm border border-gray-200 px-6 py-6">
-                        <h1> place holder </h1>
-                    </div>
-                </div>
-            </div>
+            {/* Suggestions for user */}
+            <Suggestion/>
 
             {/* Top Platforms */}
             <div className='pt-6'>

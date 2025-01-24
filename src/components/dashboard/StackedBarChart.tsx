@@ -6,6 +6,7 @@ import { ApexOptions } from 'apexcharts';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
+// come back to fix this as the impression scaling is wrong
 type Metric = {
     platform_integration_id: string;
     platform_name: string;
@@ -18,6 +19,11 @@ type Metric = {
 
 type StackedBarChartProps = {
     metrics: Metric[];
+};
+
+type TooltipFormatterOpts = {
+    dataPointIndex: number;
+    seriesName: string;
 };
 
 const StackedBarChart: React.FC<StackedBarChartProps> = ({ metrics }) => {
@@ -75,7 +81,7 @@ const StackedBarChart: React.FC<StackedBarChartProps> = ({ metrics }) => {
         yaxis: {
             title: { text: 'Values' },
             labels: {
-                formatter: (val: number) => Math.round(val).toLocaleString(), // Y-axis uses scaled values
+                formatter: (val: number) => Math.round(val).toLocaleString(),
             },
         },
         legend: {
@@ -83,11 +89,10 @@ const StackedBarChart: React.FC<StackedBarChartProps> = ({ metrics }) => {
         },
         tooltip: {
             y: {
-                formatter: (val: number, opts: any) => {
+                formatter: (val: number, opts: TooltipFormatterOpts) => {
                     const categoryIndex = opts.dataPointIndex;
                     const categoryKey = rawCategories[categoryIndex]?.key;
 
-                    // Always show the true, unscaled value in the tooltip
                     const metric = metrics.find(
                         (m) =>
                             m.platform_name.charAt(0).toUpperCase() + m.platform_name.slice(1) ===
@@ -95,9 +100,9 @@ const StackedBarChart: React.FC<StackedBarChartProps> = ({ metrics }) => {
                     );
                     if (metric && categoryKey) {
                         const trueValue = metric[categoryKey as keyof Metric];
-                        return `${Number(trueValue).toLocaleString()}`; // Display unscaled value
+                        return `${Number(trueValue).toLocaleString()}`; 
                     }
-                    return val.toLocaleString(); // Fallback to scaled value
+                    return val.toLocaleString(); 
                 },
             },
         },

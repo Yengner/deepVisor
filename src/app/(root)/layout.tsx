@@ -1,5 +1,5 @@
 import Topbar from "@/components/layout/topBar/TopBar";
-import Sidebar from "@/components/dashboard/LeftSidebar";
+import Sidebar from "@/components/layout/LeftSidebar";
 
 export default function AuthenticatedLayout({ children }: { children: React.ReactNode }) {
   return (

@@ -1,4 +1,3 @@
-import { fetchIntegratedPlatforms } from '@/lib/api/fetchIntegratedPlatforms';
 import { getTopPlatforms } from '@/lib/api/getTopPlatforms';
 import { getTopCampaignsForPlatforms } from '@/lib/api/platforms/fetchFeaturedCampaigns';
 import { fetchRecommendations } from '@/lib/api/openai.ts/recommendations';

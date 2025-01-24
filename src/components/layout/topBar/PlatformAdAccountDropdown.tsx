@@ -1,10 +1,25 @@
 import { createSupabaseClient } from "@/lib/utils/supabase/clients/server";
 import ClientDropdown from "./ClientDropdown";
 
+interface LoggedInUser {
+  id: string;
+  first_name: string;
+  last_name: string;
+  business_name: string;
+  phone_number: string;
+  email: string;
+  created_at: string;
+  updated_at: string;
+}
 
-export default async function PlatformAdAccountDropdown({ loggedInUser }: any) {
+interface PlatformAdAccountDropdownProps {
+  loggedInUser: LoggedInUser;
+}
+
+export default async function PlatformAdAccountDropdown({ loggedInUser }: PlatformAdAccountDropdownProps) {
   const supabase = await createSupabaseClient();
 
+  console.log(loggedInUser);
   const userId = loggedInUser?.id;
 
   const { data: platforms, error: platformError } = await supabase
