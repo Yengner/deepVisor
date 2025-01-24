@@ -237,7 +237,7 @@ const ClientDropdown = ({ userInfo, platforms, adAccounts }: DropdownProps) => {
                                         {/* View Platform Button */}
                                         <div className="mt-2 text-right">
                                             <Link
-                                                href={`/dashboard/platforms/${selectedPlatform.platform_name.toLowerCase()}`}
+                                                href={`/reports/platforms/${selectedPlatform.platform_name.toLowerCase()}`}
                                                 passHref
                                             >
                                                 <button className="text-xs font-medium text-blue-600 hover:underline">
@@ -257,7 +257,7 @@ const ClientDropdown = ({ userInfo, platforms, adAccounts }: DropdownProps) => {
                                 {filteredAdAccounts.map((account) => (
                                     <Link
                                         key={account.id}
-                                        href={`/dashboard/platforms/${selectedPlatform?.platform_name.toLowerCase()}/${account.ad_account_id}`}
+                                        href={`/reports/platforms/${selectedPlatform?.platform_name.toLowerCase()}/${account.ad_account_id}`}
                                         passHref
                                     >
                                         <li className="flex items-center justify-between px-4 py-3 hover:bg-gray-100 cursor-pointer">

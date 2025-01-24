@@ -1,9 +1,9 @@
 import React from 'react'
 
-const analytics = () => {
+const Reports = () => {
   return (
     <div>analytics</div>
   )
 }
 
-export default analytics
+export default Reports

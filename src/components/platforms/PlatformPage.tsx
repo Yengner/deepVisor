@@ -12,7 +12,6 @@ import LeftInfoCard from './LeftInfoCard';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const PlatformPages = ({ adAccountsData, topCampaignForAdAccounts, platform, platformData }: any) => {
 
-
     return (
         <div className="flex flex-col lg:flex-row space-y-8 lg:space-y-0 lg:space-x-6 ">
             <LeftInfoCard

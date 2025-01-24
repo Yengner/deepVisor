@@ -17,7 +17,6 @@ export default async function PlatformPage({
     const loggedIn = await getLoggedInUser();
     const userId = loggedIn.id;
     
-    // Fetch data for the platform
     const adAccountsData = await getAdAccountsData(platform, userId);
     const adAccountsLength = adAccountsData.length;
     const topCampaignForAdAccounts = await getTopCampaignsForAdAccounts(platform, userId);

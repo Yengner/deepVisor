@@ -56,7 +56,7 @@ const AdAccountsTable: React.FC<AdAccountsTableProps> = ({ adAccountsData, platf
                                     <tr key={ad_account_id} className="hover:bg-gray-100 dark:hover:bg-gray-700">
                                         <td className="border-b py-3">
                                             <Link
-                                                href={`/dashboard/platforms/${platform}/${ad_account_id}`}
+                                                href={`/reports/${platform}/${ad_account_id}`}
                                                 className="inline-block px-3 py-1 bg-blue-100 text-blue-600 rounded-full hover:bg-blue-200 hover:text-blue-700 transition-all truncate max-w-[225px]"
                                                 style={{ textDecoration: 'none' }}
                                             >

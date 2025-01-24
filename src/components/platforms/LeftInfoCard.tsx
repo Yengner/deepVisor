@@ -33,15 +33,15 @@ interface SidebarProps {
 
 const LeftSidebar: React.FC<SidebarProps> = ({ platform, overview, topAdAccounts, topCampaigns }) => {
     return (
-        <div className="lg:w-1/4 bg-white dark:bg-gray-800 shadow rounded-lg p-6 space-y-6">
+        <div className="lg:w-1/5 bg-white dark:bg-gray-800 shadow rounded-lg p-6 space-y-6">
             {/* Platform Logo and Name */}
             <div className="text-center">
                 <Image
                     src={`/images/platforms/logo/${platform}.png`}
                     alt={`${platform} Logo`}
                     className="h-24 w-24 rounded-full mx-auto mb-4"
-                    width={96} // Adjust based on your design (h-24 = 96px)
-                    height={96} // Adjust based on your design (w-24 = 96px)
+                    width={96} 
+                    height={96}
                 />
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-200">
                     {platform.charAt(0).toUpperCase() + platform.slice(1)}
