@@ -61,11 +61,10 @@ const Header: React.FC = () => {
 
                     {/* Right Section */}
                     <div className="hidden md:flex items-center space-x-4">
-                        <div className="group disabled-button">
-                            <div className="coming-soon-overlay">Coming Soon</div>
+                        <div>
                             <button
                                 onClick={handleDemoLogin}
-                                className="text-black hover:text-primary-accent px-2 py-2 rounded-full transition-colors flex items-center gap-2"
+                                className="text-black hover:text-primary-accent px-2 py-2 rounded-full transition-colors flex items-center gap-2 cursor-pointer"
                                 disabled
                             >
                                 <FiPlayCircle className="w-5 h-5" />

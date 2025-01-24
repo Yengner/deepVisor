@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
-import { GoogleAnalytics } from '@next/third-parties/google';
 import { Source_Sans_3, Manrope } from "next/font/google";
 import "../styles/globals.css";
-import { siteDetails } from "@/lib/static/siteDetails";
 
 export const metadata: Metadata = {
   title: "DeepVisor - Empower Your Business with Advanced Ad Insights",
@@ -20,16 +18,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${manrope.className} ${sourceSans.className} antialiasedbg-gray-200 relative h-screen`}>
-        <noscript>
-          <iframe
-            src="https://www.googletagmanager.com/ns.html?id=GTM-KPR97KV2"
-            height="0"
-            width="0"
-            style={{ display: "none", visibility: "hidden" }}
-          ></iframe>
-        </noscript>
-        {siteDetails.googleAnalyticsId && <GoogleAnalytics gaId={siteDetails.googleAnalyticsId} />}
+      <body className={`${manrope.className} ${sourceSans.className} antialiasedbg-gray-200`}>
         {children}
       </body>
     </html>

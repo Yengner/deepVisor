@@ -37,7 +37,7 @@ const LeftSidebar: React.FC<SidebarProps> = ({ platform, overview, topAdAccounts
             {/* Platform Logo and Name */}
             <div className="text-center">
                 <Image
-                    src={`/${platform}.png`}
+                    src={`/images/platforms/logo/${platform}.png`}
                     alt={`${platform} Logo`}
                     className="h-24 w-24 rounded-full mx-auto mb-4"
                     width={96} // Adjust based on your design (h-24 = 96px)

@@ -26,81 +26,90 @@ interface TopPlatformCardProps {
 }
 
 const TopPlatformCard = ({ topPlatforms }: TopPlatformCardProps) => {
-  const [selectedMetric, setSelectedMetric] = useState<
-    'leads' | 'ctr' | 'link_clicks' | 'impressions' | 'messages'
-  >('leads');
+  const [selectedMetric, setSelectedMetric] = useState<'leads' | 'ctr' | 'link_clicks' | 'impressions' | 'messages'>('leads');
 
   const topPlatform = topPlatforms[selectedMetric];
 
   return (
-    <div className="bg-gradient-to-r from-purple-100 via-blue-50 to-blue-100 shadow-lg rounded-xl p-4 flex flex-col gap-4">
-      {/* Header */}
-      <div className="flex items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 flex items-center justify-center bg-purple-200 rounded-full">
-            <div className="relative w-6 h-6">
-              <Image
-                src={`/${topPlatform.platform_name.toLowerCase()}.png`}
-                alt={`${topPlatform.platform_name} logo`}
-                className="fill" 
-                width={32}
-                height={32}
-              />
-            </div>
-          </div>
-          <div>
-            <h2 className="text-lg font-bold text-gray-800">
-              {topPlatform.platform_name.charAt(0).toUpperCase() +
-                topPlatform.platform_name.slice(1)}
-            </h2>
-            <p className="text-xs text-gray-600">Top Performing Platform</p>
-          </div>
+    <div className="flex flex-col items-center pl-8 pr-8 pt-6 pb-4">
+      {/* Image and Name */}
+      <div className="flex flex-col items-center mb-4">
+        <div className="relative w-16 h-16">
+          <Image
+            src={`/images/platforms/logo/${topPlatform.platform_name.toLowerCase()}.png`}
+            alt={`${topPlatform.platform_name} logo`}
+            className="object-contain"
+            width={64}
+            height={64}
+          />
         </div>
+        <h2 className="text-lg font-semibold mt-2 text-gray-800">
+          {topPlatform.platform_name.charAt(0).toUpperCase() + topPlatform.platform_name.slice(1)}
+        </h2>
+        <p className="text-sm text-gray-500">Top Performing Platform</p>
+      </div>
 
-        <div>
-          <select
-            className="bg-white border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
-            value={selectedMetric}
-            onChange={(e) =>
-              setSelectedMetric(
-                e.target.value as 'leads' | 'ctr' | 'link_clicks' | 'impressions' | 'messages'
-              )
-            }
-          >
-            <option value="leads">Leads</option>
-            <option value="messages">Messages</option>
-            <option value="link_clicks">Link Clicks</option>
-            <option value="impressions">Impressions</option>
-            <option value="ctr">CTR</option>
-          </select>
-        </div>
+      {/* Dropdown */}
+      <div className="w-full flex justify-center mb-4">
+        <select
+          className="bg-gray-50 border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          value={selectedMetric}
+          onChange={(e) =>
+            setSelectedMetric(
+              e.target.value as 'leads' | 'ctr' | 'link_clicks' | 'impressions' | 'messages'
+            )
+          }
+        >
+          <option value="leads">Leads</option>
+          <option value="messages">Messages</option>
+          <option value="link_clicks">Link Clicks</option>
+          <option value="impressions">Impressions</option>
+          <option value="ctr">CTR</option>
+        </select>
       </div>
 
       {/* Stats */}
-      <div className="bg-white rounded-lg p-3 shadow-sm">
-        <div className="flex justify-between py-1">
-          <span className="text-gray-500 text-xs">Spend</span>
-          <span className="font-medium text-green-600 text-sm">
+      <div className="w-full">
+        <div className="flex justify-between py-2 text-sm">
+          <span className="text-gray-500">Spend</span>
+          <span className="font-medium text-gray-700">
             ${topPlatform.total_spend.toLocaleString()}
           </span>
         </div>
-        <div className="flex justify-between py-1">
-          <span className="text-gray-500 text-xs">
-            {selectedMetric.charAt(0).toUpperCase() + selectedMetric.slice(1)}
+        <div className="flex justify-between py-2 text-sm">
+          <span className="text-gray-500">CTR</span>
+          <span className="font-medium text-gray-700">
+            {topPlatform.total_ctr.toFixed(2)}%
           </span>
-          <span className="font-medium text-gray-700 text-sm">
-            {topPlatform[`total_${selectedMetric}` as keyof AggregatedMetric]?.toLocaleString()}
+        </div>
+        <div className="flex justify-between py-2 text-sm">
+          <span className="text-gray-500">Leads</span>
+          <span className="font-medium text-gray-700">
+            {topPlatform.total_leads.toLocaleString()}
+          </span>
+        </div>
+        <div className="flex justify-between py-2 text-sm">
+          <span className="text-gray-500">Messages</span>
+          <span className="font-medium text-gray-700">
+            {topPlatform.total_messages.toLocaleString()}
+          </span>
+        </div>
+        <div className="flex justify-between py-2 text-sm">
+          <span className="text-gray-500">Link Clicks</span>
+          <span className="font-medium text-gray-700">
+            {topPlatform.total_link_clicks.toLocaleString()}
+          </span>
+        </div>
+        <div className="flex justify-between py-2 text-sm">
+          <span className="text-gray-500">Impressions</span>
+          <span className="font-medium text-gray-700">
+            {topPlatform.total_impressions.toLocaleString()}
           </span>
         </div>
       </div>
 
-      {/* Link */}
-      <a
-        href={`/analytics?platform=${topPlatform.platform_name}`}
-        className="text-sm font-medium text-blue-600 hover:underline mt-auto"
-      >
-        View Analytics →
-      </a>
+      {/* View Analytics Link */}
+
     </div>
   );
 };

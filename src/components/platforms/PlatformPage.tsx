@@ -4,7 +4,7 @@ import React from 'react';
 import SpendTrendsGraph from './SpendTrendsGraph';
 import FeaturedCampaigns from './FeaturedCampaigns';
 import AdAccountsTable from './AdAccountsTable';
-import LeftSidebar from './LeftSideBar';
+import LeftInfoCard from './LeftInfoCard';
 // import CampaignsTable from './platforms/CampaignsTable';
 
 // Main Platform Page
@@ -14,8 +14,8 @@ const PlatformPages = ({ adAccountsData, topCampaignForAdAccounts, platform, pla
 
 
     return (
-        <div className="flex flex-col lg:flex-row space-y-8 lg:space-y-0 lg:space-x-6 p-6">
-            <LeftSidebar
+        <div className="flex flex-col lg:flex-row space-y-8 lg:space-y-0 lg:space-x-6 pl-36 pr-20 pt-10 pb-10">
+            <LeftInfoCard
                 platform={platform}
                 overview={platformData}
                 topAdAccounts={topCampaignForAdAccounts.topAdAccounts}

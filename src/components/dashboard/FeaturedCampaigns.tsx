@@ -52,7 +52,7 @@ const FeaturedCampaigns = ({ data }: FeaturedCampaignsProps) => {
   );
 
   return (
-    <div className="bg-white shadow-md rounded-lg p-6 h-[412px]">
+    <div className= "p-4 h-fit">
       {/* Header */}
       <div className="flex justify-between items-center mb-4">
         <div>

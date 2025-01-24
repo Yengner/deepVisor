@@ -23,11 +23,7 @@ const TopPlatforms = ({ platforms }: TopPlatformsProps) => {
   // const [showTooltip, setShowTooltip] = useState(false);
 
   return (
-    <div className="bg-white shadow-lg rounded-lg p-6 col-span-2">
-      {/* Header */}
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold">Top Platforms</h2>
-      </div>
+    <div className="pl-4 pr-4 max-h-56 overflow-y-scroll">
 
       {/* Table */}
       <table className="w-full text-left border-collapse">
@@ -49,7 +45,7 @@ const TopPlatforms = ({ platforms }: TopPlatformsProps) => {
               <td className="border-b py-3 flex items-center gap-2">
                 <div className="relative h-8 w-8 rounded-full overflow-hidden">
                   <Image
-                    src={`/${platform.platform_name.toLowerCase()}.png`} 
+                    src={`/images/platforms/logo/${platform.platform_name.toLowerCase()}.png`} 
                     alt={`${platform.platform_name} logo`}
                     className="fill"
                     width={32}

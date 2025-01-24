@@ -22,7 +22,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${manrope.className} ${sourceSans.className} antialiasedbg-gray-200 relative h-screen`}>
+      <body className={`${manrope.className} ${sourceSans.className} antialiasedbg-gray-200`}>
         {/* Google Tag Manager (noscript) */}
         <noscript>
           <iframe
