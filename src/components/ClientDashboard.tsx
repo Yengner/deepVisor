@@ -2,10 +2,10 @@
 
 import { useState } from 'react';
 import MetricCard from '@/components/MetricsCard';
-import AccountInfo from '@/components/AccountInfo';
+import AccountInfo from '@/components/ad_account/AccountInfo';
 import PerformanceMetricsGraph from '@/components/PerformanceMetricsGraph';
 import TopCampaigns from '@/components/TopCampaigns';
-import DemographicsChart from '@/components/DemographicsChart';
+import DemographicsChart from '@/components/ad_account/DemographicsChart';
 import AudienceLocationChart from '@/components/AudienceLocationChart';
 import { MdAttachMoney, MdMouse, MdPersonAdd, MdShowChart, MdTrendingUp, MdVisibility } from 'react-icons/md';
 // import HourlyMetricsChart from './HourlyMetricsChart';

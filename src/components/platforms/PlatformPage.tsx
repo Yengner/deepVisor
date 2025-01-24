@@ -14,7 +14,7 @@ const PlatformPages = ({ adAccountsData, topCampaignForAdAccounts, platform, pla
 
 
     return (
-        <div className="flex flex-col lg:flex-row space-y-8 lg:space-y-0 lg:space-x-6 pl-36 pr-20 pt-10 pb-10">
+        <div className="flex flex-col lg:flex-row space-y-8 lg:space-y-0 lg:space-x-6 ">
             <LeftInfoCard
                 platform={platform}
                 overview={platformData}

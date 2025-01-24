@@ -17,11 +17,11 @@ const Sidebar = () => {
   const pathname = usePathname();
 
   const menuItems = [
-    { name: 'Home', icon: <HomeIcon className="w-6 h-6" />, route: '/home' },
+    { name: 'Home', icon: <HomeIcon className="w-6 h-6" />, route: '/dashboard/platforms' },
     { name: 'Reports', icon: <ChartBarIcon className="w-6 h-6" />, route: '/reports' },
     { name: 'Integration', icon: <PuzzlePieceIcon className="w-6 h-6" />, route: '/integration' },
     { name: 'Explore', icon: <RocketLaunchIcon className="w-6 h-6" />, route: '/explore' },
-    { name: 'Advertising', icon: <PresentationChartLineIcon className="w-6 h-6" />, route: '/advertising' },
+    { name: 'Campaigns', icon: <PresentationChartLineIcon className="w-6 h-6" />, route: '/campaigns' },
   ];
 
   const handleNavigation = (route: string) => {

@@ -1,7 +1,7 @@
 'use client';
 
 // import { PieChart, Pie, Cell, ResponsiveContainer, Sector } from 'recharts';
-import ProgressBar from './ProgressBar';
+import ProgressBar from '../ProgressBar';
 // import { useState } from 'react';
 
 // const COLORS = [

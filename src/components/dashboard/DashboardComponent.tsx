@@ -11,7 +11,7 @@ const DashboardComponent = ({ featuredPlatformsCampaigns, Topmetrics, recommenda
     const { metrics, topPlatform, topPlatforms } = Topmetrics;
 
     return (
-        <div className="pl-36 pr-20 py-6 space-y-8 bg-gray-50 min-h-screen">
+        <div className=" bg-gray-50 min-h-screen">
             {/* Dashboard Title and Subtitle */}
             <div className="space-y-2">
                 <h1 className="text-3xl font-bold text-gray-800">Home</h1>
@@ -19,7 +19,7 @@ const DashboardComponent = ({ featuredPlatformsCampaigns, Topmetrics, recommenda
             </div>
 
             {/* Active Metrics and Key Insights */}
-            <div className="grid grid-cols-1 lg:grid-cols-7 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-7 gap-6 mt-6">
                 <div className="lg:col-span-5 bg-white rounded-lg shadow-sm border border-gray-200 py-6 px-6">
                     <StackedBarChart metrics={metrics} />
                 </div>
@@ -60,11 +60,11 @@ const DashboardComponent = ({ featuredPlatformsCampaigns, Topmetrics, recommenda
                     Insights & recommendations
                 </h2>
                 <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div className="col-span-3 bg-white rounded-lg shadow-sm border border-gray-200 px-6 py-6">
+                    <div className="col-span-3 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                         <TopPlatforms platforms={topPlatforms} />
                     </div>
                 </div>
-                <div className="grid grid-cols-3 lg:grid-cols-6 gap-6 pt-6">
+                <div className="grid grid-cols-3 lg:grid-cols-6 gap-6 mt-6">
                     <div className='col-span-3 bg-white rounded-lg shadow-sm border border-gray-200 px-6 py-6'>
                         <FeaturedCampaigns data={featuredPlatformsCampaigns} />
                     </div>
