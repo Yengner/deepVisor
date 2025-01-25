@@ -1,9 +1,12 @@
-import React from 'react'
+// src/app/reports/page.tsx
+import MainReport from "@/components/reports/MainReportsPage";
+import React from "react";
 
 const Reports = () => {
   return (
-    <div>analytics</div>
-  )
-}
+    <MainReport/>
 
-export default Reports
+  );
+};
+
+export default Reports;

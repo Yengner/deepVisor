@@ -13,6 +13,7 @@ interface AdAccount {
 interface AdAccountsTableProps {
     adAccountsData: AdAccount[];
     platform: string; // Platform parameter for dynamic routing
+    isReportsSidebarOpen: boolean;
 }
 
 const getStatusLabel = (status: string): string => {
@@ -30,9 +31,12 @@ const getStatusLabel = (status: string): string => {
     }
 };
 
-const AdAccountsTable: React.FC<AdAccountsTableProps> = ({ adAccountsData, platform }) => {
+const AdAccountsTable: React.FC<AdAccountsTableProps> = ({ adAccountsData, platform, isReportsSidebarOpen }) => {
     return (
-        <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <div
+            className={`transition-all duration-300 bg-white shadow-lg p-6 rounded-lg ${isReportsSidebarOpen ? 'w-[calc(90%-4rem)]' : 'w-[calc(100%-4rem)]'
+                }`}
+        >
             <h3 className="text-lg font-bold">Ad Accounts</h3>
             <p className="text-sm text-gray-500 mb-2">
                 Click on an Ad Account to view detailed statistics and performance metrics.

@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 
 
 interface Metric {
-  date_start: string; 
+  date_start: string;
   spend: number;
 }
 
@@ -19,12 +19,13 @@ interface AccountData {
 
 interface SpendTrendsGraphProps {
   data: AccountData[];
+  isReportsSidebarOpen: boolean;
 }
 
 
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
-const SpendTrendsGraph = ({ data }: SpendTrendsGraphProps) => {
+const SpendTrendsGraph = ({ data, isReportsSidebarOpen }: SpendTrendsGraphProps) => {
   const [timeframe, setTimeframe] = useState<"1" | "7" | "30">("7");
   const [series, setSeries] = useState<{ name: string; data: number[] }[]>([]);
   const [xCategories, setXCategories] = useState<string[]>([]);
@@ -40,7 +41,7 @@ const SpendTrendsGraph = ({ data }: SpendTrendsGraphProps) => {
           ) || []
         )
       )
-    ).sort(); 
+    ).sort();
 
     const updatedSeries = data.map((account) => {
       const accountMetrics = account.time_increment_metrics[timeframe] || [];
@@ -52,7 +53,7 @@ const SpendTrendsGraph = ({ data }: SpendTrendsGraphProps) => {
       );
 
       const filledData = allDates.map(
-        (date) => metricsMap.get(date) || 0 
+        (date) => metricsMap.get(date) || 0
       );
 
       return {
@@ -64,7 +65,7 @@ const SpendTrendsGraph = ({ data }: SpendTrendsGraphProps) => {
     setSeries(updatedSeries);
     setXCategories(allDates);
   }, [timeframe, data]);
-  
+
 
   const options: ApexOptions = {
     chart: {
@@ -102,7 +103,8 @@ const SpendTrendsGraph = ({ data }: SpendTrendsGraphProps) => {
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+    <div className={`transition-all duration-300 bg-white shadow-lg p-6 rounded-lg ${isReportsSidebarOpen ? 'w-[calc(85%-4rem)]' : 'w-[calc(100%-4rem)]'}`}>
+
       {/* Dropdown for Timeframe Selection */}
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-bold dark:text-white">Timeframe Selection</h3>
@@ -118,7 +120,9 @@ const SpendTrendsGraph = ({ data }: SpendTrendsGraphProps) => {
       </div>
 
       {/* Chart */}
-      <Chart options={options} series={series} type="area" height={300} />
+      <div className="flex justify-center items-center w-full">
+        <Chart options={options} series={series} type="area" height={300} width={isReportsSidebarOpen ? 572 : 700}/>
+      </div>
     </div>
   );
 };

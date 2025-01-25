@@ -66,7 +66,7 @@ const ReportsSidebar = ({ isOpen, toggleSidebar }: ReportsSidebarProps) => {
       <ul className="mt-4 space-y-1">
         <li>
           <Link
-            href="/reports/overview"
+            href="/reports"
             className={`block px-4 py-2 rounded-md ${
               isActive("/reports/overview")
                 ? "bg-blue-100 text-gray-900"

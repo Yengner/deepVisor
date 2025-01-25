@@ -26,13 +26,14 @@ interface FeaturedCampaignsProps {
         topAdAccounts: AdAccount[];
         campaignMetrics: CampaignMetrics;
     };
+    isReportsSidebarOpen: boolean;
 }
 
 
 
-const FeaturedCampaigns = ({ data }: FeaturedCampaignsProps) => {
+const FeaturedCampaigns = ({ data, isReportsSidebarOpen }: FeaturedCampaignsProps) => {
     const { topAdAccounts = [], campaignMetrics = {} } = data || {};
-    const slicedAdAccounts = topAdAccounts.slice(0,3)
+    const slicedAdAccounts = topAdAccounts.slice(0, 3)
 
     const [activeAdAccountId, setActiveAdAccountId] = useState(
         slicedAdAccounts.length > 0 ? slicedAdAccounts[0].ad_account_id : ''
@@ -42,7 +43,11 @@ const FeaturedCampaigns = ({ data }: FeaturedCampaignsProps) => {
     const filteredCampaigns = campaignMetrics[activeAdAccountId] || [];
 
     return (
-        <div className="bg-white shadow-md rounded-lg p-6 h-[412px]">
+        <div
+            className={`transition-all duration-300 bg-white shadow-lg p-6 rounded-lg ${isReportsSidebarOpen ? 'w-[calc(90%-4rem)]' : 'w-[calc(100%-4rem)]'
+                }`}
+
+        >
             {/* Header */}
             <div className="flex justify-between items-center mb-4">
                 <div>

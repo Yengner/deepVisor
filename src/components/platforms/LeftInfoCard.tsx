@@ -29,12 +29,16 @@ interface SidebarProps {
     overview: platformData;
     topAdAccounts: topAdAccounts[];
     topCampaigns: topCampaigns[];
+    isReportsSidebarOpen: boolean;
 }
 
-const LeftSidebar: React.FC<SidebarProps> = ({ platform, overview, topAdAccounts, topCampaigns }) => {
+const LeftSidebar: React.FC<SidebarProps> = ({ platform, overview, topAdAccounts, topCampaigns, isReportsSidebarOpen }) => {
     return (
-        <div className="lg:w-1/5 bg-white dark:bg-gray-800 shadow rounded-lg p-6 space-y-6">
-            {/* Platform Logo and Name */}
+        <div
+            className={`transition-all duration-300 bg-white space-y-4 shadow-lg p-6 rounded-lg ${
+                isReportsSidebarOpen ? 'w-1/5' : 'w-1/4'
+            }`}
+        >            {/* Platform Logo and Name */}
             <div className="text-center">
                 <Image
                     src={`/images/platforms/logo/${platform}.png`}
