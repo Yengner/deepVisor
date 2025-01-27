@@ -68,22 +68,12 @@ const ReportsSidebar = ({ isOpen, toggleSidebar }: ReportsSidebarProps) => {
           <Link
             href="/reports"
             className={`block px-4 py-2 rounded-md ${
-              isActive("/reports/overview")
+              isActive("/reports")
                 ? "bg-blue-100 text-gray-900"
                 : "hover:bg-gray-200 text-gray-900"
             } ${isOpen ? "" : "hidden"}`}
           >
-            Overview
-          </Link>
-        </li>
-        <li>
-          <Link
-            href="/reports"
-            className={`block px-4 py-2 rounded-md ${
-              isActive("/reports") ? "bg-blue-100 text-gray-900" : "hover:bg-gray-200 text-gray-900"
-            } ${isOpen ? "" : "hidden"}`}
-          >
-            Snapshot
+            Reports Hub
           </Link>
         </li>
 
