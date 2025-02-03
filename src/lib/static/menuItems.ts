@@ -14,10 +14,6 @@ export const menuItems: IMenuItem[] = [
         url: "/services"
     },
     {
-        text: "How It Works",
-        url: "/how-it-works"
-    },
-    {
         text: "Invest!",
         url: "/investor-relations"
     },
