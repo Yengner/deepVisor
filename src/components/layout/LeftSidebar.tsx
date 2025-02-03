@@ -9,6 +9,7 @@ import {
   RocketLaunchIcon,
   PresentationChartLineIcon,
   Cog6ToothIcon,
+  ArrowUpTrayIcon
 } from '@heroicons/react/24/outline';
 
 const Sidebar = () => {
@@ -19,6 +20,7 @@ const Sidebar = () => {
   const menuItems = [
     { name: 'Home', icon: <HomeIcon className="w-6 h-6" />, route: '/dashboard/platforms' },
     { name: 'Reports', icon: <ChartBarIcon className="w-6 h-6" />, route: '/reports' },
+    { name: 'Upload', icon: <ArrowUpTrayIcon className="w-6 h-6" />, route: '/upload' },
     { name: 'Integration', icon: <PuzzlePieceIcon className="w-6 h-6" />, route: '/integration' },
     { name: 'Explore', icon: <RocketLaunchIcon className="w-6 h-6" />, route: '/explore' },
     { name: 'Campaigns', icon: <PresentationChartLineIcon className="w-6 h-6" />, route: '/campaigns' },

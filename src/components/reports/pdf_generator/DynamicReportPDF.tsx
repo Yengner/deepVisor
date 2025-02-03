@@ -107,6 +107,7 @@ const platformLogos: { [key: string]: string } = {
   TikTok: "https://via.placeholder.com/60?text=TikTok",
 };
 
+/* eslint-disable */
 const DynamicReportPDF = ({ data }: { data: any }) => {
   const selectedPlatformData = data.platforms.find(
     (platform: any) => platform.name === data.platform
@@ -114,6 +115,7 @@ const DynamicReportPDF = ({ data }: { data: any }) => {
   const selectedAdAccountData = data.adAccounts.find(
     (account: any) => account.name === data.selectedAdAccount
   );
+  /* eslint-enable */
 
   return (
     <Document>
@@ -128,8 +130,8 @@ const DynamicReportPDF = ({ data }: { data: any }) => {
           {data.timeRange === "7"
             ? "Last 7 Days"
             : data.timeRange === "30"
-            ? "Last 30 Days"
-            : "Last 90 Days"}
+              ? "Last 30 Days"
+              : "Last 90 Days"}
         </Text>
 
         {/* Display Ad Account Details */}

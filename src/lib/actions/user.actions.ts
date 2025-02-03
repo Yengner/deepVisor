@@ -106,7 +106,7 @@ export async function getUserInfo({ userId }: getUserInfoProps) {
         const supabase = await createSupabaseClient();
 
         const { data } = await supabase
-            .from('users') // The table where user data is stored
+            .from('users')
             .select('*')
             .eq('id', userId)
             .single();
@@ -172,7 +172,6 @@ export async function handleFreeEstimate(data: {
 
         return { success: true, data: insertedData };
     } catch (error) {
-        // Narrowing down 'error' to handle it safely
         if (error instanceof Error) {
             console.error('Supabase Insert Error:', error.message);
             return { success: false, error: error.message };
@@ -180,5 +179,53 @@ export async function handleFreeEstimate(data: {
             console.error('Unknown error:', error);
             return { success: false, error: 'An unknown error occurred.' };
         }
+    }
+};
+
+export async function handleUploadFile(file: File, userId: string) {
+    try {
+        const supabase = await createSupabaseClient();
+
+        if (!userId || typeof userId !== "string") {
+            return { success: false, message: "Invalid user ID." };
+        }
+
+        const sanitizedFileName = file.name.replace(/\s+/g, "-");
+        const filePath = `${userId}/${Date.now()}-${sanitizedFileName}`;
+
+        const storage = supabase.storage;
+
+        if (!file) {
+            return { success: false, message: "No file uploaded." };
+        }
+
+        const { error: bucketError } = await storage
+            .from("business-media")
+            .upload(filePath, file, {
+                cacheControl: "3600",
+                upsert: false,
+            });
+
+        if (bucketError) {
+            console.error("Error uploading file:", bucketError);
+            return { success: false, message: "Error Uploading File." };
+        }
+
+        const { data } = supabase.storage
+            .from("business-media")
+            .getPublicUrl(filePath)
+
+
+        const publicUrl = data?.publicUrl ?? null;
+
+        if (!publicUrl) {
+            console.error("Error getting public URL.");
+            return { success: false, message: "Error getting public URL." };
+        }
+
+        return { success: true, url: publicUrl };
+
+    } catch (error) {
+        return { success: false, error: getErrorMessage(error) };
     }
 }
