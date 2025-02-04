@@ -9,14 +9,14 @@ import TopCampaignsTable from "./TopCampaignsTable";
 import TopAdSetsTable from "./TopAdSetTable";
 import TopAdsTable from "./TopAdsTable";
 
-const PDFDownloadLink = dynamic(
-  () => import('@react-pdf/renderer').then((mod) => mod.PDFDownloadLink),
-  {
-    ssr: false,
-    loading: () => <p>Loading...</p>,
+// const PDFDownloadLink = dynamic(
+//   () => import('@react-pdf/renderer').then((mod) => mod.PDFDownloadLink),
+//   {
+//     ssr: false,
+//     loading: () => <p>Loading...</p>,
 
-  }
-);
+//   }
+// );
 const PDFViewer = dynamic(
   () => import('@react-pdf/renderer').then((mod) => mod.PDFViewer),
   {
@@ -26,6 +26,7 @@ const PDFViewer = dynamic(
   }
 );
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const MainReport = ({ metrics }: { metrics: any }) => {
   const { isReportsSidebarOpen } = useReportsSidebar();
   const [selectedPlatform, setSelectedPlatform] = useState<string | null>(null);
