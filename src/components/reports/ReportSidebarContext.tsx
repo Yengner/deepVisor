@@ -25,7 +25,6 @@ export const ReportsSidebarProvider = ({ children }: { children: React.ReactNode
   );
 };
 
-// Custom hook to use the context
 export const useReportsSidebar = () => {
   const context = useContext(ReportsSidebarContext);
   if (!context) {
