@@ -4,6 +4,10 @@ import React, { useState } from "react";
 import { useReportsSidebar } from "./ReportSidebarContext";
 import DynamicReportPDF from "./pdf_generator/DynamicReportPDF";
 import dynamic from "next/dynamic";
+import TopAdAccountsTable from "./TopAdAccounts";
+import TopCampaignsTable from "./TopCampaignsTable";
+import TopAdSetsTable from "./TopAdSetTable";
+import TopAdsTable from "./TopAdsTable";
 
 const PDFDownloadLink = dynamic(
   () => import('@react-pdf/renderer').then((mod) => mod.PDFDownloadLink),
@@ -22,12 +26,13 @@ const PDFViewer = dynamic(
   }
 );
 
-const MainReport = () => {
+const MainReport = ({ metrics }: { metrics: any }) => {
   const { isReportsSidebarOpen } = useReportsSidebar();
   const [selectedPlatform, setSelectedPlatform] = useState<string | null>(null);
   const [selectedAdAccount, setSelectedAdAccount] = useState<string | null>(null);
   const [timeRange, setTimeRange] = useState<"7" | "30" | "90">("30");
 
+  const { topAdAccounts, topCampaigns_metrics, topAdset_metrics, topAd_metrics } = metrics;
   // Enhanced Dummy Data
   const dummyData = {
     businessInfo: {
@@ -149,60 +154,29 @@ const MainReport = () => {
         </div>
       </div>
 
-      {/* Platforms Table */}
-      <div className="mt-8">
-        <h2 className="text-xl font-bold text-gray-800 mb-4">Platforms Overview</h2>
-        <table className="min-w-full bg-white border border-gray-200 shadow-md rounded-lg">
-          <thead>
-            <tr>
-              <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">
-                Platform
-              </th>
-              <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">
-                Spend
-              </th>
-              <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">
-                Clicks
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {/* Example Rows */}
-            <tr>
-              <td className="px-4 py-2 text-sm text-gray-700">Meta</td>
-              <td className="px-4 py-2 text-sm text-gray-700">$1,200</td>
-              <td className="px-4 py-2 text-sm text-gray-700">5,000</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      {/* Ad Accounts Table */}
-      <div className="mt-8">
-        <h2 className="text-xl font-bold text-gray-800 mb-4">Ad Accounts Overview</h2>
-        <table className="min-w-full bg-white border border-gray-200 shadow-md rounded-lg">
-          <thead>
-            <tr>
-              <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">
-                Ad Account
-              </th>
-              <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">
-                Spend
-              </th>
-              <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">
-                Clicks
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {/* Example Rows */}
-            <tr>
-              <td className="px-4 py-2 text-sm text-gray-700">Account 1</td>
-              <td className="px-4 py-2 text-sm text-gray-700">$800</td>
-              <td className="px-4 py-2 text-sm text-gray-700">2,000</td>
-            </tr>
-          </tbody>
-        </table>
+      {/* Top Ad Accounts, Campaigns, Adsets, Ads */}
+      <div className="pt-10 grid grid-cols-2 lg:grid-cols-3 gap-6">
+        <h2 className="text-lg font-semibold text-gray-800 mb-2 mt-4 underline underline-offset-8 [text-decoration-style:dotted]">
+          Ad Accounts
+        </h2>
+        <div className="col-span-3 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <TopAdAccountsTable adAccounts={topAdAccounts} />
+        </div>
+        <h2 className="text-lg font-semibold text-gray-800 mb-2 mt-4 underline underline-offset-8 [text-decoration-style:dotted]">
+          Campaigns
+        </h2>
+        <div className="col-span-3 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <TopCampaignsTable campaigns={topCampaigns_metrics} />
+        </div>
+        <h2 className="text-lg font-semibold text-gray-800 mb-2 mt-4 underline underline-offset-8 [text-decoration-style:dotted]">
+          Ad Sets
+        </h2>
+        <div className="col-span-3 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <TopAdSetsTable adSets={topAdset_metrics} />
+        </div>
+        <div className="col-span-3 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <TopAdsTable ads={topAd_metrics} />
+        </div>
       </div>
     </div >
   );
