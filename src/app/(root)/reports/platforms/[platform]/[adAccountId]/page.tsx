@@ -20,7 +20,7 @@ export default async function AdAccountPage({
     const loggedIn = await getLoggedInUser();
     const userId = loggedIn.id;
 
-    const adAccountData = await getAdAccountsData(platform, userId);
+    // const adAccountData = await getAdAccountsData(platform, userId);
     const dashboardData = await fetchDashboardMetrics(platform, adAccountId);
     return (
 
