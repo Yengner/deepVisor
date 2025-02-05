@@ -1,7 +1,7 @@
 import ClientDashboard from '@/components/ClientDashboard';
 import { getLoggedInUser } from '@/lib/actions/user.actions';
 import { fetchDashboardMetrics } from '@/lib/api/dashboard';
-import { getAdAccountsData } from '@/lib/api/getAdAccountsData';
+// import { getAdAccountsData } from '@/lib/api/getAdAccountsData';
 
 interface AdAccountPageProps {
   params: Promise<{
