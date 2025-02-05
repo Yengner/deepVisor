@@ -21,7 +21,7 @@ export default async function AdAccountPage({
     const userId = loggedIn.id;
 
     // const adAccountData = await getAdAccountsData(platform, userId);
-    const dashboardData = await fetchDashboardMetrics(platform, adAccountId);
+    const dashboardData = await fetchDashboardMetrics(platform, adAccountId, userId);
     return (
 
       <ClientDashboard dashboardData={dashboardData} />
