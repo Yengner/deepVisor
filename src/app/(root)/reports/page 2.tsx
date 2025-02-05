@@ -8,7 +8,6 @@ export default async function Reports() {
   const loggedIn = await getLoggedInUser();
   const userId = loggedIn?.id;
   const metrics = await getTopAdAccounts(userId)
-
   return (
     <MainReport metrics={metrics} />
   );

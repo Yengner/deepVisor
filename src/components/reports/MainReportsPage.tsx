@@ -175,6 +175,9 @@ const MainReport = ({ metrics }: { metrics: any }) => {
         <div className="col-span-3 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
           <TopAdSetsTable adSets={topAdset_metrics} />
         </div>
+        <h2 className="text-lg font-semibold text-gray-800 mb-2 mt-4 underline underline-offset-8 [text-decoration-style:dotted]">
+          Ads
+        </h2>
         <div className="col-span-3 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
           <TopAdsTable ads={topAd_metrics} />
         </div>

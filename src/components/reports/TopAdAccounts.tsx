@@ -62,7 +62,7 @@ const TopAdAccountsTable = ({ adAccounts }: TopAdAccountsProps) => {
           {adAccounts.map((account) => (
             <tr key={account.id}>
               {/* Account Name */}
-              <td className="border-b py-3 flex items-center gap-2">
+              <td className="border-b py-3">
                 <span className="font-medium text-gray-700 capitalize">
                   {account.name}
                 </span>
