@@ -9,9 +9,6 @@ import { createSupabaseClient } from '@/lib/utils/supabase/clients/server';
 export const fetchDashboardMetrics = async (platform: string, adAccountId: string, userId: string) => {
   const supabase = await createSupabaseClient();
 
-
-  // Replace this with actual user ID logic (e.g., session or JWT)
-
   const { data, error } = await supabase
     .from('platform_integrations')
     .select('access_token')
@@ -25,18 +22,14 @@ export const fetchDashboardMetrics = async (platform: string, adAccountId: strin
 
   const accessToken = data.access_token;
 
-
-  // Fetch all data in parallel
   const [metrics, accountInfo, topCampaigns, ageGenderMetrics, performanceMetrics] = await Promise.all([
     fetchMetrics(adAccountId, accessToken),
     fetchAccountInfo(adAccountId, accessToken),
     fetchCampaignMetrics(adAccountId, accessToken),
     fetchAgeGenderCountryMetrics(adAccountId, accessToken),
     fetchPerformanceMetrics(adAccountId, accessToken),
-    // fetchHourlyBreakdown(adAccountId, accessToken),
   ]);
 
-  // Combine results into one object
   return {
     metrics,
     topCampaigns,

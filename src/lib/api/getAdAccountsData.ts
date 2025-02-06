@@ -16,7 +16,7 @@ export async function getAdAccountsData(platform: string, userId: string): Promi
   try {
     const { data, error } = await supabase
       .from('ad_accounts')
-      .select('ad_account_id, name, account_status, time_increment_metrics, aggregated_metrics, industry_id(name)')
+      .select('ad_account_id, name, account_status, time_increment_metrics, aggregated_metrics, industry_id(name), time_increment_metrics')
       .eq('platform_name', platform)
       .eq('user_id', userId);
 
@@ -25,7 +25,7 @@ export async function getAdAccountsData(platform: string, userId: string): Promi
       return [];
     }
 
-    // console.log('afsfsawfdwadwawddwa', data)
+    
     const mappedData = data.map((adAccount) => {
       const industry = adAccount.industry_id as { name?: string };
       return {
@@ -38,7 +38,7 @@ export async function getAdAccountsData(platform: string, userId: string): Promi
       }
     })
 
-    // Ensure the fetched data includes both time-based metrics and maximum metrics
+    
     return mappedData
   } catch (err) {
     console.error('Unexpected error fetching platform data:', err);
