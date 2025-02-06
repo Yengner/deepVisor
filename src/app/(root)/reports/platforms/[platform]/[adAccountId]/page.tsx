@@ -1,6 +1,8 @@
 import ClientDashboard from '@/components/ClientDashboard';
 import { getLoggedInUser } from '@/lib/actions/user.actions';
 import { fetchDashboardMetrics } from '@/lib/api/dashboard';
+import { getAdAccountData } from '@/lib/api/adAccount/getAdAccountData';
+import { getCampaignData } from '@/lib/api/adAccount/getCampaignData';
 
 interface AdAccountPageProps {
   params: Promise<{
@@ -19,8 +21,9 @@ export default async function AdAccountPage({
     const loggedIn = await getLoggedInUser();
     const userId = loggedIn.id;
 
-    const getAdAccountData = await getAdAccountData(platform, adAccountId, userID);
-    // const getCampaignData = await 
+    // const adAccountData = await getAdAccountData(platform, adAccountId, userId);
+    // const CampaignData = await getCampaignData(platform, adAccountId, userId);
+    
     const dashboardData = await fetchDashboardMetrics(platform, adAccountId, userId);
 
     return (
