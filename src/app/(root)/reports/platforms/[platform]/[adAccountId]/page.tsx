@@ -1,36 +1,44 @@
-import ClientDashboard from '@/components/ClientDashboard';
 import { getLoggedInUser } from '@/lib/actions/user.actions';
-import { fetchDashboardMetrics } from '@/lib/api/dashboard';
 import { getAdAccountData } from '@/lib/api/adAccount/getAdAccountData';
 import { getCampaignData } from '@/lib/api/adAccount/getCampaignData';
+import AdAccountDashboard from '@/components/AdAccountDashboard';
 
 interface AdAccountPageProps {
-  params: Promise<{
+  params: {
     platform: string;
     adAccountId: string;
-  }>;
+  };
 }
 
-export default async function AdAccountPage({
-  params,
-}: AdAccountPageProps) {
+export default async function AdAccountPage({ params }: AdAccountPageProps) {
   try {
-    const resolvedParams = await params;
-    const { platform, adAccountId } = resolvedParams;
+    params = await params;
+    if (!params?.platform || !params?.adAccountId) {
+      throw new Error("Missing parameters.");
+    }
 
     const loggedIn = await getLoggedInUser();
+    if (!loggedIn) throw new Error("User not logged in.");
+
     const userId = loggedIn.id;
 
-    // const adAccountData = await getAdAccountData(platform, adAccountId, userId);
-    // const CampaignData = await getCampaignData(platform, adAccountId, userId);
-    
-    const dashboardData = await fetchDashboardMetrics(platform, adAccountId, userId);
+    // Fetch data in parallel for better performance
+    const [adAccountData, campaignData] = await Promise.all([
+      getAdAccountData(params.platform, params.adAccountId, userId),
+      getCampaignData(params.platform, params.adAccountId, userId),
+    ]);
 
     return (
-      <ClientDashboard dashboardData={dashboardData} />
+      <div>
+        <AdAccountDashboard adAccountData={adAccountData} campaignData={campaignData} />
+      </div>
     );
   } catch (error) {
-    console.error('Error resolving params or fetching dashboard data:', error);
-    return (<div className="text-red-600">How did you get here?</div>)
+    console.error('Error in AdAccountPage:', error);
+    return (
+      <div className="text-red-600 font-bold p-4">
+        Error loading data. Please try again later.
+      </div>
+    );
   }
 }

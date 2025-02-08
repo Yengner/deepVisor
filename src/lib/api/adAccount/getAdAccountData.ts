@@ -5,7 +5,7 @@ export async function getAdAccountData(platform: string, adAccountId: string, us
 
     const { data, error } = await supabase
         .from('ad_accounts')
-        .select('ad_account_id, name, account_status, time_increment_metrics, aggregated_metrics, industry_id(name), time_increment_metrics')
+        .select('ad_account_id, name, account_status, time_increment_metrics, aggregated_metrics, industry_id(name), time_increment_metrics, platform_name')
         .eq('platform_name', platform)
         .eq('ad_account_id', adAccountId)
         .eq('user_id', userId);
@@ -23,6 +23,7 @@ export async function getAdAccountData(platform: string, adAccountId: string, us
         time_increment_metrics: data[0].time_increment_metrics || {},
         aggregated_metrics: data[0].aggregated_metrics || {},
         industry: industry.name || null,
+        platform: data[0].platform_name,
     }
 
 }

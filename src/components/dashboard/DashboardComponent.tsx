@@ -11,7 +11,7 @@ const DashboardComponent = ({ featuredPlatformsCampaigns, Topmetrics, recommenda
     const { metrics, topPlatform, topPlatforms } = Topmetrics;
 
     return (
-        <div className=" bg-gray-50 min-h-screen">
+        <div className="bg-gray-50 min-h-screen">
             {/* Dashboard Title and Subtitle */}
             <div className="space-y-2">
                 <h1 className="text-3xl font-bold text-gray-800">Home</h1>
