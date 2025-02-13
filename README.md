@@ -1,36 +1,62 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# **DeepVisor** 🚀  
+### **Multi-Platform Ad Management & Insights SaaS**  
 
-## Getting Started
+DeepVisor is an enterprise-level SaaS platform designed to **streamline marketing campaign management** across multiple social media platforms, including **Meta (Facebook & Instagram), TikTok, Google Ads, Reddit, YouTube, and more**.  
 
-First, run the development server:
+This project allows **business owners and marketers** to **integrate, track, analyze, and manage ad campaigns** in one centralized dashboard, offering insights, automation, and AI-driven suggestions for campaign optimization.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## **🌟 Features & Functionality**  
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### **1. Multi-Platform Integration**  
+- ✅ Connects with **Meta (Facebook & Instagram), TikTok, Google Ads, Reddit, YouTube, Twitter (X), and more**.  
+- ✅ Pulls real-time **campaign, ad set, and ad-level data** from integrated accounts.  
+- ✅ Allows businesses to manage ads, set budgets, and optimize performance across platforms.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### **2. Centralized Dashboard & Insights**  
+- 📊 **View key marketing metrics** such as impressions, clicks, conversions, CTR, CPC, and ROI.  
+- 📈 **Real-time analytics** for ad performance with interactive charts and visual reports.  
+- 🎯 **AI-driven recommendations** to optimize campaigns and boost conversions.
 
-## Learn More
+### **3. Campaign Management & Automation**  
+- ⚡ **Quickly create, edit, and launch ad campaigns** with a guided setup.  
+- 🔄 **Automated ad optimizations** based on AI-driven insights.  
+- 📌 **Multi-ad account support**, allowing businesses to manage multiple brands in one place.  
 
-To learn more about Next.js, take a look at the following resources:
+### **4. Secure Authentication & User Management**  
+- 🛠 **Role-based access control** for managing teams and permissions.  
+- ✅ Allows users to **add, remove, and manage ad accounts dynamically**.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## **📂 Tech Stack**  
 
-## Deploy on Vercel
+| **Technology**  | **Usage** |
+|---------------|----------|
+| **Next.js 15 (App Router)**  | Frontend framework |
+| **TypeScript** | Type safety & scalability |
+| **Tailwind CSS** | UI styling |
+| **Node.js + Express.js** | Backend API |
+| **Supabase** | Database & authentication |
+| **PostgreSQL (RDS)** | Database for structured data |
+| **Meta & TikTok API** | Ad data fetching |
+| **ApexCharts** | Data visualization |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## **🗄️ Database Structure**  
+
+DeepVisor uses **PostgreSQL** to store essential data for **ad campaigns, user integrations, and analytics**.
+
+### **Main Tables**:
+- **`users`** → Stores user details (ID, name, email, role).  
+- **`integrations`** → Tracks user integrations (Meta, TikTok, etc.).  
+- **`ad_accounts`** → Contains linked ad accounts per user.  
+- **`campaigns`** → Stores campaign details with budget, targeting, and performance stats.  
+- **`ads`** → Tracks individual ads within campaigns.  
+
+Example **ERD (Entity Relationship Diagram)**:
+
+```plaintext
+users (id) ---< integrations (id) ---< ad_accounts (id) ---< campaigns (id) ---< ads (id)
