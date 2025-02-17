@@ -4,16 +4,17 @@ import { getCampaignData } from '@/lib/api/adAccount/getCampaignData';
 import AdAccountDashboard from '@/components/AdAccountDashboard';
 
 interface AdAccountPageProps {
-  params: {
+  params: Promise<{
     platform: string;
     adAccountId: string;
-  };
+  }>;
 }
 
 export default async function AdAccountPage({ params }: AdAccountPageProps) {
   try {
-    params = await params;
-    if (!params?.platform || !params?.adAccountId) {
+    
+    const AdAccountItems = await params;
+    if (!AdAccountItems?.platform || !AdAccountItems?.adAccountId) {
       throw new Error("Missing parameters.");
     }
 
@@ -24,11 +25,11 @@ export default async function AdAccountPage({ params }: AdAccountPageProps) {
 
     // Fetch data in parallel for better performance
     const [adAccountData, campaignData] = await Promise.all([
-      getAdAccountData(params.platform, params.adAccountId, userId),
-      getCampaignData(params.platform, params.adAccountId, userId),
+      getAdAccountData(AdAccountItems.platform, AdAccountItems.adAccountId, userId),
+      getCampaignData(AdAccountItems.platform, AdAccountItems.adAccountId),
     ]);
 
-    return (
+     return (
       <div>
         <AdAccountDashboard adAccountData={adAccountData} campaignData={campaignData} />
       </div>

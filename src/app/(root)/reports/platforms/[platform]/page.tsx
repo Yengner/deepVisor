@@ -4,11 +4,7 @@ import { getAdAccountsData } from "@/lib/api/getAdAccountsData";
 import { getTopCampaignsForAdAccounts } from "@/lib/api/getCampaignsForAdAccount";
 import { getPlatformData } from "@/lib/api/getPlatformData";
 
-export default async function PlatformPage({
-  params,
-}: {
-  params: Promise<{ platform: string }>;
-}) {
+export default async function PlatformPage({ params }: { params: Promise<{ platform: string }> }) {
   try {
     // Await the params to resolve the Promise
     const resolvedParams = await params;

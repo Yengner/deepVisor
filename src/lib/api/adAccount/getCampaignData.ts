@@ -1,6 +1,6 @@
 import { createSupabaseClient } from "@/lib/utils/supabase/clients/server";
 
-export async function getCampaignData(platform: string, adAccountId: string, userId: string) {
+export async function getCampaignData(platform: string, adAccountId: string) {
     const supabase = await createSupabaseClient();
 
     const { data, error } = await supabase

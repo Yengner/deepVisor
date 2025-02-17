@@ -1,15 +1,8 @@
 'use client';
 
-import { useState } from 'react';
-import MetricCard from '@/components/MetricsCard';
-import AccountInfo from '@/components/ad_account/AccountInfo';
-import PerformanceMetricsGraph from '@/components/PerformanceMetricsGraph';
-import TopCampaigns from '@/components/TopCampaigns';
-import DemographicsChart from '@/components/ad_account/DemographicsChart';
-import AudienceLocationChart from '@/components/AudienceLocationChart';
-import { MdAttachMoney, MdMouse, MdPersonAdd, MdShowChart, MdTrendingUp, MdVisibility } from 'react-icons/md';
 import AdAccountPerformanceMetrics from './ad_account/AdAccountPerformanceMetrics';
 import { useReportsSidebar } from './reports/ReportSidebarContext';
+import LatestCampaignResults from './ad_account/LatestCampaignResults';
 
 // Using `any` for now to avoid TypeScript issues while data structures are finalized
 /* eslint-disable */
@@ -36,7 +29,7 @@ export default function AdAccountDashboard({ adAccountData, campaignData }: { ad
         <h2 className="text-lg font-semibold text-gray-800 mb-4 underline underline-offset-8 [text-decoration-style:dotted]">
           Latest Campaign Results
         </h2>
-        {/* <LatestCampaignResults campaignData={campaignData} isReposrtsSidebarOpen={isReportsSidebarOpen}/> */}
+        <LatestCampaignResults campaignData={campaignData} isReportsSidebarOpen={isReportsSidebarOpen}/>
       </div>
       {/* Other Dashboard Components */}
       <div className="flex-1 space-y-8">
